@@ -24,7 +24,7 @@ body, html {
 }
 
 /* Create a Parallax Effect */
-.bgimg-1, .bgimg-2, .bgimg-3 {
+.bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4 {
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -33,31 +33,38 @@ body, html {
 
 /* First image (Logo. Full height) */
 .bgimg-1 {
-  background-image: url('img/badamall.jpg');
+  background-image: url('img/bienvenida.jpg');
   min-height: 100%;
 }
 
 /* Second image (Portfolio) */
 .bgimg-2 {
-  background-image: url("img/fiesta.jpg");
+  background-image: url("img/celebracion.jpg");
   min-height: 400px;
 }
 
 /* Third image (Contact) */
 .bgimg-3 {
-  background-image: url("img/badamall.jpg");
+  background-image: url("img/contacto.jpg");
   min-height: 400px;
 }
+
+.bgimg-4 {
+  background-image: url("img/informacion.jpg");
+  min-height: 400px;
+}
+
 
 .w3-wide {letter-spacing: 10px;}
 .w3-hover-opacity {cursor: pointer;}
 
 /* Turn off parallax scrolling for tablets and phones */
-@media only screen and (max-device-width: 1600px) {
-  .bgimg-1, .bgimg-2, .bgimg-3 {
+/* @media only screen and (max-device-width: 1600px) {
+  .bgimg-1, .bgimg-2, .bgimg-3 .bgimg-4{
     background-attachment: scroll;
     min-height: 400px;
-  }
+  } 
+*/
 }
 </style>
 <body>
@@ -96,10 +103,10 @@ body, html {
   <div class="w3-col w3-center w3-padding-large">
      
       
-      <h1>María Barrado de Solís </h1>
-      <h1>Francisco Javier Ferragut Ferretjans </h1><br>
+      <h3>María Barrado de Solís </h3>
+      <h3>Francisco Javier Ferragut Ferretjans </h3><br>
 
-      <h1>Tienen el gusto de invitarles a su enlace matrimonial que se celebrará en la <b>Iglésia de la Concepción</b>  el día  <b>04 de septiembre de 2.021</b></h1>
+      <h3>Tienen el gusto de invitarles a su enlace matrimonial que se celebrará en la <b>Iglésia de la Concepción</b>  el día  <b>04 de septiembre de 2.021</b></h3>
   </div>
 
   <h1 class="w3-text-green"> ¡¡Os esperamos!! </b></h1>
@@ -142,7 +149,7 @@ body, html {
   <div class="w3-row">
     <div class="w3-col m6 w3-center w3-padding-large">
      <p></p>
-      <img src="img/iglesia.jpg" class="w3-round w3-image w3-opacity " alt="Photo of Me" width="500" height="333">
+      <img src="img/iglesia.jpg" class="w3-round w3-image " alt="Photo of Me" width="500" height="333">
     </div>
 
     <!-- Hide this text on small devices -->
@@ -193,7 +200,7 @@ Cómo no haber disfrutado de una noche como esa..</p>
   </div>
       <div class="w3-col m6 w3-center w3-padding-large">
      <p></p>
-      <img src="img/fresnos.jpg" class="w3-round w3-image w3-opacity " alt="Photo of Me" width="500" height="333">
+      <img src="img/fresnos.jpg" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
     </div>
   </div>
   <p class="w3-center"> <b> Recuerda !!! </b> Podéis acceder directamente a “Los fresnos” en vuestro vehículo pero también tenéis a vuestra disposición autobuses de ida y vuelta a la plaza (por favor, confirmadnos si queréis hacer uso de los mismos)
@@ -328,7 +335,7 @@ Cómo no haber disfrutado de una noche como esa..</p>
 
 </div>
 
- <div class="bgimg-3 w3-display-container w3-opacity-min">
+ <div class="bgimg-4 w3-display-container w3-opacity-min">
   <div class="w3-display-middle">
      <span class="w3-xxlarge w3-text-white w3-wide">INFÓRMACIÓN ÚTIL</span>
   </div>
