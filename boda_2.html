@@ -9,18 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&display=swap" rel="stylesheet">
-
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <style>
 
 
  body {
   background-image: url('img/fondo.jpg');
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-attachment: fixed;
-  background-size: cover;
+ 
 }
 
-h1,h3 {font-family: 'Open Sans', sans-serif; font-family: 'Pacifico', cursive}
+h1,h2,h3 {font-family: 'Open Sans', sans-serif; font-family: 'Pacifico', cursive}
 body, html {
   height: 100%;
   color: #777;
@@ -33,29 +33,31 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  opacity: 1;
 }
 
 /* First image (Logo. Full height) */
 .bgimg-1 {
   background-image: url('img/bienvenida.jpg');
   min-height: 100%;
+  opacity: 1;
 }
 
 /* Second image (Portfolio) */
 .bgimg-2 {
   background-image: url("img/celebracion.jpg");
-  min-height: 400px;
+  min-height: 800px;
 }
 
 /* Third image (Contact) */
 .bgimg-3 {
   background-image: url("img/contacto.jpg");
-  min-height: 400px;
+  min-height: 800px;
 }
 
 .bgimg-4 {
   background-image: url("img/informacion.jpg");
-  min-height: 400px;
+  min-height: 800px;
 }
 
 
@@ -66,7 +68,7 @@ body, html {
  @media only screen and (max-device-width: 1600px) {
   .bgimg-1, .bgimg-2, .bgimg-3 .bgimg-4{
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 600px;
   } 
 
 }
@@ -99,25 +101,54 @@ body, html {
 
 
 <!-- Container (About Section) -->
-<div class="w3-content w3-container w3-padding-64 w3-white" id="about">
-  <h2 class="w3-center w3-text-teal">¡Que sí!  ¡¡Que nos casamos!!!</h2>
-  <p class="w3-center w3-center-align">
-¡Estamos super felices! <br><br> Nos sentimos en las nubes y queremos compartirlo contigo. Por eso estamos preparando una boda en la que te lo pasarás genial.<br><br>
-Mientras llega el gran día hemos creado esta web con un montón de secciones para que estés al día de todo<br><br>.
-Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda o no. Confírmanos lo antes posible por favor, que así organizarlo todo nos será muchos más fácil.<br><br>
-¡Disfruta con nosotros y nos vemos muy pronto!</p>
+<div class="w3-content w3-container w3-padding-64" id="about">
+<div class="w3-card w3-white">
+  <h1 class="w3-center w3-text-teal">¡Que sí!  ¡¡Que nos casamos!!!</h1>
+  <p class="w3-center w3-text-teal w3-center-align">
+¡Estamos super felices y nos encantaría celebrarlo con vosotros! <br><br> 
 
 
-  <div class="w3-content w3-container w3-center" id="about">
 
-   <img src="img/separador.jpg" class="w3-image w3-opacity w3-center" alt="Photo of Me" width="500" height="333">
-     <div class="w3-col w3-center ">
-      <h3>María Barrado de Solís </h3>
-      <h3>Francisco Javier Ferragut Ferretjans </h3><br>
-      <h3>Tienen el gusto de invitarles a su enlace matrimonial que se celebrará en la <br><b>Iglésia de la Concepción</b><br>  el día  <b><br>04 de septiembre de 2.021</b></h3>
-     </div>
+<div class="w3-containerw3-white w3-padding-32 w3-center">
+  
+  <div class="w3-row">
+    <div class="w3-col m4 w3-center w3-padding-large">
+    <i class="far fa-calendar-alt w3-jumbo w3-text-teal" aria-hidden="true"></i>
+    <p class="w3-text-teal"> <b> FECHA </b><p> 
+    <hr>
+    <p class="w3-text-teal"> Día: 04.09.2021 </span>
+    <p class="w3-text-teal"> Hora: 18:00h </span><i class="fas fa-cross"></i></p>
+    <br>
+    <a href="#contacto" class="w3-button w3-teal w3-hover-yellow">Confirmanos</a>
+    
+    </div>
 
-  <h1 class="w3-text-teal"> ¡¡Os esperamos!! </b></h1>
+    <div class="w3-col m4 w3-center w3-padding-large">
+    <i class="fas fa-church w3-jumbo w3-text-teal" aria-hidden="true"></i>
+    <p class="w3-text-teal"> <b>Ceremonia </b> </span>
+    <hr>
+    <p class="w3-text-teal">Iglésia de la Concepción</p>
+    <p class="w3-text-teal">Calle San Juan, 28, 06002<br> Badajoz</p>
+    
+    <a href="https://goo.gl/maps/B4r5BgbL1xY3BGAc6" class="w3-button w3-teal w3-hover-yellow">¿Cómo llegar?</a>
+    </div>
+
+        
+    <div class="w3-col m4 w3-center w3-padding-large">
+    <i class="fas fa-utensils w3-jumbo w3-text-teal" aria-hidden="true"></i>
+    <p class="w3-text-teal"> <b>Celebración </b> </span>
+    <hr>
+    <p class="w3-text-teal">Finca los fresnos</p>
+    <p class="w3-text-teal">Carretera de Valverde de Leganes - Táliga km 7</p>
+    <a href="https://maps.google.com/maps?ll=38.607587,-6.970392&z=18&t=m&hl=es&gl=ES&mapclient=embed&daddr=Los%20Fresnos%2006010%20Badajoz@38.6075867,-6.9703917" class="w3-button w3-teal w3-hover-yellow">¿Cómo llegar?</a>
+    </div>
+
+
+
+    </div>
+
+     
+  <h2 class="w3-text-teal w3-center"> ¡¡Os esperamos!! </b></h2>
   </div>
 </div>
 <!--  <img src="img/separador.jpg" class="w3-image w3-opacity w3-center" alt="Photo of Me" width="500" height="333">
@@ -156,99 +187,60 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
 </div>
 
 <div class="w3-content w3-container w3-padding-64" id="celebracion">
+<div class="w3-card w3-white w3-padding-32">
   <h1 class="w3-center w3-text-teal">El Lugar</h1>
-  <p class="w3-center"><i>En mitad de la naturaleza, como nos gusta a nosotros </i></p>
-  <h4 class="v3-center w3-border-bottom w3-border-teal w3-text-teal">Iglesia de la Concepción (Badajoz).</h4>
-  <div class="w3-row">
-    <div class="w3-col m6 w3-center w3-padding-large">
-     <p></p>
-      <img src="img/iglesia.jpg" class="w3-round w3-image " alt="Photo of Me" width="500" height="333">
-    </div>
-
-    <!-- Hide this text on small devices -->
-    <div class="w3-col m6 w3-padding-large w3-center">
-      <p>El amor es sufrido, es benigno; <br>
-        el amor no tiene envidia;<br>
-        el amor no es jactancioso, no se envanece,<br>
-        no hace nada indebido, no busca lo suyo,<br>
-        no se irrita, no guarda rencor;<br>
-        no se goza de la injusticia,<br>
-        sino que se goza de la verdad.<br>
-        Todo lo sufre, todo lo cree,<br>
-        todo lo espera, todo lo soporta.<br>
-        El amor disculpa sin límites,<br>
-        cree sin límites, espera sin límites,<br>
-        aguanta sin límites.<br>
-        El amor no pasa nunca.</p>
-    
-
-        <a href="https://maps.google.com/maps?ll=38.880117,-6.96854&z=15&t=h&hl=es&gl=ES&mapclient=embed&daddr=Parroquia%20de%20La%20Concepci%C3%B3n%20Calle%20San%20Juan%2C%2028%2006002%20Badajoz@38.8801171,-6.9685396" class="w3-button w3-teal w3-hover-yellow">¿Cómo llegar?</a>
-    </div>
-   </div>
-
-    <p class="w3-center"><p>Sabéis que nos encanta las excursiones, el campo, la naturalea... así que hemos elegido un lugar en el que nos sentamos identificados. Lamentablemente la naturaleza y la ciudad no se llevan bien y tendremos que alejarnos 20 minutos del centro para poder llegar pero no os preocupeis en la <b><span class="w3-text-teal">Plaza España</b></span> os esperaran los autobuses para poder llegar.  ></p>
-
-
-   <div class="w3-row">
-    <h4 class="v3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">Los Fresnos (Valverde de leganés).</h4>
-    <!-- Hide this text on small devices -->
-    <div class="w3-col m6 w3-padding-large w3-center ">
-      <p>PUEDO escribir los versos más felices esta noche.<br>
-        Escribir, por ejemplo: "La noche está estrellada,<br>
-        y tiritan, azules, los astros, a lo lejos".<br>
-        El viento de la noche gira en el cielo y canta.<br>
-        En las noches como ésta nos lo pasamos a lo grande.<br>
-        comiendo, riendo bajo  el cielo infinito.<br>
-        Ella me quiso, a veces yo también la quería.<br>
-        Cómo no haber disfrutado de una noche como esa..</p>
-
-        <a href="https://maps.google.com/maps?ll=38.607587,-6.970392&z=18&t=m&hl=es&gl=ES&mapclient=embed&daddr=Los%20Fresnos%2006010%20Badajoz@38.6075867,-6.9703917" class="w3-button w3-teal w3-hover-yellow">¿Cómo llegar?</a>
-    </div>
-
-   
-
-    <div class="w3-col m6 w3-center w3-padding-large">
-     <p></p>
-      <img src="img/fresnos.gif" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
-    </div>
-  </div>
-     <p class="w3-center"> <b> Recuerda !!! </b> Podéis acceder directamente a “Los fresnos” en vuestro vehículo pero también tenéis a vuestra disposición autobuses de ida y vuelta a la plaza (por favor, confirmadnos si queréis hacer uso de los mismos)
+  <p class="w3-center w3-text-teal"><i>En mitad de la naturaleza, como nos gusta a nosotros </i></p>
   
-    <div class="w3-center w3-padding-large">
-     <p></p>
-      <img src="img/plano.jpg" class="w3-round w3-image" alt="Photo of Me" width="500" height="333">
-    </div>
-   
-        
+    <div class="w3-container w3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align"><h4><b>Finca Los Fresnos</b></h4>
+    <hr>
+    
+    
+    
+      <p>      Queremos que todos podamos disfutar al máximo de este día y por eso habrá servicios de autobuses desde badajoz hasta la Finca Los fresnos y vuelta.</p>
+      <p> Aunque preferimos que dejes el coche en casa, podeis acceder a la finca en vuestro vehiculo . </p>
+
+
+  <div class="w3-row">
+       <div class="w3-col m6"> ​
+
+       <p> Para poder organizarlo, necesitaremos que confirméis los autobuses al confirmar vuestra asistencia.</p>
+        ​
+
+        <b>Detalle autobuses:</b>
+        <hr>
+
+        <b>Autobuses a la Finca</b>
+
+        <li>Lugar: Plaza Alta, Badajoz</li>
+
+        <li>Hora: Al terminar la ceremonia (19:00h)</li>
+
+        <b>Autobuses de vuelta: </b>
+
+        <li>Destinos: Pendiente</li>
+
+        <li>Horarios: Pendiente</li>
+
+        <li>Último autobús: Pendiente</li>
 </div>
-    
-
-
-<div class="w3-container w3-hide-small w3-hide-medium">
-  <div class="w3-row w3-hide-small">
-   <div class="w3-col m4  w3-padding-large">
-    
-    <p>La iglesia</p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6253.604255138829!2d-6.979074170402467!3d38.87941856176406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16e434180fdad9%3A0xc4c41c2ef0367888!2sParroquia%20de%20La%20Concepci%C3%B3n!5e1!3m2!1ses!2ses!4v1608849853698!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-  </div>
-
-  <div class="w3-col m4  w3-padding-large">
-    
-    <p>Los autobuses</p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.47060886759!2d-6.972453684384305!3d38.878449055665456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16e4314e4ceda9%3A0xee6a5f95260d9a7c!2sPlaza%20Espa%C3%B1a%2C%2006002%20Badajoz!5e1!3m2!1ses!2ses!4v1608849995576!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-
-  </div>
-
  
-  <div class="w3-col m4  w3-padding-large">
-    
-    <p>Los fresnos</p>
-    
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1452.540775304633!2d-6.971402065721143!3d38.607655007007736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16d158e00c9061%3A0x39d10b687e763a54!2sLos%20Fresnos!5e1!3m2!1ses!2ses!4v1608896187509!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-        <p>La finca Los Fresnos está situada en el Km 7, a la izquierda, de la carretera EX-105, que une las localidades de Valverde de Leganés y Táliga>
-  </div>
+   
 
+    
+     <div class="w3-col m6">
+     <hr>
+      <img src="img/fresnos.gif" class="w3-image" alt="Photo of Me" width="500" height="333">
+    
+    </div>
+    </div>
+    
+    </div> 
+   
+
+</div>    
  </div>
+
+
 </div>
 
 
@@ -261,21 +253,21 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
 
 <!-- Container (Contact Section) -->
 <div class="w3-content w3-container w3-padding-64" id="contacto">
+<div class="w3-container w3-white">
   <h1 class="w3-text-teal w3-center">Nos Encantaría que Nos Escribieras</h1>
-  <p class="w3-center">y nos confirmases tu asistencia, si vienes en autobus o coche propio, si tienes alguna alergia (menos a las copas) o lo que quieras!!!/p>
+  <p class="w3-center w3-text-teal">y nos confirmases tu asistencia, si vienes en autobus o coche propio, si tienes alguna alergia o lo que quieras!!!</p>
 
   <div class="w3-row w3-padding-32 w3-section">
     
     <div class="w3-col m12 w3-panel">
       <div class="w3-large w3-margin-bottom w3-center">
         
-        <a class="fa fa-phone  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="tel:699345580"></a><a class="fa fa-whatsapp  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="https://api.whatsapp.com/send?phone=+034699345580" ></a> Fran  699 345 580<br>
+        <a class="fa fa-phone  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="tel:699345580"></a><a class="fab fa-whatsapp  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="https://api.whatsapp.com/send?phone=+034699345580" ></a> <a class="w3-text-teal">Fran  </a><br>
 
-        <a class="fa fa-phone  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="tel:651887771"></a><a class="fa fa-whatsapp  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="https://api.whatsapp.com/send?phone=+034651887771" ></a> María  651 88 77 71<br>
+        <a class="fa fa-phone  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="tel:651887771"></a><a class="fab fa-whatsapp  fa-fw w3-text-teal w3-xlarge w3-margin-right" href="https://api.whatsapp.com/send?phone=+034651887771" ></a><a class="w3-text-teal"> María </a> <br>
 
-        <a class="fa fa-envelope fa-fw w3-text w3-xlarge w3-margin-right w3-text-teal" href="mailto:barragut26@gmail.com"></a> Email: barragut26@gmail.com<br>
-        <a class= "w3-text-teal" href="https://api.whatsapp.com/send?phone=+034699345580">Envía un mensaje de WhatsApp a <b>Fran</b></a><br>
-        <a class= "w3-text-teal" href="https://api.whatsapp.com/send?phone=+034651887771">Envía un mensaje de WhatsApp a <b>María</b></a>
+        <a class="fa fa-envelope fa-fw w3-text w3-xlarge w3-margin-right w3-text-teal" href="mailto:barragut26@gmail.com"></a> <a class="w3-text-teal">Email: barragut26@gmail.com </a><br>
+        
      </div>
 
 
@@ -287,7 +279,7 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
           <div class="w3-row w3-section">
             <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
               <div class="w3-rest">
-                <input class="w3-input w3-border" name="entry.197479286" type="text" placeholder="Nombre">
+                <input class="w3-input w3-border" name="entry.197479286" type="text" placeholder="Nombre y apellido">
               </div>
             </div>
 
@@ -324,7 +316,7 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
           </div>
 
         
-        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-pencil"></i></div>
+        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fas fa-pencil-alt"></i></div>
         <div class="w3-rest">
         <textarea class="w3-input w3-border" name="entry.682354471" type="text" placeholder="Mensaje" style="resize:none"></textarea>
         </div>
@@ -352,10 +344,10 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
       <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {}"></iframe>
 
     </div>
-    <i class="w3-hover-green w3-text-green fa fa-spotify w3-xxlarge" aria-hidden="true"></i>  <--Clicka el icono para ir a la lista!
+    <i class="w3-hover-green w3-text-green fab fa-spotify w3-xxlarge" aria-hidden="true"></i>  <--Clicka el icono para ir a la lista!
   </div>
 </div>
-
+</div>
 
 
 </div>
@@ -365,15 +357,88 @@ Una cosa importante, en la sección asistencia puedes confirmar si vas a la boda
      <span class="w3-xxlarge w3-text-white w3-wide"><b>INFÓRMACIÓN ÚTIL</b></span>
   </div>
 </div>
-<div class="w3-content w3-container w3-padding-64" id="informacion">
-<h4 class="v3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">¿Cómo llegar?</h4>
-
-
-<h4 class="v3-center w3-border-bottom w3-border-teal w3-text-teal w3-right-align">¿Dónde aparcar?</h4>   
-
-<h4 class="v3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">¿Dónde dormir?</h4>   
+</div>
+<div class="w3-content " id="informacion">
+</div>
 </div>
 
+
+<div class="w3-content w3-container w3-padding-32" id="contacto">
+<div class="w3-container w3-white">
+  <h1 class="w3-container w3-text-teal w3-center">Información útil</h1>
+  <p class="w3-center w3-text-teal">Os dejamos aqui información útil para haceros más fácil la estancia, la iremos actualizando</p>
+
+
+<div class="w3-row">
+
+  <div class="w3-col m12 ">
+  <div class="w3-container">
+    <div class="w3-card-4 w3-white">
+       <h4 class="w3-container w3-text-white w3-teal w3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">¿Cómo llegar?</h4>
+       <div class="w3-container w3-text-teal"> 
+       <p>Para aquellos que no vengais en coche propio en Badajoz hay estación de autobuses, estación de tren y aeropuerto </p>
+       <i> * El aeropuerto se encuentra a 18km de Badajoz por lo que necesitarás un taxi / autobús para llegar a la ciudad (hay parada de taxis en aeropuerto, por si acaso, el telefono de taxis de Badajoz es: 924 24 31 01) </i>
+       </div>
+   </div>
+  </div>
+  </div>
+
+
+
+  <div class="w3-col m12">
+  <div class="w3-container">
+  <div class="w3-card-4 w3-white">
+  <h4 class="w3-container w3-text-white w3-teal w3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">¿Dónde dormir?</h4>
+  <div class="w3-container w3-text-teal"> 
+  <p>Estamos trabajando para buscaros las mejores opciones, actualizaremos la web con más información. </p>
+  </div>
+  </div>
+  </div>
+  </div>
+
+
+
+  <div class="w3-col m12">
+  <div class="w3-container">
+  <div class="w3-card w3-white">
+  <h4 class="w3-container w3-text-white w3-teal w3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align">¿Dónde aparcar?</h4>
+  <div class="w3-container w3-text-teal"> 
+  <p>Estamos trabajando para buscaros las mejores opciones, actualizaremos la web con más información. </p>
+  </div>
+  </div>
+  </div>
+  </div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w3-container w3-teal">
+  <div class="w3-row ">
+   <div class="w3-col m4  w3-padding-large">
+    
+    <p>La iglesia</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6253.604255138829!2d-6.979074170402467!3d38.87941856176406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16e434180fdad9%3A0xc4c41c2ef0367888!2sParroquia%20de%20La%20Concepci%C3%B3n!5e1!3m2!1ses!2ses!4v1608849853698!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+  </div>
+
+  <div class="w3-col m4  w3-padding-large">
+    
+    <p>Los autobuses</p>
+       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d808.8215622120981!2d-6.967911905197171!3d38.88110623379532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16e4343141d423%3A0xa1d0de2c4fa0e9cf!2sPlaza%20Alta%2C%20Badajoz!5e1!3m2!1ses!2ses!4v1612127883441!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+
+  </div>
+
+ 
+  <div class="w3-col m4  w3-padding-large">
+    
+    <p>Los fresnos</p>
+    
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1452.540775304633!2d-6.971402065721143!3d38.607655007007736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd16d158e00c9061%3A0x39d10b687e763a54!2sLos%20Fresnos!5e1!3m2!1ses!2ses!4v1608896187509!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        <p>La finca Los Fresnos está situada en el Km 7, a la izquierda, de la carretera EX-105, que une las localidades de Valverde de Leganés y Táliga>
+  </div>
+
+ </div>
 <!-- Footer -->
 <footer class="w3-center w3-teal w3-padding-64 w3-opacity w3-hover-opacity-off">
   <div class="w3-display-bottomleft w3-padding-large">
