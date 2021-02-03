@@ -38,6 +38,14 @@ body, html {
 }
 
 /* First image (Logo. Full height) */
+ 
+.bgimg-0 {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* or object-fit: contain; */
+}
+ 
 .bgimg-1 {
   background-image: url('img/bienvenida.jpg');
   min-height: 1800px;
@@ -102,6 +110,7 @@ body, html {
  
  
 <!-- First Parallax Image with Logo Text -->
+<bgimg-0 src="img/bienvenida.jpg" >
 <div class="bgimg-1" id="home">
   <div class="w3-display-top w3-padding-32" style="white-space:nowrap;">
     <span class="w3-xxlarge  w3-text-white w3-middle w3-center"><h1>María y Fran <br/></h1><br>
