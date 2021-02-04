@@ -31,8 +31,23 @@ p {line-height: 2}
 
 .bgimg {background-image: url("img/bienvenida.jpg")}
 .bgimg2 {background-image: url("img/celebracion.jpg")}
- .bgimg3 {background-image: url("img/celebracion.jpg")}
+.bgimg-3 {
+  background-image: url("img/contacto.jpg");
+  min-height: 800px;
+  background-position: center;
+  background-size: cover;
+    background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1;
+}
 
+ @media only screen and (max-device-width: 1600px) {
+  .bgimg-1, .bgimg-2, .bgimg-3 .bgimg-4{
+    background-attachment: scroll;
+    min-height: 600px;
+  } 
 
 </style>
 <body>
@@ -123,7 +138,12 @@ p {line-height: 2}
     <h2 class="w3-text-teal">Por supuesto..</h2>
   </div>
 </div>
-
+<div class="w3-display-container bgimg-3">
+  <div class="w3-display-middle w3-text-white w3-center">
+    <h1 class=>Estais invitados</h1><br>
+    <h2 class="w3-text-teal">Por supuesto..</h2>
+  </div>
+</div>
 <!-- Wedding information 
 <div class="bgimg-2 w3-display-container w3-opacity-min">
   <div class="w3-display-middle">
