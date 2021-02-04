@@ -14,8 +14,8 @@
 
 
 
-body,h1,h2{font-family: "Raleway", sans-serif}
-h1,h2,h3 {font-family: 'Open Sans', sans-serif; font-family: 'Pacifico', cursive}
+body,h1,h2,h3{font-family: "Raleway", sans-serif}
+h1,h2 {font-family: 'Open Sans', sans-serif; font-family: 'Pacifico', cursive}
 
 body, html {height: 100%}
 p {line-height: 2}
@@ -26,6 +26,7 @@ p {line-height: 2}
 }
 .bgimg {background-image: url("img/bienvenida.jpg")}
 .bgimg2 {background-image: url("img/celebracion.jpg")}
+.bgimg-2 {background-image: url("img/contacto.jpg")}
 </style>
 <body>
 
@@ -107,77 +108,63 @@ p {line-height: 2}
     </div> 
   </div>
 </div>
+
 <!-- Background photo -->
 <div class="w3-display-container bgimg2">
   <div class="w3-display-middle w3-text-white w3-center">
-    <h1 class="w3-jumbo">You Are Invited</h1><br>
-    <h2>Of course..</h2>
+    <h1 class="w3-jumbo">Estais invitadso</h1><br>
+    <h2>Por supuesto..</h2>
   </div>
 </div>
 
-<!-- Wedding information -->
+<!-- Wedding information 
 <div class="bgimg-2 w3-display-container w3-opacity-min">
   <div class="w3-display-middle">
     <span class="w3-xxlarge w3-text-white w3-wide w3-text-teal"><b>LA CELEBRACIÓN</b></span>
   </div>
 </div>
+-->
 
-
-<div class="w3-container w3-padding-64 w3-pale-red w3-grayscale-min w3-center" id="wedding">
-  <div class="w3-content">
-    <h1 class="w3-text-grey"><b>THE WEDDING</b></h1>
-    <img class="w3-round-large w3-grayscale-min" src="/w3images/wedding_location.jpg" style="width:100%;margin:64px 0">
+<div class="w3-content w3-container w3-padding-64" id="celebracion">
+  <div class="w3-card w3-white w3-padding-32">
+  <h1 class="w3-center w3-text-teal">El Lugar</h1>
+  <p class="w3-center w3-text-teal"><i>En mitad de la naturaleza, como nos gusta a nosotros </i></p>
+    <div class="w3-container w3-center w3-border-bottom w3-border-teal w3-text-teal w3-left-align"><h4><b>Finca Los Fresnos</b></h4>
+    <hr>
+    <p>      Queremos que todos podamos disfutar al máximo de este día y por eso habrá servicios de autobuses desde badajoz hasta la Finca Los fresnos y vuelta.</p>
+    <p> Aunque preferimos que dejes el coche en casa, podeis acceder a la finca en vuestro vehiculo . </p>
     <div class="w3-row">
-      <div class="w3-half">
-        <h2>When</h2>
-        <p>Wedding Ceremony - 2:00pm</p>
-        <p>Reception & Dinner - 5:00pm</p>
-      </div>
-      <div class="w3-half">
-        <h2>Where</h2>
-        <p>Some place, an address</p>
-        <p>Some where, some address</p>
+      <div class="w3-col m6"> 
+      <p> Para poder organizarlo, necesitaremos que confirméis los autobuses al confirmar vuestra asistencia.</p>
+      <b>Detalle autobuses:</b>
+      <hr>
+      <b>Autobuses a la Finca</b>
+      <li>Lugar: Plaza Alta, Badajoz</li>
+      <li>Hora: Al terminar la ceremonia (19:00h)</li>
+      <b>Autobuses de vuelta: </b>
+      <li>Destinos: Pendiente</li>
+      <li>Horarios: Pendiente</li>
+      <li>Último autobús: Pendiente</li>
+      </div> 
+      <div class="w3-col m6">
+      <hr>
+      <img src="img/fresnos.gif" class="w3-image" alt="Photo of Me" width="500" height="333">    
       </div>
     </div>
+  </div> 
+</div>    
+
+
+
+
+
+<!-- Third Parallax Image with Portfolio Text -->
+<div class="bgimg-3 w3-display-container w3-opacity-min">
+  <div class="w3-display-middle">
+     <span class="w3-xxlarge w3-text-white w3-wide"><b>CONTACTA</b></span>
   </div>
 </div>
 
-<!-- RSVP section -->
-<div class="w3-container w3-padding-64 w3-pale-red w3-center w3-wide" id="rsvp">
-  <h1>HOPE YOU CAN MAKE IT!</h1>
-  <p class="w3-large">Kindly Respond By January, 2017</p>
-  <p class="w3-xlarge">
-    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-round w3-red w3-opacity w3-hover-opacity-off" style="padding:8px 60px">RSVP</button>
-  </p>
-</div>
-
-<!-- RSVP modal -->
-<div id="id01" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:600px">
-    <div class="w3-container w3-white w3-center">
-      <h1 class="w3-wide">CAN YOU COME?</h1>
-      <p>We really hope you can make it.</p>
-      <form>
-        <input class="w3-input w3-border" type="text" placeholder="Name(s)" name="name">
-      </form>
-      <p><i>Sincerely, John & Jane</i></p>
-      <div class="w3-row">
-        <div class="w3-half">
-          <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-block w3-green">Going</button>
-        </div>
-        <div class="w3-half">
-          <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-block w3-red">Can't come</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Footer -->
-<footer class="w3-center w3-black w3-padding-16">
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-</footer>
-<div class="w3-hide-small" style="margin-bottom:32px"> </div>
 
 </body>
 </html>
