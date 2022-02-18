@@ -2,6 +2,9 @@
 <title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="marquis.css">
+<link rel="stylesheet" href="marcosletra.css">
+<link rel="preload" href="TheStarintheMidnight.woff2" as="font" type="font/woff2" crossorigin>
 
 <style>
 .bgimg, .bgimg2, .bgimg3, .bgimg4{
@@ -13,9 +16,15 @@
 .bgimg {background-image: url("img/Atardecer 3.jpg")}
 .bgimg2 {background-image: url("img/Jeronimos.jpg")}
 .bgimg3 {background-image: url("img/Torre 1.jpg")}
-</style>
 
-<link rel="stylesheet" href="marquis.css">
+
+.marcos-letra{
+    font-family: 'The Star in the Midnight';
+    font-weight: normal;
+    font-style: normal;
+}
+
+</style>
 
 
 <body>
@@ -38,7 +47,7 @@
       <span onclick="document.getElementById('id01').style.display='none'" 
         class="w3-button w3-display-topright w3-teal">&times;</span>
      
-      <img src="img/save the date.jpg" class="w3-image w3-center" alt="Photo of Me" width="100%"> 
+      <img src="img/SavetheDate2.jpg" class="w3-image w3-center" alt="Photo of Me" width="100%"> 
       
     </div>
   </div>
@@ -62,12 +71,12 @@ document.getElementById('id01').style.display='block'
     <!--- Ojo!! No sé que pasa cuando termina la cuenta atras, jajaja. Creo que vuelve a contar cuestion de entrar en codepen y encontrar un js que te guste -->
         <div class="container">
           <h2 class="w3-xxlarge w3-padding-64 w3-text-teal"><span class="w3-padding w3-opacity-min">y cada vez falta menos</h2>
-          <div id="countdown" class=" w3-text-teal">
+          <div id="countdown" class=" w3-text-red">
             <b>
-              <span  id="days"></span> Días
-              <span  id="hours"></span> Horas
-              <span id="minutes"></span> Minutos
-              <span id="seconds"></span> Segundos
+              <span  id="days"></span> Días <br>
+              <span  id="hours"></span> Horas <br>
+              <span id="minutes"></span> Minutos <br>
+              <span id="seconds"></span> Segundos <br>
             </b>
           </div>
         </div>

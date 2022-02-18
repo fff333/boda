@@ -20,7 +20,7 @@
   }
   //end
   
-  const countDown = new Date(birthday).getTime(),
+  const countDown = new Date("July 10, 2022 19:00:00").getTime(),
       x = setInterval(function() {    
 
         const now = new Date().getTime(),
