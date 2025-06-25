@@ -89,6 +89,35 @@ p {line-height: 2}
   } 
 
 </style>
+
+
+  <script>
+  const canciones = [
+    { nombre: "Canción 1", archivo: "canciones/cancion1.mp3" },
+    { nombre: "Canción 2", archivo: "canciones/cancion2.mp3" },
+    // Añade más aquí según tus archivos reales
+  ];
+
+  const playlist = document.getElementById("playlist");
+  const audio = document.getElementById("audio");
+
+  canciones.forEach(cancion => {
+    const option = document.createElement("option");
+    option.value = cancion.archivo;
+    option.textContent = cancion.nombre;
+    playlist.appendChild(option);
+  });
+
+  playlist.addEventListener("change", function () {
+    audio.src = this.value;
+    audio.play();
+  });
+
+  // Carga la primera canción por defecto
+  playlist.selectedIndex = 0;
+  audio.src = playlist.value;
+</script>
+
 <body>
 
 <!-- Header / Home-->
