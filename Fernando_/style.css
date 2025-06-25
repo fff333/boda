@@ -8,6 +8,17 @@ body {
   justify-content: center;
   min-height: 100vh;
 }
+#controles-adicionales {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#controles-adicionales button {
+  flex: 1 1 40%;
+  max-width: 120px;
+}
 
 #reproductor-musica {
   background: white;
