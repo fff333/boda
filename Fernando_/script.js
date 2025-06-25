@@ -26,14 +26,21 @@ const canciones = [
   { nombre: "26ElCoche", archivo: "canciones/26ElCoche.mp3" },
   { nombre: "27Micarita", archivo: "canciones/27Micarita.mp3" },
   { nombre: "28Despedida", archivo: "canciones/28Despedida.mp3" },
-  { nombre: "29Villancico", archivo: "canciones/29Villancico.mp3" },
-  { nombre: "30Beethoven_TripleConcerto", archivo: "canciones/30Beethoven_TripleConcerto.mp3" }
+  { nombre: "29Villancico", archivo: "canciones/29Villancico.mp3" }
+  
 ];
 
 const playlist = document.getElementById("playlist");
 const audio = document.getElementById("audio");
+const btnPrev = document.getElementById("btn-prev");
+const btnNext = document.getElementById("btn-next");
+const btnRepeat = document.getElementById("btn-repeat");
+const btnRandom = document.getElementById("btn-random");
 
-// Añadir canciones al selector
+let repeatOn = false;
+let randomOn = false;
+
+// Cargar canciones al select
 canciones.forEach(cancion => {
   const option = document.createElement("option");
   option.value = cancion.archivo;
@@ -41,55 +48,52 @@ canciones.forEach(cancion => {
   playlist.appendChild(option);
 });
 
-// Botón repetir
-const repeatButton = document.createElement("button");
-repeatButton.textContent = "🔁 Repetir: OFF";
-repeatButton.style.marginLeft = "10px";
-let repeatOn = false;
-repeatButton.onclick = () => {
+// Función para cargar y reproducir canción por índice
+function playIndex(index) {
+  if (index < 0) index = playlist.options.length -1;
+  if (index >= playlist.options.length) index = 0;
+  playlist.selectedIndex = index;
+  audio.src = playlist.value;
+  audio.play();
+}
+
+// Eventos botones
+btnPrev.onclick = () => {
+  playIndex(playlist.selectedIndex - 1);
+};
+
+btnNext.onclick = () => {
+  playIndex(playlist.selectedIndex + 1);
+};
+
+btnRepeat.onclick = () => {
   repeatOn = !repeatOn;
-  repeatButton.textContent = repeatOn ? "🔁 Repetir: ON" : "🔁 Repetir: OFF";
+  btnRepeat.textContent = repeatOn ? "🔁 Repetir: ON" : "🔁 Repetir: OFF";
 };
 
-// Botón aleatorio
-const randomButton = document.createElement("button");
-randomButton.textContent = "🔀 Aleatorio: OFF";
-randomButton.style.marginLeft = "10px";
-let randomOn = false;
-randomButton.onclick = () => {
+btnRandom.onclick = () => {
   randomOn = !randomOn;
-  randomButton.textContent = randomOn ? "🔀 Aleatorio: ON" : "🔀 Aleatorio: OFF";
+  btnRandom.textContent = randomOn ? "🔀 Aleatorio: ON" : "🔀 Aleatorio: OFF";
 };
 
-playlist.after(repeatButton);
-repeatButton.after(randomButton);
-
-// Cambiar canción manualmente
-playlist.addEventListener("change", function () {
-  audio.src = this.value;
+// Cambiar canción con select
+playlist.addEventListener("change", () => {
+  audio.src = playlist.value;
   audio.play();
 });
 
-// Al terminar una canción
-audio.addEventListener("ended", function () {
+// Al terminar canción
+audio.addEventListener("ended", () => {
   if (repeatOn) {
     audio.currentTime = 0;
     audio.play();
   } else if (randomOn) {
     const randomIndex = Math.floor(Math.random() * playlist.options.length);
-    playlist.selectedIndex = randomIndex;
-    audio.src = playlist.value;
-    audio.play();
+    playIndex(randomIndex);
   } else {
-    const nextIndex = playlist.selectedIndex + 1;
-    if (nextIndex < playlist.options.length) {
-      playlist.selectedIndex = nextIndex;
-      audio.src = playlist.value;
-      audio.play();
-    }
+    playIndex(playlist.selectedIndex + 1);
   }
 });
 
-// Cargar la primera canción por defecto
-playlist.selectedIndex = 0;
-audio.src = playlist.value;
+// Iniciar con primera canción
+playIndex(0);
