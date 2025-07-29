@@ -90,6 +90,55 @@ p {line-height: 2}
   <div class="w3-display-middle w3-text-white w3-center">
     <h1>María y Fran</h1>
     <h2><b>04.09.2021</b></h2>
+
+  
+    
+    <p id="contador"></p>
+  
+
+  <script>
+    function actualizarContador() {
+      const inicio = new Date('2021-09-04T00:00:00');
+      const ahora = new Date();
+
+      let diff = ahora - inicio;
+      const segundosTotales = Math.floor(diff / 1000);
+      const segundos = segundosTotales % 60;
+      const minutosTotales = Math.floor(segundosTotales / 60);
+      const minutos = minutosTotales % 60;
+      const horasTotales = Math.floor(minutosTotales / 60);
+      const horas = horasTotales % 24;
+      const diasTotales = Math.floor(horasTotales / 24);
+
+      const años = Math.floor(diasTotales / 365.25);
+      const meses = Math.floor((diasTotales % 365.25) / 30.44);
+      const dias = Math.floor((diasTotales % 365.25) % 30.44);
+
+      document.getElementById("contador").innerHTML =
+        `<span class="highlight">${años}</span> años, ` +
+        `<span class="highlight">${meses}</span> meses, ` +
+        `<span class="highlight">${dias}</span> días<br>` +
+        `<span class="highlight">${horas.toString().padStart(2, '0')}</span>h ` +
+        `<span class="highlight">${minutos.toString().padStart(2, '0')}</span>m ` +
+        `<span class="highlight">${segundos.toString().padStart(2, '0')}</span>s`;
+    }
+
+    actualizarContador();
+    setInterval(actualizarContador, 1000);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+    
   </div>
 </header>
 
