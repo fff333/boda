@@ -92,7 +92,7 @@ p {line-height: 2}
     <h2><b>04.09.2021</b></h2>
 
   
-    
+    <p "Casados desde....></p>
     <p id="contador"></p>
   
 
@@ -115,12 +115,12 @@ p {line-height: 2}
       const dias = Math.floor((diasTotales % 365.25) % 30.44);
 
       document.getElementById("contador").innerHTML =
-        `<span class="highlight">${años}</span> años, ` +
-        `<span class="highlight">${meses}</span> meses, ` +
+        `<span class="highlight">${años}</span> años<br> ` + 
+        `<span class="highlight">${meses}</span> meses<br> ` +
         `<span class="highlight">${dias}</span> días<br>` +
-        `<span class="highlight">${horas.toString().padStart(2, '0')}</span>h ` +
-        `<span class="highlight">${minutos.toString().padStart(2, '0')}</span>m ` +
-        `<span class="highlight">${segundos.toString().padStart(2, '0')}</span>s`;
+        `<span class="highlight">${horas.toString().padStart(2, '0')}</span>h<br> ` +
+        `<span class="highlight">${minutos.toString().padStart(2, '0')}</span>m<br> ` +
+        `<span class="highlight">${segundos.toString().padStart(2, '0')}</span>s<br>`;
     }
 
     actualizarContador();
