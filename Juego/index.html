@@ -51,12 +51,10 @@
     <ellipse cx="58" cy="84" rx="3" ry="2.2" fill="#E9A6B8"/>
   </svg>
   <h1>Sigue al conejo blanco</h1>
-  <input class="nombre" id="nombre" type="text" maxlength="20" autocomplete="nickname" placeholder="¿Cómo te llamas?" aria-label="Tu nombre">
   <button class="principal" id="empezar">Empezar</button>
   <p class="nota">Este juego usa el micrófono, la cámara y el movimiento del móvil. Te pedirá permiso.</p>
   <div class="secundarios">
     <button id="idioma">🌐 English</button>
-    <a href="ranking.html" id="ranking" hidden>🏆 Ranking</a>
     <button id="reiniciar" hidden>Empezar de cero</button>
   </div>
 </section>
@@ -74,12 +72,10 @@
 
   const PRIMERO = "arbol.html";
   const juego = document.getElementById("juego"), portada = document.getElementById("portada");
-  const boton = document.getElementById("empezar"), nombre = document.getElementById("nombre");
+  const boton = document.getElementById("empezar");
 
-  nombre.value = Comun.leer("nombre", "");
   document.getElementById("idioma").textContent = Comun.idioma === "es" ? "🌐 English" : "🌐 Español";
   document.getElementById("idioma").addEventListener("click", () => { Comun.guardar("idioma", Comun.idioma === "es" ? "en" : "es"); location.reload(); });
-  if (Comun.servidor) document.getElementById("ranking").hidden = false;
 
   // Continuar donde se quedó
   const actual = Comun.leer("actual", "");
@@ -91,8 +87,6 @@
   }
 
   boton.addEventListener("click", async () => {
-    const n = nombre.value.trim().slice(0, 20);
-    if (n) Comun.guardar("nombre", n);
 
     // 1. Audio (se desbloquea con este toque y sirve para todos los niveles)
     try { window.AUDIO = new (window.AudioContext || window.webkitAudioContext)(); window.AUDIO.resume(); } catch (e) {}

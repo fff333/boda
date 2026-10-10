@@ -1,10 +1,3 @@
-// ============================================================
-//  CONFIGURACIÓN DEL RANKING Y LAS VALORACIONES
-//  Pega aquí la URL de tu Google Apps Script (mira LEEME.md).
-//  Si se deja vacía, el juego funciona igual pero sin ranking.
-// ============================================================
-const SERVIDOR = "";
-
 // Utilidades compartidas por todos los niveles
 const Comun = (() => {
   // Orden de los niveles (cada uno es un archivo .html) y su código para volver a él
@@ -161,17 +154,6 @@ const Comun = (() => {
   const leer = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
   const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   const idioma = leer("idioma", "es");
-  // Identidad del jugador (se guarda en su móvil)
-  let jugador = leer("jugador", "");
-  if (!jugador) { jugador = Math.random().toString(36).slice(2, 10) + Date.now().toString(36); guardar("jugador", jugador); }
-  const nombre = () => leer("nombre", "Anónimo");
-  function enviar(datos) {
-    if (!SERVIDOR) return;
-    try {
-      fetch(SERVIDOR, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(Object.assign({ id: jugador, nombre: nombre() }, datos)) }).catch(() => {});
-    } catch (e) {}
-  }
   const archivo = (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "");
   const indice = NIVELES.indexOf(archivo);
 
@@ -205,14 +187,34 @@ const Comun = (() => {
 
   // ---------- Sonido y vibración ----------
   let ctx = null;
+  // Cada nivel suena a través de su propia «salida». Al cambiar de nivel se desconecta,
+  // así ningún sonido (la radio, un zumbido…) sigue sonando en el nivel siguiente.
+  let salida = null;
+  function prepararSalida(c) {
+    if (!c || (salida && salida.context === c)) return;
+    try {
+      if (!c.__destinoReal) c.__destinoReal = c.destination;
+      salida = c.createGain(); salida.connect(c.__destinoReal);
+      Object.defineProperty(c, "destination", { value: salida, configurable: true, writable: true });
+    } catch (e) { salida = null; }
+  }
+  addEventListener("pagehide", () => {
+    if (!salida) return;
+    try {
+      salida.disconnect();
+      const c = salida.context;
+      Object.defineProperty(c, "destination", { value: c.__destinoReal, configurable: true, writable: true });
+    } catch (e) {}
+    salida = null;
+  });
   function audio() {
-    if (marco && marco.AUDIO) {
-      if (marco.AUDIO.state === "suspended") marco.AUDIO.resume();
-      return marco.AUDIO;
-    }
-    if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
-    if (ctx && ctx.state === "suspended") ctx.resume();
-    return ctx;
+    let c;
+    if (marco && marco.AUDIO) c = marco.AUDIO;
+    else { if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } c = ctx; }
+    if (!c) return null;
+    if (c.state === "suspended") c.resume();
+    prepararSalida(c);
+    return c;
   }
   function tono(freq, cuando = 0, dur = .25, vol = .2, tipo = "triangle") {
     const c = audio(); if (!c) return;
@@ -255,32 +257,18 @@ const Comun = (() => {
     const nSig = NIVELES.indexOf(siguiente);
     const frase = ELOGIOS[archivo] || "";
     const codigo = nSig >= 0 ? `<span class="sup-codigo">Código del nivel ${nSig + 1}: <b>${CODIGOS[siguiente]}</b></span>` : "";
-    const fila = (k, simbolo) => `<div class="v-fila" data-k="${k}">${[1, 2, 3, 4, 5].map(n => `<button data-v="${n}" aria-label="${n}">${simbolo === "n" ? n : simbolo}</button>`).join("")}</div>`;
     document.body.insertAdjacentHTML("beforeend", `
       <div class="superado" role="status">
         <span class="sup-nivel">Nivel ${indice + 1} superado</span>
         <p>${frase}</p>
         ${CURIOSIDADES[archivo] ? `<div class="curiosidad"><span class="cur-titulo">¿Sabías que…?</span><p class="cur-texto">${CURIOSIDADES[archivo]}</p></div>` : ""}
         ${codigo}
-        <div class="valorar">
-          <span class="v-titulo">¿Te ha divertido?</span>
-          ${fila("diversion", "★")}
-          <span class="v-titulo">¿Cómo de difícil te ha parecido?</span>
-          ${fila("dificultad", "n")}
-        </div>
         <button class="sup-seguir">Continuar</button>
       </div>`);
     const el = document.querySelector(".superado");
-    const voto = {};
-    el.querySelectorAll(".v-fila").forEach(f => f.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-      const v = +b.dataset.v; voto[f.dataset.k] = v;
-      f.querySelectorAll("button").forEach(x => x.classList.toggle("on", +x.dataset.v <= v));
-      tono(500 + v * 80, 0, .1, .08, "sine");
-    })));
-    el.querySelector(".sup-seguir").addEventListener("click", () => {
-      if (voto.diversion || voto.dificultad) enviar({ tipo: "voto", nivel: indice + 1, diversion: voto.diversion || "", dificultad: voto.dificultad || "" });
-      location.href = url;
-    });
+    el.querySelector(".sup-seguir").addEventListener("click", () => { location.href = url; });
+    // Apagar los sonidos del nivel (la radio, los zumbidos…) poco después de la melodía de victoria
+    if (salida) { const c = audio(); salida.gain.setTargetAtTime(0, c.currentTime + 1.2, .25); }
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("visible")));
   }
 
@@ -288,7 +276,7 @@ const Comun = (() => {
     <ellipse cx="14" cy="10" rx="4" ry="10"/><ellipse cx="26" cy="10" rx="4" ry="10"/>
     <circle cx="20" cy="26" r="11"/></svg>`;
 
-  // ---------- Menú: nivel anterior, código, idioma, ranking ----------
+  // ---------- Menú: nivel anterior, código e idioma ----------
   function irACodigo(texto) {
     const c = texto.toUpperCase().replace(/[^A-Z0-9]/g, "");
     const n = Object.keys(CODIGOS).find(k => CODIGOS[k] === c);
@@ -309,7 +297,6 @@ const Comun = (() => {
             <button class="accion corta" data-a="codigo">Ir</button>
           </div>
           <button class="accion" data-a="idioma">🌐 ${otro}</button>
-          ${SERVIDOR ? `<button class="accion" data-a="ranking">🏆 Ranking</button>` : ""}
           <button class="accion" data-a="portada">🏠 Portada</button>
           <button class="cerrar">Volver al juego</button>
         </div>
@@ -325,7 +312,6 @@ const Comun = (() => {
       const a = b.dataset.a;
       if (a === "atras") location.href = anterior + ".html";
       if (a === "idioma") { guardar("idioma", idioma === "es" ? "en" : "es"); if (marco && marco.aplicarIdioma) marco.aplicarIdioma(); location.reload(); }
-      if (a === "ranking") (marco || window).location.href = "ranking.html";
       if (a === "portada") (marco || window).location.href = "index.html";
       if (a === "codigo") {
         const n = irACodigo(input.value);
@@ -345,7 +331,7 @@ const Comun = (() => {
       menu();
       guardar("actual", archivo);
       const max = parseInt(leer("max", "0"), 10) || 0;
-      if (indice + 1 > max) { guardar("max", String(indice + 1)); enviar({ tipo: "progreso", nivel: indice + 1 }); }
+      if (indice + 1 > max) guardar("max", String(indice + 1));
     }
     addEventListener("pageshow", e => { if (e.persisted) location.reload(); });
     if (casi === null) { document.body.insertAdjacentHTML("beforeend", `<div class="fundido"></div>`); return; }
@@ -480,6 +466,6 @@ const Comun = (() => {
   }
 
   return { audio, tono, vibrar, normalizar, ir, avisar, nivel, inicio, superado, pistas, t, idioma,
-           NIVELES, CODIGOS, irACodigo, leer, guardar, enviar, nombre, jugador, servidor: SERVIDOR,
+           NIVELES, CODIGOS, irACodigo, leer, guardar,
            pedirOrientacion, pedirMovimiento, pedirMicro };
 })();
