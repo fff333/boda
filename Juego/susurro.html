@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Secreto</title>
+<style>
+  .conejo { position: absolute; left: 50%; top: 56%; width: min(64vw, 300px); transform: translate(-50%, -50%); }
+  .conejo svg { width: 100%; display: block; overflow: visible; }
+  .oreja { cursor: pointer; }
+  .conejo.habla svg { animation: hablar .25s ease 4; }
+  @keyframes hablar { 50% { transform: scale(1.02, .98); } }
+  .escrito { position: absolute; left: 0; right: 0; top: 24%; text-align: center; font-size: 30px; opacity: 0; transition: opacity 1s; }
+  .escrito.visible { opacity: .5; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <p class="escrito" id="escrito">trébol</p>
+  <div class="conejo" id="conejo">
+    <svg viewBox="0 0 120 130">
+      <g class="oreja" id="oreja1"><ellipse cx="48" cy="28" rx="13" ry="30" fill="transparent"/><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/></g>
+      <g class="oreja" id="oreja2"><ellipse cx="70" cy="26" rx="13" ry="30" fill="transparent"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/></g>
+      <ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/>
+      <circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/>
+      <ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">El conejito quiere contarte un secreto</p>
+<p class="subpista">Sube el volumen y tócale una oreja</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["El conejito habla muy bajito.", "Sube el volumen del móvil y toca una de sus orejas.", "Dice el nombre de una planta que trae suerte. Escribe lo que oyes."]);
+  Comun.nivel("XXXI", { trevol: "Casi. Se escribe con be", suerte: "¿Qué planta da suerte?", planta: "¿Qué planta?" });
+  const conejo = document.getElementById("conejo"), escrito = document.getElementById("escrito");
+  let veces = 0;
+  function susurrar() {
+    conejo.classList.remove("habla"); void conejo.offsetWidth; conejo.classList.add("habla");
+    veces++;
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance("trébol");
+      u.lang = "es-ES"; u.rate = .75; u.pitch = 1.5; u.volume = 1;
+      const voz = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith("es"));
+      if (voz) u.voice = voz;
+      speechSynthesis.speak(u);
+    }
+    if (!("speechSynthesis" in window) || veces >= 3) escrito.classList.add("visible");
+  }
+  ["oreja1", "oreja2"].forEach(id => document.getElementById(id).addEventListener("click", susurrar));
+  if ("speechSynthesis" in window) speechSynthesis.getVoices();
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root { --fondo: #0B1020; --crema: #F2E9C9; --rosa: #E9A6B8; --anil: #3949AB; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: var(--fondo); color: var(--crema);
+  font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+  touch-action: none; -webkit-user-select: none; user-select: none;
+}
+.escena { position: fixed; inset: 0; height: 100dvh; }
+.numero {
+  position: fixed; z-index: 20; pointer-events: none;
+  top: calc(env(safe-area-inset-top) + 14px); left: 18px;
+  font-size: 15px; letter-spacing: .18em; opacity: .45;
+}
+.pista {
+  position: fixed; left: 0; right: 0; z-index: 6; pointer-events: none;
+  top: calc(env(safe-area-inset-top) + 8vh);
+  text-align: center; padding: 0 9vw;
+  font-size: clamp(20px, 5.6vw, 30px); line-height: 1.25;
+}
+.subpista {
+  position: fixed; left: 0; right: 0; z-index: 6; pointer-events: none;
+  bottom: calc(env(safe-area-inset-bottom) + 92px);
+  text-align: center; font-size: 16px; opacity: .5; padding: 0 10vw;
+}
+
+/* Barra para escribir la palabra */
+.respuesta {
+  position: fixed; left: 0; right: 0; z-index: 30;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  display: flex; justify-content: center;
+}
+.boton-ojo {
+  width: 54px; height: 54px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(242,233,201,.35);
+  background: rgba(11,16,32,.65); color: var(--crema);
+  display: grid; place-items: center;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.boton-ojo svg { width: 28px; }
+.campo {
+  display: none; align-items: center; gap: 6px;
+  background: rgba(11,16,32,.88); border: 1px solid rgba(242,233,201,.35);
+  border-radius: 40px; padding: 6px 6px 6px 20px;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.respuesta.abierta .boton-ojo { display: none; }
+.respuesta.abierta .campo { display: flex; }
+.campo input {
+  font: inherit; font-size: 18px; color: var(--crema);
+  background: none; border: none; outline: none;
+  width: 55vw; max-width: 240px;
+  -webkit-user-select: text; user-select: text;
+}
+.campo input::placeholder { color: rgba(242,233,201,.35); }
+.campo .entrar {
+  width: 42px; height: 42px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--crema); color: var(--fondo); font-size: 20px;
+}
+.campo.error { animation: temblar .4s ease; }
+@keyframes temblar {
+  20% { transform: translateX(-8px); } 40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); } 80% { transform: translateX(3px); }
+}
+.aviso {
+  position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none;
+  bottom: calc(env(safe-area-inset-bottom) + 84px);
+  text-align: center; font-size: 17px; padding: 0 10vw;
+  opacity: 0; transition: opacity .4s ease;
+  text-shadow: 0 1px 8px rgba(0,0,0,.6);
+}
+.aviso.visible { opacity: .9; }
+
+/* Pantalla de inicio (permisos y audio) */
+.inicio {
+  position: fixed; inset: 0; z-index: 40; background: var(--fondo);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5vh; padding: 10vw; text-align: center; transition: opacity .8s ease;
+}
+.inicio p { font-size: clamp(22px, 6.5vw, 34px); line-height: 1.25; max-width: 18ch; }
+.inicio button {
+  font: inherit; font-size: 20px; color: var(--fondo); background: var(--crema);
+  border: none; border-radius: 40px; padding: 14px 34px; cursor: pointer;
+}
+.inicio.oculto { opacity: 0; pointer-events: none; }
+
+.fundido {
+  position: fixed; inset: 0; z-index: 50; background: var(--fondo);
+  opacity: 0; pointer-events: none; transition: opacity .6s ease;
+}
+.fundido.activo { opacity: 1; }
+.entrada { animation: aparecer 1s ease both; }
+@keyframes aparecer { from { opacity: 0; } }
+button:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Nivel superado */
+.superado {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(11,16,32,.94);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 12vw; text-align: center; color: #F2E9C9;
+  font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+  opacity: 0; transition: opacity .9s ease;
+}
+.superado.visible { opacity: 1; }
+.superado .sup-nivel {
+  font-size: 14px; letter-spacing: .22em; text-transform: uppercase; opacity: .5; font-style: normal;
+}
+.superado p {
+  font-size: clamp(24px, 7vw, 38px); line-height: 1.25; max-width: 16ch;
+  transform: translateY(10px); transition: transform 1.2s ease .2s;
+}
+.superado.visible p { transform: none; }
+
+/* Pistas */
+.boton-pista {
+  position: fixed; z-index: 35;
+  top: calc(env(safe-area-inset-top) + 8px); right: 12px;
+  width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(242,233,201,.35); background: rgba(11,16,32,.6);
+  color: #F2E9C9; font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 20px;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.panel-pista {
+  position: fixed; inset: 0; z-index: 45;
+  background: rgba(5,8,15,.6); display: flex; align-items: center; justify-content: center;
+  padding: 8vw; opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+.panel-pista.abierto { opacity: 1; pointer-events: auto; }
+.panel-pista .tarjeta {
+  width: 100%; max-width: 380px; background: #141B36; color: #F2E9C9;
+  border: 1px solid rgba(242,233,201,.2); border-radius: 22px;
+  padding: 26px 24px 20px; text-align: center;
+  font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+  transform: translateY(12px); transition: transform .35s ease;
+}
+.panel-pista.abierto .tarjeta { transform: none; }
+.panel-pista .contador { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; opacity: .5; font-style: normal; }
+.panel-pista .texto-pista { font-size: 21px; line-height: 1.35; margin: 14px 0 22px; white-space: pre-line; }
+.panel-pista .tarjeta { max-height: 82vh; overflow-y: auto; }
+.panel-pista .acciones { display: flex; flex-direction: column; gap: 10px; }
+.panel-pista .acciones button {
+  font: inherit; font-size: 17px; border-radius: 30px; padding: 12px; cursor: pointer;
+}
+.panel-pista .otra { background: #F2E9C9; color: #0B1020; border: none; }
+.panel-pista .cerrar { background: none; color: #F2E9C9; border: 1px solid rgba(242,233,201,.3); }

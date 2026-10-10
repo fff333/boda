@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Eclipse</title>
+<style>
+  .cielo { background: #7FA3D9; transition: background .3s; }
+  .astro { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+  .sol { background: radial-gradient(circle, #FFF6CF 0%, #FFE07A 60%, #FFC94A 100%); box-shadow: 0 0 60px 20px rgba(255,214,90,.6); }
+  .corona { box-shadow: 0 0 0 0 rgba(255,255,255,0); transition: box-shadow .3s; }
+  .luna { background: #0E1426; }
+  .final { position: absolute; left: 0; right: 0; top: 74%; text-align: center; font-size: clamp(22px, 6.4vw, 32px); opacity: 0; transition: opacity 2s; padding: 0 10vw; }
+  .final.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena cielo entrada" id="cielo">
+  <div class="astro sol" id="sol"></div>
+  <div class="astro luna corona" id="luna"></div>
+  <p class="final" id="final">Has visto lo que casi nadie mira</p>
+</main>
+<p class="pista" id="pista">Tapa el sol</p>
+<p class="subpista" id="sub"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Inclina el móvil para mover la luna.", "Tapa el sol por completo y mantenlo tapado unos segundos.", "Durante un eclipse todo se queda en silencio. Tú también debes callar."]);
+  Comun.nivel("XLIII", null);
+  const cielo = document.getElementById("cielo"), sol = document.getElementById("sol"), luna = document.getElementById("luna");
+  const final = document.getElementById("final"), pista = document.getElementById("pista"), sub = document.getElementById("sub");
+  let W = innerWidth, H = innerHeight;
+  const D = Math.min(W, H) * .28;
+  [sol, luna].forEach(a => { a.style.width = a.style.height = D + "px"; });
+  let mx = W * .2, my = H * .75, tx = mx, ty = my, base = null, giro = false, medir = null, umbral = .04;
+  let progreso = 0, hecho = false, ultimo = performance.now(), avisado = 0, t0 = performance.now();
+  function alOrientar(e) {
+    if (e.beta == null) return; giro = true; sub.textContent = "";
+    if (!base) base = { b: e.beta, g: e.gamma, x: mx, y: my };
+    tx = base.x + (e.gamma - base.g) * (W / 45);
+    ty = base.y + (e.beta - base.b) * (H / 55);
+  }
+  addEventListener("pointerdown", e => { if (giro) base = null; else { tx = e.clientX; ty = e.clientY; } });
+  addEventListener("pointermove", e => { if (!giro) { tx = e.clientX; ty = e.clientY; } });
+  Comun.inicio("Hoy hay eclipse", "Mirar al cielo", async () => {
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    medir = await Comun.pedirMicro();
+    setTimeout(() => { if (!giro) sub.textContent = "Arrastra la luna con el dedo"; }, 2000);
+    ultimo = performance.now(); requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    const t = (ahora - t0) / 1000;
+    const sx = W / 2 + Math.sin(t * .25) * W * .1, sy = H * .42 + Math.cos(t * .2) * H * .05;
+    tx = Math.max(0, Math.min(W, tx)); ty = Math.max(0, Math.min(H, ty));
+    mx += (tx - mx) * .1; my += (ty - my) * .1;
+    sol.style.left = sx + "px"; sol.style.top = sy + "px";
+    luna.style.left = mx + "px"; luna.style.top = my + "px";
+    const dist = Math.hypot(mx - sx, my - sy) / D;
+    const tapado = Math.max(0, 1 - dist);
+    const oscuro = Math.round(127 - tapado * 115), oscuroG = Math.round(163 - tapado * 150), oscuroB = Math.round(217 - tapado * 190);
+    cielo.style.background = `rgb(${oscuro},${oscuroG},${oscuroB})`;
+    if (!hecho) {
+      const ruido = medir ? medir() > umbral : false;
+      const total = dist < .22;
+      if (total && !ruido) progreso = Math.min(1, progreso + dt / (medir ? 4000 : 6000));
+      else progreso = Math.max(0, progreso - dt / 900);
+      if (total && ruido && ahora - avisado > 3000) { avisado = ahora; Comun.avisar("Shhh…"); }
+      luna.style.boxShadow = `0 0 ${20 + progreso * 70}px ${progreso * 25}px rgba(255,255,255,${(.15 + progreso * .7) * (total ? 1 : 0)})`;
+      if (progreso >= 1) {
+        hecho = true; pista.style.opacity = 0; final.classList.add("visible");
+        [261.63, 392, 523.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .25, 2, .1, "sine")); Comun.vibrar([100, 80, 200]);
+        setTimeout(() => Comun.superado("fin.html", "XLIII"), 3500);
+      }
+    }
+    requestAnimationFrame(bucle);
+  }
+</script>
+</body>
+</html>

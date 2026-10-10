@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Laberinto</title>
+<style>
+  canvas { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <canvas id="lienzo"></canvas>
+</main>
+<p class="pista">Lleva la luz hasta la salida</p>
+<p class="subpista" id="sub" style="bottom: calc(env(safe-area-inset-bottom) + 76px)"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Inclina el móvil para mover la bola.", "Si se descoloca, toca la pantalla para volver a centrar la inclinación.", "La salida es la casilla rosa, abajo a la derecha. Ve despacio en las curvas."]);
+  Comun.nivel("XLII", null);
+  // Laberinto generado siempre igual (semilla fija), 6 × 8 celdas
+  const CC = 6, FF = 8, COLS = CC * 2 + 1, FILAS = FF * 2 + 1;
+  let semilla = 7;
+  const azar = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+  const mapa = Array.from({ length: FILAS }, () => Array(COLS).fill(1));
+  (function excavar(cx, cy) {
+    mapa[cy * 2 + 1][cx * 2 + 1] = 0;
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]].sort(() => azar() - .5);
+    for (const [dx, dy] of dirs) {
+      const nx = cx + dx, ny = cy + dy;
+      if (nx >= 0 && ny >= 0 && nx < CC && ny < FF && mapa[ny * 2 + 1][nx * 2 + 1]) {
+        mapa[cy * 2 + 1 + dy][cx * 2 + 1 + dx] = 0; excavar(nx, ny);
+      }
+    }
+  })(0, 0);
+  const SALIDA = { x: COLS - 2, y: FILAS - 2 };
+
+  const lienzo = document.getElementById("lienzo"), c = lienzo.getContext("2d"), sub = document.getElementById("sub");
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  let T, bx, by, vx = 0, vy = 0, ax = 0, ay = 0, base = null, giro = false, dedo = null, hecho = false;
+  function ajustar() {
+    T = Math.floor(Math.min(innerWidth * .94 / COLS, innerHeight * .7 / FILAS));
+    lienzo.width = COLS * T * dpr; lienzo.height = FILAS * T * dpr;
+    lienzo.style.width = COLS * T + "px"; lienzo.style.height = FILAS * T + "px";
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  ajustar();
+  bx = 1.5 * T; by = 1.5 * T;
+  const R = () => T * .3;
+  const muro = (x, y) => { const cx = Math.floor(x / T), cy = Math.floor(y / T); return cy < 0 || cx < 0 || cy >= FILAS || cx >= COLS || mapa[cy][cx] === 1; };
+  const choca = (x, y) => { const r = R(); return muro(x - r, y - r) || muro(x + r, y - r) || muro(x - r, y + r) || muro(x + r, y + r); };
+
+  function alOrientar(e) {
+    if (e.beta == null) return; giro = true; sub.textContent = "";
+    if (!base) base = { b: e.beta, g: e.gamma };
+    ax = Math.max(-1, Math.min(1, (e.gamma - base.g) / 25));
+    ay = Math.max(-1, Math.min(1, (e.beta - base.b) / 25));
+  }
+  addEventListener("pointerdown", e => { if (giro) base = null; else dedo = { x: e.clientX, y: e.clientY }; });
+  addEventListener("pointermove", e => { if (dedo) dedo = { x: e.clientX, y: e.clientY }; });
+  addEventListener("pointerup", () => { dedo = null; if (!giro) { ax = ay = 0; } });
+
+  Comun.inicio("Un laberinto a oscuras", "Entrar", async () => {
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    setTimeout(() => { if (!giro) sub.textContent = "Mantén el dedo hacia donde quieras mover la bola"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+
+  function bucle() {
+    if (!giro && dedo) {
+      const r = lienzo.getBoundingClientRect(), dx = dedo.x - (r.left + bx), dy = dedo.y - (r.top + by), d = Math.hypot(dx, dy) || 1;
+      ax = dx / d * Math.min(1, d / 80); ay = dy / d * Math.min(1, d / 80);
+    }
+    const acel = T * .012, max = T * .16;
+    vx = Math.max(-max, Math.min(max, (vx + ax * acel) * .94));
+    vy = Math.max(-max, Math.min(max, (vy + ay * acel) * .94));
+    if (!hecho) {
+      if (!choca(bx + vx, by)) bx += vx; else vx *= -.2;
+      if (!choca(bx, by + vy)) by += vy; else vy *= -.2;
+      if (Math.floor(bx / T) === SALIDA.x && Math.floor(by / T) === SALIDA.y) {
+        hecho = true; [392, 523.25, 659.25, 783.99].forEach((f, i) => Comun.tono(f, i * .12, .8, .14, "sine")); Comun.vibrar([30, 50, 60]);
+        setTimeout(() => Comun.superado("eclipse.html", "XLII"), 1200);
+      }
+    }
+    dibujar(); requestAnimationFrame(bucle);
+  }
+  function dibujar() {
+    c.clearRect(0, 0, COLS * T, FILAS * T);
+    for (let y = 0; y < FILAS; y++) for (let x = 0; x < COLS; x++) {
+      c.fillStyle = mapa[y][x] ? "#2A3966" : "#0E1426";
+      c.fillRect(x * T, y * T, T + .5, T + .5);
+    }
+    c.fillStyle = "#E9A6B8"; c.fillRect(SALIDA.x * T + 2, SALIDA.y * T + 2, T - 4, T - 4);
+    const g = c.createRadialGradient(bx, by, 0, bx, by, R() * 3);
+    g.addColorStop(0, "rgba(242,233,201,.5)"); g.addColorStop(1, "rgba(242,233,201,0)");
+    c.fillStyle = g; c.beginPath(); c.arc(bx, by, R() * 3, 0, 7); c.fill();
+    c.fillStyle = "#F2E9C9"; c.beginPath(); c.arc(bx, by, R(), 0, 7); c.fill();
+  }
+</script>
+</body>
+</html>

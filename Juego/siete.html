@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Principio</title>
+<style>
+  .arco { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); width: min(92vw, 440px); height: min(60vw, 290px); }
+  .nota {
+    position: absolute; width: 17%; aspect-ratio: 1; border-radius: 50%; border: none; cursor: pointer;
+    transform: translate(-50%, -50%); transition: transform .12s, box-shadow .12s;
+    box-shadow: 0 0 0 0 rgba(255,255,255,0);
+  }
+  .nota.suena { transform: translate(-50%, -50%) scale(1.25); box-shadow: 0 0 30px 8px rgba(255,255,255,.35); }
+  .verso {
+    position: absolute; left: 0; right: 0; top: 18%; text-align: center; padding: 0 9vw;
+    font-size: clamp(20px, 5.6vw, 28px); line-height: 1.35; pointer-events: none;
+  }
+  .verso .segundo { display: block; margin-top: 16px; opacity: 0; transition: opacity 2s ease; }
+  .verso .segundo.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <p class="verso">
+    Siete colores. Siete notas. Siete años.
+    <span class="segundo" id="segundo">Vuelve a quien seguiste<br>al principio de todo</span>
+  </p>
+  <div class="arco" id="arco"></div>
+</main>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Cada color suena a una nota. ¿Recuerdas el orden del arcoíris?", "Toca los colores de rojo a violeta: do, re, mi, fa, sol, la, si.", "¿A quién seguías en la primera pantalla?"]);
+  Comun.nivel("XIII", {
+    madriguera: "Ya estuviste allí. ¿A quién seguías?",
+    arbol: "Junto al árbol había alguien",
+    blanco: "¿Blanco qué?",
+    principio: "¿Y a quién viste allí?"
+  });
+
+  const COLORES = ["#E53935","#FB8C00","#FDD835","#43A047","#1E88E5","#3949AB","#8E24AA"];
+  const NOTAS = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+  const arco = document.getElementById("arco"), segundo = document.getElementById("segundo");
+  // colocadas en un arco, pero mezcladas
+  const orden = [3, 6, 0, 5, 2, 4, 1];
+  let tocadas = [];
+
+  orden.forEach((n, i) => {
+    const a = Math.PI - (i / 6) * Math.PI;
+    const b = document.createElement("button");
+    b.className = "nota";
+    b.style.background = COLORES[n];
+    b.style.left = (50 + Math.cos(a) * 42) + "%";
+    b.style.top = (88 - Math.sin(a) * 78) + "%";
+    b.setAttribute("aria-label", "Nota");
+    b.addEventListener("pointerdown", ev => {
+      ev.preventDefault();
+      Comun.tono(NOTAS[n], 0, .6, .22);
+      Comun.vibrar(10);
+      b.classList.add("suena"); setTimeout(() => b.classList.remove("suena"), 200);
+      tocadas.push(n); tocadas = tocadas.slice(-7);
+      if (tocadas.join() === "0,1,2,3,4,5,6" && !segundo.classList.contains("visible")) {
+        segundo.classList.add("visible");
+        setTimeout(() => Comun.tono(523.25, 0, 1.2, .2), 300);
+      }
+    });
+    arco.appendChild(b);
+  });
+</script>
+</body>
+</html>

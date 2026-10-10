@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Aliento</title>
+<style>
+  .fondo-noche { background: radial-gradient(ellipse at 50% 30%, #2A3966 0%, #0B1020 75%); }
+  .acertijo {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    text-align: center; padding: 0 10vw; font-size: clamp(30px, 9vw, 52px); line-height: 1.2;
+  }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pista { color: #2A3966; z-index: 7; }
+  .numero { color: #2A3966; opacity: .6; }
+</style>
+</head>
+<body>
+<main class="escena fondo-noche entrada">
+  <p class="acertijo">Si me nombras,<br>me rompes</p>
+  <canvas id="escarcha"></canvas>
+</main>
+<p class="pista">Hace frío aquí dentro</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Hay algo escrito debajo del hielo.", "Frota la pantalla con el dedo para quitar la escarcha, y date prisa.", "Si dices su nombre, desaparece. ¿Qué es?"]);
+  Comun.nivel("XI", { hielo: "Eso es lo que lo cubre", nada: "Casi… pero tiene nombre" });
+
+  const lienzo = document.getElementById("escarcha");
+  const c = lienzo.getContext("2d");
+  let dpr = Math.min(devicePixelRatio || 1, 2), frotado = 0;
+
+  function helar() {
+    lienzo.width = innerWidth * dpr; lienzo.height = innerHeight * dpr;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.globalCompositeOperation = "source-over";
+    c.fillStyle = "rgba(222,233,244,.97)";
+    c.fillRect(0, 0, innerWidth, innerHeight);
+    for (let i = 0; i < 900; i++) {
+      c.fillStyle = `rgba(255,255,255,${Math.random() * .7})`;
+      c.beginPath();
+      c.arc(Math.random() * innerWidth, Math.random() * innerHeight, Math.random() * 2.2, 0, 7);
+      c.fill();
+    }
+  }
+  helar();
+  addEventListener("resize", helar);
+
+  function frotar(x, y) {
+    c.globalCompositeOperation = "destination-out";
+    const g = c.createRadialGradient(x, y, 0, x, y, 34);
+    g.addColorStop(0, "rgba(0,0,0,.9)"); g.addColorStop(1, "rgba(0,0,0,0)");
+    c.fillStyle = g;
+    c.beginPath(); c.arc(x, y, 34, 0, 7); c.fill();
+    if (++frotado % 12 === 0) Comun.vibrar(5);
+  }
+  lienzo.addEventListener("pointerdown", e => { Comun.audio(); frotar(e.clientX, e.clientY); });
+  lienzo.addEventListener("pointermove", e => {
+    if (e.buttons || e.pointerType === "touch") frotar(e.clientX, e.clientY);
+  });
+
+  // La escarcha vuelve poco a poco
+  setInterval(() => {
+    c.globalCompositeOperation = "source-over";
+    c.fillStyle = "rgba(222,233,244,.018)";
+    c.fillRect(0, 0, innerWidth, innerHeight);
+  }, 120);
+</script>
+</body>
+</html>

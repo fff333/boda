@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Fases</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 40%, #1E2A4A 0%, #0B1020 75%); }
+  .luna { position: absolute; left: 50%; top: 50%; width: min(60vw, 280px); transform: translate(-50%, -50%); cursor: pointer; border: none; background: none; }
+  .luna svg { width: 100%; display: block; overflow: visible; transition: filter 1s; }
+  .luna.llena svg { filter: drop-shadow(0 0 40px rgba(242,233,201,.7)); }
+  #sombra { transition: transform .6s ease; }
+</style>
+</head>
+<body>
+<main class="escena noche entrada">
+  <button class="luna" id="luna" aria-label="Luna">
+    <svg viewBox="0 0 200 200">
+      <defs><clipPath id="disco"><circle cx="100" cy="100" r="90"/></clipPath></defs>
+      <circle cx="100" cy="100" r="90" fill="#F2E9C9"/>
+      <circle cx="70" cy="80" r="14" fill="#E2D6B0"/><circle cx="125" cy="125" r="20" fill="#E2D6B0"/><circle cx="130" cy="65" r="8" fill="#E2D6B0"/>
+      <g clip-path="url(#disco)"><circle id="sombra" cx="100" cy="100" r="92" fill="#1A2240"/></g>
+      <circle cx="100" cy="100" r="90" fill="none" stroke="#F2E9C9" stroke-opacity=".25" stroke-width="2"/>
+    </svg>
+  </button>
+</main>
+<p class="pista">La luna está tímida esta noche</p>
+<p class="subpista">Ayúdala a llenarse</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["La luna cambia de forma cada pocos días.", "Toca la luna.", "Sigue tocando hasta que esté llena."]);
+  Comun.nivel("XIX", null);
+  const luna = document.getElementById("luna"), sombra = document.getElementById("sombra");
+  const FASES = [0, 45, 90, 140, 200];
+  let fase = 0;
+  luna.addEventListener("pointerdown", () => {
+    if (fase >= FASES.length - 1) return;
+    fase++;
+    sombra.style.transform = `translateX(${FASES[fase]}px)`;
+    Comun.tono(330 + fase * 70, 0, .5, .15, "sine"); Comun.vibrar(12);
+    if (fase === FASES.length - 1) {
+      luna.classList.add("llena");
+      const c = Comun.audio();
+      if (c) { // un aullido
+        const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + .4;
+        o.type = "sine"; o.frequency.setValueAtTime(300, t);
+        o.frequency.linearRampToValueAtTime(620, t + .6); o.frequency.linearRampToValueAtTime(420, t + 1.6);
+        g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.15, t + .2); g.gain.exponentialRampToValueAtTime(.0001, t + 1.7);
+        o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.8);
+      }
+      setTimeout(() => Comun.superado("fases.html", "XIX"), 2200);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Samuel</title>
+<style>
+  .faro {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 160px; height: 160px; border-radius: 50%; border: none; background: none; cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .faro span {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--crema);
+    box-shadow: 0 0 18px 4px rgba(242,233,201,.35);
+    transition: transform .06s, box-shadow .06s;
+    animation: latido 3s ease-in-out infinite;
+  }
+  .faro.encendido span {
+    transform: scale(2.6); animation: none;
+    box-shadow: 0 0 60px 30px rgba(242,233,201,.55);
+  }
+  @keyframes latido { 50% { transform: scale(1.25); } }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <button class="faro" id="faro" aria-label="Escuchar el mensaje"><span></span></button>
+</main>
+<p class="pista">Algunos mensajes no se leen</p>
+<p class="subpista" id="sub">Toca la luz</p>
+<!-- Una luz, un sonido, un temblor. Tres maneras de decir lo mismo. -->
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Toca la luz y fíjate: hay destellos cortos y destellos largos.", "Es un código que inventó Samuel Morse.", "Punto · raya punto raya punto · raya raya raya. Son tres letras."]);
+  Comun.nivel("VII", { morse: "Eso es el idioma, no el mensaje", sos: "Nadie pide ayuda aquí. Escucha otra vez" });
+
+  const MENSAJE = ". -.-. ---";
+  const U = 220; // duración de un punto en ms
+  const faro = document.getElementById("faro"), sub = document.getElementById("sub");
+  let sonando = false;
+
+  function pitido(inicio, dur) {
+    const c = Comun.audio(); if (!c) return;
+    const t = c.currentTime + inicio / 1000, d = dur / 1000;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.value = 620;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(.25, t + .01);
+    g.gain.setValueAtTime(.25, t + d - .01);
+    g.gain.linearRampToValueAtTime(0, t + d);
+    o.connect(g).connect(c.destination);
+    o.start(t); o.stop(t + d + .02);
+  }
+
+  faro.addEventListener("click", () => {
+    if (sonando) return;
+    sonando = true; sub.textContent = "";
+    let t = 0; const vib = [];
+    for (const s of MENSAJE) {
+      if (s === " ") { t += 2 * U; vib[vib.length - 1] += 2 * U; continue; }
+      const d = s === "." ? U : 3 * U;
+      setTimeout(() => faro.classList.add("encendido"), t);
+      setTimeout(() => faro.classList.remove("encendido"), t + d);
+      pitido(t, d);
+      vib.push(d, U);
+      t += d + U;
+    }
+    Comun.vibrar(vib);
+    setTimeout(() => { sonando = false; sub.textContent = "Otra vez"; }, t + 400);
+  });
+</script>
+</body>
+</html>

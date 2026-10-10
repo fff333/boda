@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Al otro lado</title>
+<style>
+  .marco { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(62vw, 300px); cursor: pointer; }
+  .marco svg { width: 100%; display: block; overflow: visible; }
+  .grieta { opacity: 0; transition: opacity .15s; }
+  .grieta.visible { opacity: 1; }
+  .brillo { animation: brillar 4s ease-in-out infinite; }
+  @keyframes brillar { 50% { transform: translate(30px, 40px); opacity: .1; } }
+  .marco.roto .cristal { animation: caer 1.4s cubic-bezier(.5,0,.8,.5) forwards; }
+  @keyframes caer { to { transform: translateY(120%) rotate(8deg); opacity: 0; } }
+  .marco.golpe { animation: golpe .25s ease; }
+  @keyframes golpe { 40% { transform: translate(-50%, -50%) scale(.97) rotate(-1deg); } }
+  .mensaje {
+    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+    text-align: center; padding: 0 10vw; font-size: clamp(26px, 7.6vw, 40px); line-height: 1.3;
+    opacity: 0; transition: opacity 1.5s ease 1.2s; pointer-events: none;
+  }
+  .mensaje.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <p class="mensaje" id="mensaje">Detrás del cristal hay un túnel que baja.<br>Lo cavó alguien de orejas largas.</p>
+  <div class="marco" id="marco" role="button" aria-label="Espejo">
+    <svg viewBox="0 0 200 280">
+      <defs>
+        <linearGradient id="plata" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#C8D0E0"/><stop offset=".5" stop-color="#8E9AB5"/><stop offset="1" stop-color="#5E6A88"/>
+        </linearGradient>
+        <clipPath id="ovalo"><ellipse cx="100" cy="140" rx="82" ry="122"/></clipPath>
+      </defs>
+      <g class="cristal">
+        <ellipse cx="100" cy="140" rx="82" ry="122" fill="url(#plata)"/>
+        <g clip-path="url(#ovalo)">
+          <rect class="brillo" x="10" y="20" width="30" height="300" fill="#FFFFFF" opacity=".25" transform="rotate(25 100 140)"/>
+        </g>
+        <g stroke="#F4F6FB" stroke-width="1.6" fill="none" stroke-linecap="round" clip-path="url(#ovalo)">
+          <path class="grieta" d="M100 130 L70 80 L60 40"/>
+          <path class="grieta" d="M100 130 L150 110 L178 90"/>
+          <path class="grieta" d="M100 130 L120 200 L110 260"/>
+          <path class="grieta" d="M100 130 L40 160 L20 200"/>
+          <path class="grieta" d="M70 80 L95 60 M150 110 L140 170 L120 200 M40 160 L75 210 L120 200 M100 130 L130 60"/>
+        </g>
+      </g>
+      <ellipse cx="100" cy="140" rx="88" ry="128" fill="none" stroke="#C9A86A" stroke-width="10"/>
+    </svg>
+  </div>
+</main>
+<p class="pista" id="pista">No te mires demasiado</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["A este espejo le pasa algo. Quizá haya que hacerle algo a él.", "Agita el móvil con fuerza o golpea el espejo con el dedo varias veces.", "¿Cómo se llama la casa que cava un conejo bajo tierra?"]);
+  Comun.nivel("IV", { conejo: "Él lo cavó. ¿Cómo se llama lo que cavó?", agujero: "Tiene un nombre más preciso", tunel: "Tiene un nombre más preciso", siete: "La mala suerte no es el camino", liebre: "Casi. Busca su casa" });
+
+  const marco = document.getElementById("marco"), mensaje = document.getElementById("mensaje");
+  const pista = document.getElementById("pista");
+  const grietas = [...document.querySelectorAll(".grieta")];
+  let golpes = 0, roto = false, ultimoGolpe = 0, prevMag = null;
+
+  function cristal(fuerte) {
+    const c = Comun.audio(); if (!c) return;
+    const dur = fuerte ? 1.2 : .25;
+    const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, fuerte ? 3 : 6);
+    const s = c.createBufferSource(); s.buffer = buf;
+    const f = c.createBiquadFilter(); f.type = "highpass"; f.frequency.value = 2500;
+    const g = c.createGain(); g.gain.value = fuerte ? .5 : .25;
+    s.connect(f).connect(g).connect(c.destination); s.start();
+    if (fuerte) for (let i = 0; i < 8; i++) Comun.tono(2500 + Math.random() * 3000, .05 + Math.random() * .8, .15, .05, "sine");
+  }
+
+  function golpe() {
+    const ahora = performance.now();
+    if (roto || ahora - ultimoGolpe < 300) return;
+    ultimoGolpe = ahora;
+    marco.classList.remove("golpe"); void marco.offsetWidth; marco.classList.add("golpe");
+    if (golpes < grietas.length) {
+      grietas[golpes++].classList.add("visible");
+      cristal(false); Comun.vibrar(25);
+    } else {
+      roto = true;
+      marco.classList.add("roto");
+      cristal(true); Comun.vibrar([80, 40, 120]);
+      pista.style.opacity = 0;
+      mensaje.classList.add("visible");
+    }
+  }
+
+  marco.addEventListener("pointerdown", golpe);
+
+  function alMover(e) {
+    const a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
+    const mag = Math.hypot(a.x, a.y, a.z);
+    if (prevMag != null && Math.abs(mag - prevMag) > 14) golpe();
+    prevMag = mag;
+  }
+
+  Comun.inicio("Sujeta fuerte el móvil", "Entrar", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Julio</title>
+<style>
+  .cifrado { position: absolute; left: 0; right: 0; top: 20%; text-align: center; font-size: clamp(44px, 14vw, 72px); letter-spacing: .25em; font-style: normal; }
+  .rueda { position: absolute; left: 50%; top: 60%; width: min(88vw, 400px); transform: translate(-50%, -50%); touch-action: none; }
+  .rueda svg { width: 100%; display: block; }
+  .rueda text { font-family: Georgia, serif; font-size: 13px; text-anchor: middle; }
+  #interior { transform-origin: 150px 150px; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <div class="cifrado" aria-label="I D U R">IDUR</div>
+  <div class="rueda" id="rueda">
+    <svg viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="145" fill="#141B36" stroke="#F2E9C9" stroke-opacity=".3"/>
+      <g id="exterior" fill="#F2E9C9"></g>
+      <circle cx="150" cy="150" r="112" fill="#1E2A4A" stroke="#E9A6B8" stroke-opacity=".5"/>
+      <g id="interior" fill="#E9A6B8"></g>
+      <circle cx="150" cy="150" r="8" fill="#E9A6B8"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">Un emperador escribió esto</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Es un mensaje cifrado. La rueda sirve para descifrarlo: gira la parte interior con el dedo.", "Julio César escondía sus mensajes moviendo cada letra tres posiciones.", "Gira la rueda tres posiciones y cambia cada letra de fuera por la de dentro: la I se convierte en F…"]);
+  Comun.nivel("XXXIX", { idur: "Eso sigue cifrado", lgxu: "Has ido hacia el otro lado", cesar: "¿Qué dice su mensaje?" });
+  const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", PASO = 360 / 26;
+  const ns = "http://www.w3.org/2000/svg";
+  function anillo(g, r) {
+    [...ABC].forEach((l, i) => {
+      const a = (i * PASO - 90) * Math.PI / 180, t = document.createElementNS(ns, "text");
+      t.setAttribute("x", 150 + Math.cos(a) * r); t.setAttribute("y", 150 + Math.sin(a) * r + 5);
+      t.setAttribute("transform", `rotate(${i * PASO} ${150 + Math.cos(a) * r} ${150 + Math.sin(a) * r})`);
+      t.textContent = l; g.appendChild(t);
+    });
+  }
+  anillo(document.getElementById("exterior"), 130);
+  const interior = document.getElementById("interior"); anillo(interior, 98);
+  const rueda = document.getElementById("rueda");
+  let rot = 0, prev = null, ultimoPaso = 0;
+  const ang = e => { const r = rueda.getBoundingClientRect(); return Math.atan2(e.clientY - r.top - r.height / 2, e.clientX - r.left - r.width / 2) * 180 / Math.PI; };
+  rueda.addEventListener("pointerdown", e => { prev = ang(e); rueda.setPointerCapture(e.pointerId); interior.style.transition = "none"; });
+  rueda.addEventListener("pointermove", e => {
+    if (prev == null) return;
+    const a = ang(e); rot += ((a - prev + 540) % 360) - 180; prev = a;
+    interior.style.transform = `rotate(${rot}deg)`;
+    const p = Math.round(rot / PASO);
+    if (p !== ultimoPaso) { ultimoPaso = p; Comun.tono(1500, 0, .03, .06, "square"); Comun.vibrar(5); }
+  });
+  rueda.addEventListener("pointerup", () => {
+    prev = null; rot = Math.round(rot / PASO) * PASO;
+    interior.style.transition = "transform .2s"; interior.style.transform = `rotate(${rot}deg)`;
+  });
+</script>
+</body>
+</html>

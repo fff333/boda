@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Tictac</title>
+<style>
+  .esfera { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: min(86vw, 420px); }
+  .esfera svg { width: 100%; display: block; }
+  .letra { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 22px; fill: rgba(242,233,201,.45); transition: fill .2s; }
+  .letra.marcada { fill: #F2E9C9; }
+  #aguja { transition: transform .45s cubic-bezier(.4,1.6,.6,1); transform-origin: 150px 150px; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <div class="esfera">
+    <svg viewBox="0 0 300 300" id="svg">
+      <circle cx="150" cy="150" r="140" fill="#141B36" stroke="#F2E9C9" stroke-opacity=".3" stroke-width="2"/>
+      <g id="marcas"></g>
+      <g id="aguja"><line x1="150" y1="168" x2="150" y2="62" stroke="#E9A6B8" stroke-width="3" stroke-linecap="round"/></g>
+      <circle cx="150" cy="150" r="6" fill="#E9A6B8"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">Las horas también deletrean</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Fíjate en dónde se para la aguja en cada salto.", "Apunta cada letra que señala, en orden, hasta que haga una pausa.", "Son siete letras. Es un objeto que sirve para no perderse."]);
+  Comun.nivel("IX", { tiempo: "El tiempo solo es el mensajero", hora: "Fíjate en dónde se para" });
+
+  const LETRAS = ["B","E","R","M","U","T","J","N","L","O","A","S"];
+  const SECUENCIA = [0, 2, 4, 6, 4, 8, 10]; // posiciones de la palabra
+  const marcas = document.getElementById("marcas"), aguja = document.getElementById("aguja");
+  const textos = LETRAS.map((l, i) => {
+    const a = (i * 30 - 90) * Math.PI / 180;
+    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    t.setAttribute("x", 150 + Math.cos(a) * 112);
+    t.setAttribute("y", 150 + Math.sin(a) * 112 + 8);
+    t.setAttribute("text-anchor", "middle");
+    t.setAttribute("class", "letra");
+    t.textContent = l;
+    marcas.appendChild(t);
+    return t;
+  });
+
+  let angulo = 0;
+  function moverA(i) {
+    const destino = i * 30;
+    let delta = ((destino - angulo) % 360 + 360) % 360; // siempre en sentido horario
+    angulo += delta;
+    aguja.style.transform = `rotate(${angulo}deg)`;
+    textos.forEach(t => t.classList.remove("marcada"));
+    setTimeout(() => textos[i].classList.add("marcada"), 300);
+    Comun.tono(1900, .3, .05, .08, "square");
+    Comun.vibrar(8);
+  }
+
+  async function ciclo() {
+    while (true) {
+      for (const i of SECUENCIA) { moverA(i); await new Promise(r => setTimeout(r, 1100)); }
+      textos.forEach(t => t.classList.remove("marcada"));
+      await new Promise(r => setTimeout(r, 3200));
+    }
+  }
+
+  Comun.inicio("Un reloj parado", "Darle cuerda", async () => { ciclo(); });
+</script>
+</body>
+</html>

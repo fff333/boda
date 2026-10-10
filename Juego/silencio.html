@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Shhh</title>
+<style>
+  .ojo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(70vw, 340px); }
+  .ojo svg { width: 100%; display: block; overflow: visible; }
+  .abierto { transform-origin: 50px 35px; }
+  .ojo.molesto svg { animation: apretar .4s ease; }
+  @keyframes apretar { 30% { transform: scale(.9, .7); } 60% { transform: scale(1.03, .95); } }
+  .reflejo {
+    position: absolute; left: 0; right: 0; top: 66%; text-align: center;
+    font-size: clamp(40px, 13vw, 72px); letter-spacing: .08em;
+    transform: scaleX(-1); opacity: 0; transition: opacity 2s ease;
+    color: #C5CAE9; text-shadow: 0 0 18px rgba(92,107,192,.8); pointer-events: none;
+  }
+  .reflejo.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <div class="ojo" id="ojo">
+    <svg viewBox="0 0 100 60">
+      <ellipse cx="38" cy="-4" rx="7" ry="22" fill="#FBFAF4" transform="rotate(-10 38 -4)"/>
+      <ellipse cx="38" cy="-2" rx="3" ry="15" fill="#E9A6B8" transform="rotate(-10 38 -2)"/>
+      <ellipse cx="62" cy="-4" rx="7" ry="22" fill="#FBFAF4" transform="rotate(10 62 -4)"/>
+      <ellipse cx="62" cy="-2" rx="3" ry="15" fill="#E9A6B8" transform="rotate(10 62 -2)"/>
+      <circle cx="50" cy="36" r="26" fill="#FBFAF4"/>
+      <ellipse cx="50" cy="46" rx="3.4" ry="2.4" fill="#E9A6B8"/>
+      <g id="cerrado" stroke="#0B1020" stroke-width="2" stroke-linecap="round" fill="none">
+        <path d="M34 36 Q39 40 44 36"/><path d="M56 36 Q61 40 66 36"/>
+      </g>
+      <g class="abierto" id="abierto">
+        <circle cx="39" cy="35" r="5" fill="#3949AB"/><circle cx="61" cy="35" r="5" fill="#3949AB"/>
+        <circle cx="39" cy="35" r="2.4" fill="#05080F"/><circle cx="61" cy="35" r="2.4" fill="#05080F"/>
+        <circle cx="37.5" cy="33.5" r="1.2" fill="#FFFFFF"/><circle cx="59.5" cy="33.5" r="1.2" fill="#FFFFFF"/>
+      </g>
+    </svg>
+  </div>
+  <div class="reflejo" id="reflejo">SIETE</div>
+</main>
+<p class="pista">Shhh…</p>
+<p class="subpista" id="sub"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["El conejito duerme. No lo despiertes.", "Quédate en completo silencio unos segundos, sin moverte.", "La palabra aparece como en un espejo: léela al revés."]);
+  Comun.nivel("XII", { eteis: "Lo estás leyendo al revés", espejo: "Ese ya se rompió. Lee lo que refleja", "7": "Escríbelo con letras" });
+
+  const ojo = document.getElementById("ojo"), cerrado = document.getElementById("cerrado");
+  const abierto = document.getElementById("abierto"), reflejo = document.getElementById("reflejo");
+  const sub = document.getElementById("sub");
+  const TIEMPO = 4000; // ms de silencio necesarios
+  let medir = null, umbral = .03, progreso = 0, abiertoDel = false, dedo = false;
+  let ultimo = performance.now(), ruidoAntes = false;
+
+  ojo.addEventListener("pointerdown", () => { if (!medir) dedo = true; });
+  addEventListener("pointerup", () => dedo = false);
+
+  Comun.inicio("Alguien duerme aquí", "Entrar sin hacer ruido", async () => {
+    medir = await Comun.pedirMicro();
+    if (medir) {
+      // calibrar el ruido de fondo durante un segundo
+      let suma = 0, n = 0; const fin = performance.now() + 1000;
+      await new Promise(r => (function m() { suma += medir(); n++; performance.now() < fin ? requestAnimationFrame(m) : r(); })());
+      umbral = Math.max(.025, Math.min((suma / n) * 1.7, .07));
+    } else {
+      sub.textContent = "Sin micrófono: mantén el dedo sobre el ojo";
+    }
+    ultimo = performance.now();
+    requestAnimationFrame(bucle);
+  });
+
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    if (!abiertoDel) {
+      const silencio = medir ? medir() < umbral : dedo;
+      if (silencio) { progreso = Math.min(1, progreso + dt / TIEMPO); ruidoAntes = false; }
+      else {
+        if (medir && !ruidoAntes && progreso > .05) {
+          ojo.classList.remove("molesto"); void ojo.offsetWidth; ojo.classList.add("molesto");
+        }
+        ruidoAntes = true;
+        progreso = Math.max(0, progreso - dt / 500);
+      }
+      if (progreso >= 1) {
+        abiertoDel = true;
+        reflejo.classList.add("visible");
+        Comun.vibrar(80);
+        [392, 587.33, 783.99].forEach((f, i) => Comun.tono(f, i * .2, 1.2, .08, "sine"));
+      }
+    }
+    const p = progreso;
+    abierto.style.transform = `scaleY(${p})`;
+    abierto.style.opacity = p;
+    cerrado.style.opacity = 1 - p;
+    requestAnimationFrame(bucle);
+  }
+</script>
+</body>
+</html>

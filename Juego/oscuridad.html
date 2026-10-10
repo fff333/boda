@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#05080F">
+<title>Madriguera adentro</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: #05080F;
+    touch-action: none;
+    -webkit-user-select: none; user-select: none;
+    font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+    color: #F2E9C9;
+  }
+  .mundo {
+    position: fixed; inset: 0; height: 100dvh;
+    background: radial-gradient(ellipse at 50% 40%, #1A2240 0%, #0D1328 70%);
+  }
+  .ojo {
+    position: absolute;
+    width: 24vw; max-width: 120px;
+    transform: translate(-50%, -50%);
+  }
+  .ojo svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .ojo svg { transform-origin: 50% 100%; transform: translateY(calc(var(--p, 0) * -12%)) scale(calc(1 + var(--p, 0) * .25));
+    filter: drop-shadow(0 0 calc(var(--p, 0) * 18px) rgba(255,255,255,.9)); }
+  .ojo.salta svg { animation: saltar .6s cubic-bezier(.3,1.6,.6,1); }
+  @keyframes saltar { 50% { transform: translateY(-45%) scale(1.25); } }
+  .ojo.molesto svg { animation: apretar .4s ease; }
+  @keyframes apretar {
+    0%,100% { transform: scale(1); }
+    30% { transform: scale(.85, .7); }
+    60% { transform: scale(1.05, .95); }
+  }
+
+  .oscuridad {
+    position: fixed; inset: 0; pointer-events: none;
+    background: #05080F;
+  }
+  .pista {
+    position: fixed; left: 0; right: 0;
+    top: calc(env(safe-area-inset-top) + 2.5vh);
+    text-align: center; font-size: clamp(18px, 5vw, 26px);
+    padding: 0 60px; opacity: .55; pointer-events: none;
+  }
+
+  /* Pantalla de inicio */
+  .inicio {
+    position: fixed; inset: 0; z-index: 10;
+    background: #05080F;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5vh; padding: 10vw; text-align: center;
+    transition: opacity .8s ease;
+  }
+  .inicio p { font-size: clamp(22px, 6.5vw, 34px); line-height: 1.25; max-width: 18ch; }
+  .inicio button {
+    font: inherit; font-size: 20px;
+    color: #05080F; background: #F2E9C9;
+    border: none; border-radius: 40px;
+    padding: 14px 34px; cursor: pointer;
+  }
+  .inicio button:focus-visible { outline: 3px solid #5C6BC0; outline-offset: 4px; }
+  .inicio.oculto { opacity: 0; pointer-events: none; }
+
+  /* Al acertar */
+  .destello {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: radial-gradient(circle at var(--x) var(--y), #FFFFFF 0%, #C9CFE0 25%, #05080F 75%);
+    opacity: 0; transition: opacity 1.4s ease;
+  }
+  .destello.activo { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ojo.molesto svg { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="mundo" id="mundo"></main>
+  <div class="oscuridad" id="oscuridad"></div>
+  <p class="pista">¿Dónde se ha metido el conejo blanco?</p>
+  <div class="destello" id="destello"></div>
+
+  <section class="inicio" id="inicio">
+    <p>Inclina el móvil para mirar en la oscuridad</p>
+    <button id="empezar">Encender la linterna</button>
+  </section>
+
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Inclina el móvil para mover la luz por la oscuridad.", "Hay muchos conejos escondidos, pero solo uno es el que buscas.", "Busca al conejo blanco y mantén la luz quieta sobre él."]);
+  Comun.nivel("VI", null);
+  const SIGUIENTE = "despierta.html";
+
+  const COLORES = ["#E53935","#FB8C00","#FDD835","#43A047","#1E88E5","#8E24AA","#FBFAF4"];
+  const ANIL = 6; // el conejo que buscamos es el blanco
+  // Posiciones en % de pantalla (x, y)
+  const POSICIONES = [[22,24],[76,20],[50,42],[18,61],[80,57],[32,84],[72,83]];
+  const TIEMPO_MIRADA = 1600; // ms que hay que sostener la luz sobre el ojo
+
+  const mundo = document.getElementById("mundo");
+  const oscuridad = document.getElementById("oscuridad");
+  const destello = document.getElementById("destello");
+  const inicio = document.getElementById("inicio");
+
+  let W = innerWidth, H = innerHeight;
+  let lx = W / 2, ly = H / 2, tx = lx, ty = ly;
+  let base = null, tieneGiro = false;
+  let progreso = 0, resuelto = false, ultimo = performance.now();
+  let ojoIluminado = null;
+  let audioCtx = null, zumbido = null, zumbidoGain = null;
+
+  // --- Crear los ojos con los colores repartidos al azar ---
+  const orden = COLORES.map((_, i) => i).sort(() => Math.random() - .5);
+  const ojos = POSICIONES.map(([px, py], i) => {
+    const color = COLORES[orden[i]];
+    const d = document.createElement("div");
+    d.className = "ojo";
+    d.style.left = px + "%";
+    d.style.top = py + "%";
+    d.innerHTML = `
+      <svg viewBox="0 0 120 130">
+        <ellipse cx="48" cy="28" rx="9" ry="28" fill="${color}" transform="rotate(-12 48 28)"/>
+        <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" opacity=".8" transform="rotate(-12 48 30)"/>
+        <ellipse cx="70" cy="26" rx="9" ry="28" fill="${color}" transform="rotate(10 70 26)"/>
+        <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" opacity=".8" transform="rotate(10 70 28)"/>
+        <ellipse cx="62" cy="100" rx="38" ry="28" fill="${color}"/>
+        <circle cx="98" cy="100" r="9" fill="${color}"/>
+        <circle cx="56" cy="66" r="24" fill="${color}"/>
+        <circle cx="47" cy="63" r="3.4" fill="#0B1020"/>
+        <ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/>
+      </svg>`;
+    mundo.appendChild(d);
+    return { el: d, color: orden[i], x: 0, y: 0 };
+  });
+
+  function medir() {
+    W = innerWidth; H = innerHeight;
+    ojos.forEach(o => {
+      const r = o.el.getBoundingClientRect();
+      o.x = r.left + r.width / 2;
+      o.y = r.top + r.height / 2;
+    });
+  }
+  addEventListener("resize", medir);
+
+  // --- Sonido ---
+  function iniciarAudio() {
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      zumbido = audioCtx.createOscillator();
+      zumbidoGain = audioCtx.createGain();
+      zumbido.type = "sine";
+      zumbido.frequency.value = 110;
+      zumbidoGain.gain.value = 0;
+      zumbido.connect(zumbidoGain).connect(audioCtx.destination);
+      zumbido.start();
+    } catch (e) {}
+  }
+  function tono(freq, cuando = 0, dur = .3, vol = .2, tipo = "triangle") {
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime + cuando;
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = tipo; o.frequency.value = freq;
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + .02);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t); o.stop(t + dur + .05);
+  }
+
+  // --- Giroscopio ---
+  function alOrientar(e) {
+    if (e.beta == null || e.gamma == null) return;
+    tieneGiro = true;
+    if (!base) base = { b: e.beta, g: e.gamma };
+    const k = Math.min(W, H) / 38;            // píxeles por grado
+    tx = W / 2 + (e.gamma - base.g) * k;
+    ty = H / 2 + (e.beta  - base.b) * k;
+  }
+
+  // Sin giroscopio (ordenador o permiso denegado): mover la luz con el dedo
+  function alArrastrar(e) {
+    if (tieneGiro) return;
+    tx = e.clientX; ty = e.clientY;
+  }
+  addEventListener("pointermove", alArrastrar);
+  addEventListener("pointerdown", e => {
+    if (inicio.classList.contains("oculto")) {
+      if (tieneGiro) base = null;   // un toque vuelve a centrar la luz
+      else alArrastrar(e);
+    }
+  });
+
+  document.getElementById("empezar").addEventListener("click", async () => {
+    iniciarAudio();
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    inicio.classList.add("oculto");
+    medir();
+    requestAnimationFrame(bucle);
+  });
+
+  // --- Bucle principal ---
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50);
+    ultimo = ahora;
+
+    tx = Math.max(0, Math.min(W, tx));
+    ty = Math.max(0, Math.min(H, ty));
+    lx += (tx - lx) * .15;
+    ly += (ty - ly) * .15;
+
+    const R = Math.min(W, H) * .24;
+    oscuridad.style.background =
+      `radial-gradient(circle ${R}px at ${lx}px ${ly}px, rgba(5,8,15,0) 0%, rgba(5,8,15,.15) 55%, rgba(5,8,15,.985) 100%)`;
+
+    if (!resuelto) {
+      // ¿Qué ojo está bajo la luz?
+      let cerca = null;
+      for (const o of ojos) {
+        if (Math.hypot(o.x - lx, o.y - ly) < R * .45) { cerca = o; break; }
+      }
+
+      if (cerca !== ojoIluminado) {
+        if (cerca && cerca.color !== ANIL) {
+          cerca.el.classList.remove("molesto");
+          void cerca.el.offsetWidth;
+          cerca.el.classList.add("molesto");
+          tono(140, 0, .2, .12, "sine");
+        }
+        ojoIluminado = cerca;
+      }
+
+      const objetivo = ojos.find(o => o.color === ANIL);
+      if (cerca === objetivo) progreso = Math.min(1, progreso + dt / TIEMPO_MIRADA);
+      else progreso = Math.max(0, progreso - dt / 600);
+
+      objetivo.el.style.setProperty("--p", progreso.toFixed(3));
+
+      if (zumbidoGain) {
+        const t = audioCtx.currentTime;
+        zumbidoGain.gain.setTargetAtTime(progreso > 0 ? .06 + progreso * .08 : 0, t, .08);
+        zumbido.frequency.setTargetAtTime(110 + progreso * 220, t, .08);
+      }
+
+      if (progreso >= 1) resolver(objetivo);
+    }
+    requestAnimationFrame(bucle);
+  }
+
+  function resolver(objetivo) {
+    resuelto = true;
+    if (zumbidoGain) zumbidoGain.gain.setTargetAtTime(0, audioCtx.currentTime, .1);
+    [392, 493.88, 587.33, 783.99].forEach((f, i) => tono(f, i * .12, .9, .18));
+    if (navigator.vibrate) navigator.vibrate([60, 80, 160]);
+    destello.style.setProperty("--x", objetivo.x + "px");
+    destello.style.setProperty("--y", objetivo.y + "px");
+    objetivo.el.classList.add("salta");
+    destello.classList.add("activo");
+    setTimeout(() => Comun.superado(SIGUIENTE, "VI"), 1500);
+  }
+
+  // Si se vuelve atrás desde la siguiente adivinanza, empezar de cero
+  addEventListener("pageshow", e => { if (e.persisted) location.reload(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Soplo</title>
+<style>
+  .halo {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at 50% 62%, rgba(255,190,110,.55) 0%, rgba(255,150,70,.18) 30%, rgba(11,16,32,0) 65%);
+  }
+  .vela { position: absolute; left: 50%; top: 62%; transform: translate(-50%, -30%); width: 110px; }
+  .vela svg { width: 100%; overflow: visible; display: block; }
+  .llama { transform-origin: 55px 70px; }
+  .llama-viva { animation: titilar .18s ease-in-out infinite alternate; transform-origin: 55px 70px; }
+  @keyframes titilar { from { transform: scale(1, 1) skewX(-2deg); } to { transform: scale(.94, 1.06) skewX(3deg); } }
+  .humo { opacity: 0; }
+  .apagada .humo { animation: humo 3s ease-out forwards; }
+  @keyframes humo { 0% { opacity: .6; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-80px) scaleX(1.6); } }
+  .secreto {
+    position: absolute; left: 0; right: 0; top: 32%; text-align: center; padding: 0 10vw;
+    font-size: clamp(26px, 7.5vw, 40px); line-height: 1.25;
+    color: #C9F7D4; text-shadow: 0 0 14px rgba(150,255,180,.6);
+    opacity: 0; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<main class="escena entrada" id="escena">
+  <div class="halo" id="halo"></div>
+  <p class="secreto" id="secreto">Después de la oscuridad y la lluvia<br>vienen siete colores</p>
+  <div class="vela" id="vela">
+    <svg viewBox="0 0 110 220">
+      <g class="humo"><path d="M55 60 C45 40 65 30 55 10" stroke="#9AA3B8" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+      <g class="llama" id="llama">
+        <g class="llama-viva">
+          <path d="M55 8 C70 35 72 52 55 70 C38 52 40 35 55 8Z" fill="#FFB347"/>
+          <path d="M55 30 C63 45 63 56 55 66 C47 56 47 45 55 30Z" fill="#FFF1C9"/>
+        </g>
+      </g>
+      <line x1="55" y1="70" x2="55" y2="82" stroke="#2A2A2A" stroke-width="3"/>
+      <rect x="30" y="80" width="50" height="130" rx="6" fill="#EDE3C8"/>
+      <path d="M30 92 Q40 100 44 92 Q46 110 52 96 Q60 104 80 92 V86 H30Z" fill="#F7F0DC"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">Algunas palabras solo se leen a oscuras</p>
+<p class="subpista" id="sub"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["La luz no te deja leer lo que hay escrito.", "¿Cómo se apaga una vela?", "Sopla al micrófono del móvil, fuerte y seguido, hasta que se apague."]);
+  Comun.nivel("II", null);
+
+  const halo = document.getElementById("halo"), llama = document.getElementById("llama");
+  const secreto = document.getElementById("secreto"), escena = document.getElementById("escena");
+  const sub = document.getElementById("sub"), vela = document.getElementById("vela");
+  let luz = 1, apagada = false, medir = null, dedo = false, ultimo = performance.now();
+
+  // Sin micrófono: mantener el dedo sobre la llama
+  vela.addEventListener("pointerdown", () => { if (!medir) dedo = true; });
+  addEventListener("pointerup", () => dedo = false);
+  addEventListener("pointercancel", () => dedo = false);
+
+  Comun.inicio("Hay una vela encendida", "Entrar", async () => {
+    medir = await Comun.pedirMicro();
+    if (!medir) sub.textContent = "Sin micrófono: mantén el dedo en la llama";
+    requestAnimationFrame(bucle);
+  });
+
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    if (!apagada) {
+      const soplando = (medir && medir() > .14) || dedo;
+      luz = soplando ? luz - dt / 900 : Math.min(1, luz + dt / 4500);
+      if (luz <= 0) apagar();
+    }
+    const l = Math.max(0, luz);
+    halo.style.opacity = l;
+    llama.style.transform = `scale(${.4 + l * .6}) skewX(${(1 - l) * 18}deg)`;
+    llama.style.opacity = apagada ? 0 : .3 + l * .7;
+    secreto.style.opacity = Math.pow(1 - l, 3);
+    requestAnimationFrame(bucle);
+  }
+
+  function apagar() {
+    apagada = true; luz = 0;
+    escena.classList.add("apagada");
+    Comun.tono(180, 0, .6, .08, "sine");
+    Comun.vibrar(60);
+    setTimeout(() => Comun.superado("arcoiris.html", "II"), 3200);
+  }
+</script>
+</body>
+</html>

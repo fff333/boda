@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>¡Llego tarde!</title>
+<style>
+  .reloj { position: absolute; left: 50%; top: 55%; width: min(80vw, 360px); transform: translate(-50%, -50%); touch-action: none; }
+  .reloj svg { width: 100%; display: block; overflow: visible; }
+  .num { font-family: Georgia, serif; font-size: 18px; fill: #5A3A1E; text-anchor: middle; }
+  #minutero { cursor: grab; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <div class="reloj" id="reloj">
+    <svg viewBox="0 0 300 300">
+      <circle cx="150" cy="22" r="12" fill="none" stroke="#C9A86A" stroke-width="5"/>
+      <circle cx="150" cy="160" r="128" fill="#C9A86A"/>
+      <circle cx="150" cy="160" r="116" fill="#F7F0DC"/>
+      <g id="numeros"></g>
+      <line id="horario" x1="150" y1="160" x2="150" y2="105" stroke="#3E2A1A" stroke-width="7" stroke-linecap="round"/>
+      <g id="minutero"><line x1="150" y1="160" x2="150" y2="66" stroke="#E9A6B8" stroke-width="5" stroke-linecap="round"/><circle cx="150" cy="70" r="14" fill="#E9A6B8" opacity=".35"/></g>
+      <circle cx="150" cy="160" r="7" fill="#3E2A1A"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">«¡Llego tarde, llego tarde!» Pero… ¿qué hora es?</p>
+<p class="subpista">Pon el reloj del conejo en hora</p>
+<script src="comun.js"></script>
+<script>
+  const ahora = () => { const d = new Date(); return ((d.getHours() % 12) * 60 + d.getMinutes()); };
+  const dosCifras = n => String(n).padStart(2, "0");
+  Comun.pistas(["El conejo siempre va con prisa. ¿Qué hora es de verdad, ahora mismo?", "Arrastra la aguja larga (la rosa). La corta la sigue sola.",
+    () => { const d = new Date(); return "Mira la hora de tu móvil: son las " + d.getHours() + ":" + dosCifras(d.getMinutes()) + ". Ponla en el reloj y suelta."; }]);
+  Comun.nivel("XXIX", null);
+  const ns = "http://www.w3.org/2000/svg", numeros = document.getElementById("numeros");
+  for (let i = 1; i <= 12; i++) {
+    const a = (i * 30 - 90) * Math.PI / 180, t = document.createElementNS(ns, "text");
+    t.setAttribute("x", 150 + Math.cos(a) * 96); t.setAttribute("y", 160 + Math.sin(a) * 96 + 6);
+    t.setAttribute("class", "num"); t.textContent = i; numeros.appendChild(t);
+  }
+  const reloj = document.getElementById("reloj"), horario = document.getElementById("horario"), minutero = document.getElementById("minutero");
+  let t = (ahora() + 240 + Math.floor(Math.random() * 180)) % 720, prev = null, hecho = false;
+  function pintar() {
+    minutero.setAttribute("transform", `rotate(${(t % 60) * 6} 150 160)`);
+    horario.setAttribute("transform", `rotate(${t / 2} 150 160)`);
+  }
+  pintar();
+  const ang = e => { const r = reloj.getBoundingClientRect(); const sx = r.width / 300;
+    return (Math.atan2(e.clientY - (r.top + 160 * sx), e.clientX - (r.left + 150 * sx)) * 180 / Math.PI + 90 + 360) % 360; };
+  reloj.addEventListener("pointerdown", e => { if (hecho) return; prev = ang(e); reloj.setPointerCapture(e.pointerId); });
+  reloj.addEventListener("pointermove", e => {
+    if (prev == null) return;
+    const a = ang(e); let d = a - prev; if (d > 180) d -= 360; if (d < -180) d += 360; prev = a;
+    const antes = Math.floor(t);
+    t = ((t + d / 6) % 720 + 720) % 720; pintar();
+    if (Math.floor(t) !== antes && Math.floor(t) % 5 === 0) Comun.tono(1800, 0, .03, .05, "square");
+  });
+  reloj.addEventListener("pointerup", () => {
+    if (prev == null) return; prev = null;
+    const dif = Math.abs(t - ahora()), error = Math.min(dif, 720 - dif);
+    if (error <= 5) {
+      hecho = true;
+      [784, 659, 784, 659, 784].forEach((f, i) => Comun.tono(f, i * .12, .1, .15, "square")); Comun.vibrar([20, 40, 20]);
+      setTimeout(() => Comun.superado("tumbado.html", "XXIX"), 1200);
+    } else if (error <= 30) Comun.avisar("¡Casi! Afina un poco más");
+  });
+</script>
+</body>
+</html>

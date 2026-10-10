@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Hogar</title>
+<style>
+  .barrio { background: linear-gradient(#0B1020 0%, #1B2546 70%, #141B36 71%, #0E1426 100%); }
+  .casa { position: absolute; left: 50%; top: 55%; width: min(84vw, 400px); transform: translate(-50%, -50%); }
+  .casa svg { width: 100%; display: block; overflow: visible; }
+  .ventana { cursor: pointer; transition: fill .4s; }
+  .ventana.luz { fill: #FFD979; filter: drop-shadow(0 0 10px rgba(255,217,121,.8)); }
+  .humo { animation: humo 4s ease-in-out infinite; }
+  @keyframes humo { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: .5; } 100% { opacity: 0; transform: translateY(-40px) scale(1.5); } }
+</style>
+</head>
+<body>
+<main class="escena barrio entrada">
+  <div class="casa">
+    <svg viewBox="0 0 300 260">
+      <circle class="humo" cx="222" cy="20" r="10" fill="#9AA3B8"/>
+      <rect x="210" y="30" width="24" height="50" fill="#3A2F44"/>
+      <path d="M20 110 L150 20 L280 110Z" fill="#5A3D52"/>
+      <rect x="40" y="110" width="220" height="150" fill="#2E3655"/>
+      <rect x="128" y="190" width="44" height="70" rx="3" fill="#6D4C33"/>
+      <g id="ventanas" fill="#0B1020"></g>
+    </svg>
+  </div>
+</main>
+<p class="pista">Ya es de noche. Que no falte luz en casa</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Las ventanas están a oscuras.", "Toca una ventana para encender la luz.", "Enciéndelas todas."]);
+  Comun.nivel("XXVI", null);
+  const SITIOS = [[60,125],[128,125],[196,125],[60,195],[196,195],[134,60]];
+  const g = document.getElementById("ventanas");
+  let luces = 0;
+  SITIOS.forEach(([x, y], i) => {
+    const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    r.setAttribute("x", x); r.setAttribute("y", y);
+    r.setAttribute("width", i === 5 ? 32 : 44); r.setAttribute("height", i === 5 ? 32 : 44); r.setAttribute("rx", 3);
+    r.setAttribute("class", "ventana");
+    r.addEventListener("pointerdown", () => {
+      if (r.classList.contains("luz")) return;
+      r.classList.add("luz");
+      Comun.tono(440 + luces * 60, 0, .4, .12, "sine"); Comun.vibrar(10);
+      if (++luces === SITIOS.length) {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => Comun.tono(f, .3 + k * .15, 1, .12, "sine"));
+        setTimeout(() => Comun.superado("dormir.html", "XXVI"), 1500);
+      }
+    });
+    g.appendChild(r);
+  });
+</script>
+</body>
+</html>

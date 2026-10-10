@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#121A33">
+<title>Adivinanza 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<style>
+  :root {
+    --cielo-alto: #121A33;
+    --cielo-bajo: #2A3966;
+    --luna: #F2E9C9;
+    --sombra: #0B1020;
+    --hierba: #1B2546;
+    --conejo: #FBFAF4;
+    --rosa: #E9A6B8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: var(--cielo-alto);
+    touch-action: manipulation;
+    -webkit-user-select: none; user-select: none;
+  }
+  .escena {
+    position: fixed; inset: 0;
+    width: 100vw; height: 100dvh;
+    background: linear-gradient(to bottom, var(--cielo-alto) 0%, var(--cielo-bajo) 70%);
+  }
+  svg.paisaje { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .texto {
+    position: absolute;
+    top: calc(env(safe-area-inset-top) + 9vh);
+    left: 0; right: 0;
+    text-align: center;
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic; font-weight: 500;
+    font-size: clamp(30px, 9vw, 56px);
+    line-height: 1.1;
+    color: var(--luna);
+    padding: 0 8vw;
+    text-shadow: 0 2px 18px rgba(0,0,0,.45);
+    pointer-events: none;
+    opacity: 0;
+    animation: aparecer 1.8s ease 0.4s forwards;
+  }
+  @keyframes aparecer { to { opacity: 1; } }
+
+  /* El conejo */
+  .conejo {
+    position: absolute;
+    width: 26vw; max-width: 150px;
+    left: 58%; bottom: 17%;
+    cursor: pointer;
+    /* zona táctil más grande que el dibujo */
+    padding: 4vw;
+    margin: -4vw;
+    animation: asomarse 4s ease-in-out infinite;
+    transform-origin: 50% 100%;
+  }
+  .conejo svg { width: 100%; height: auto; display: block; overflow: visible; }
+  @keyframes asomarse {
+    0%, 70%, 100% { transform: translateY(0) scaleY(1); }
+    76% { transform: translateY(0) scaleY(.92); }
+    84% { transform: translateY(-14%) scaleY(1.04); }
+    92% { transform: translateY(0) scaleY(.96); }
+  }
+  .conejo.salta {
+    animation: huir .7s cubic-bezier(.5,0,.75,0) forwards;
+  }
+  @keyframes huir {
+    0%   { transform: translate(0,0) scale(1); }
+    30%  { transform: translate(8vw,-12vh) scale(1); }
+    60%  { transform: translate(20vw,-2vh) scale(.9); }
+    100% { transform: translate(60vw,-6vh) scale(.6); opacity: 0; }
+  }
+  .velo {
+    position: fixed; inset: 0; background: var(--sombra);
+    opacity: 0; pointer-events: none; transition: opacity .5s ease .35s;
+  }
+  .velo.activo { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .conejo { animation: none; }
+    .texto { animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="escena">
+
+  <svg class="paisaje" viewBox="0 0 400 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <!-- estrellas -->
+    <g fill="#F2E9C9" opacity=".7">
+      <circle cx="40" cy="120" r="1.2"/><circle cx="110" cy="60" r="1"/>
+      <circle cx="330" cy="90" r="1.4"/><circle cx="260" cy="170" r="1"/>
+      <circle cx="70" cy="260" r="1"/><circle cx="360" cy="240" r="1.1"/>
+      <circle cx="190" cy="40" r="1"/><circle cx="300" cy="320" r=".9"/>
+    </g>
+    <!-- luna -->
+    <circle cx="300" cy="360" r="46" fill="#F2E9C9" opacity=".95"/>
+    <circle cx="300" cy="360" r="70" fill="#F2E9C9" opacity=".08"/>
+
+    <!-- colinas -->
+    <path d="M0 600 Q100 560 200 590 T400 575 V800 H0Z" fill="#202C52"/>
+    <path d="M0 650 Q120 620 240 645 T400 640 V800 H0Z" fill="#1B2546"/>
+
+    <!-- árbol -->
+    <g fill="#0B1020">
+      <path d="M118 660 C122 590 116 520 126 450 C130 420 140 410 150 405
+               L162 405 C170 420 172 440 170 470 C166 540 172 600 182 660Z"/>
+      <path d="M128 470 C100 440 80 430 55 432 L58 425 C85 420 110 430 132 452Z"/>
+      <path d="M166 455 C190 425 215 418 240 425 L238 432 C212 430 192 440 170 470Z"/>
+      <ellipse cx="148" cy="360" rx="120" ry="95"/>
+      <ellipse cx="80"  cy="400" rx="70"  ry="55"/>
+      <ellipse cx="220" cy="395" rx="72"  ry="56"/>
+      <ellipse cx="150" cy="290" rx="80"  ry="60"/>
+      <path d="M100 662 Q150 640 205 662Z"/>
+    </g>
+    <!-- hierba en primer plano -->
+    <path d="M0 700 Q200 680 400 700 V800 H0Z" fill="#141C38"/>
+  </svg>
+
+  <h1 class="texto">Sigue al conejo blanco</h1>
+
+  <div class="conejo" id="conejo" role="button" aria-label="Conejo blanco" tabindex="0">
+    <svg viewBox="0 0 120 130">
+      <!-- orejas -->
+      <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/>
+      <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/>
+      <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+      <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/>
+      <!-- cuerpo -->
+      <ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/>
+      <circle cx="98" cy="100" r="9" fill="#FBFAF4"/>
+      <!-- cabeza -->
+      <circle cx="56" cy="66" r="24" fill="#FBFAF4"/>
+      <circle cx="47" cy="63" r="3.4" fill="#0B1020"/>
+      <circle cx="46" cy="62" r="1" fill="#FFFFFF"/>
+      <ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/>
+      <!-- patitas -->
+      <ellipse cx="40" cy="124" rx="12" ry="5" fill="#E6E4DA"/>
+      <ellipse cx="78" cy="124" rx="14" ry="5" fill="#E6E4DA"/>
+    </svg>
+  </div>
+
+  <div class="velo" id="velo"></div>
+</main>
+
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["El texto te dice exactamente qué hacer.", "¿Hay algo blanco en la pantalla?", "Toca al conejo que se asoma junto al árbol."]);
+  Comun.nivel("I", null);
+  const SIGUIENTE = "vela.html";
+  const conejo = document.getElementById("conejo");
+  const velo = document.getElementById("velo");
+  let audioCtx = null;
+  let usado = false;
+
+  // Sonido de salto generado con Web Audio (sin archivos externos)
+  function sonidoSalto() {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const t = audioCtx.currentTime;
+      [0, 0.18].forEach((d, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(380 + i * 120, t + d);
+        osc.frequency.exponentialRampToValueAtTime(900 + i * 200, t + d + 0.12);
+        gain.gain.setValueAtTime(0.0001, t + d);
+        gain.gain.exponentialRampToValueAtTime(0.35, t + d + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.16);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(t + d);
+        osc.stop(t + d + 0.18);
+      });
+    } catch (e) { /* si no hay audio, el juego sigue */ }
+  }
+
+  function seguirConejo(ev) {
+    if (usado) return;
+    usado = true;
+    ev.preventDefault();
+    sonidoSalto();
+    if (navigator.vibrate) navigator.vibrate(30);
+    conejo.classList.add("salta");
+    setTimeout(() => Comun.superado(SIGUIENTE, "I"), 700);
+  }
+
+  conejo.addEventListener("pointerdown", seguirConejo);
+  conejo.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") seguirConejo(e);
+  });
+
+  // Por si el usuario vuelve atrás (caché de iOS), reiniciar la escena
+  window.addEventListener("pageshow", () => {
+    usado = false;
+    conejo.classList.remove("salta");
+    velo.classList.remove("activo");
+  });
+</script>
+</body>
+</html>

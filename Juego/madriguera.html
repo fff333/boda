@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Más abajo</title>
+<style>
+  .tierra { background: linear-gradient(#0B1020 0%, #141B36 55%, #2A2218 56%, #1C160F 100%); }
+  .hueco {
+    position: absolute; left: 50%; top: 62%; transform: translate(-50%, -50%);
+    width: min(64vw, 300px); height: min(44vw, 210px); overflow: hidden;
+  }
+  .boca {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 34%;
+    background: radial-gradient(ellipse at 50% 40%, #000 0%, #05080F 60%, rgba(5,8,15,0) 72%);
+  }
+  .conejo {
+    position: absolute; left: 50%; bottom: 8%; width: 46%;
+    transform: translate(-50%, 105%); transition: transform .28s cubic-bezier(.3,1.5,.6,1);
+    cursor: pointer;
+  }
+  .conejo.fuera { transform: translate(-50%, 0); }
+  .conejo.cazado { transition: transform .5s cubic-bezier(.6,0,.9,.4); transform: translate(-50%, 140%); }
+  .conejo svg { width: 100%; display: block; }
+  .borde {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 20%;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0) 45%, #1C160F 47%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<main class="escena tierra entrada">
+  <div class="hueco">
+    <div class="boca"></div>
+    <div class="conejo" id="conejo" role="button" aria-label="Conejo">
+      <svg viewBox="0 0 120 130">
+        <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/>
+        <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/>
+        <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+        <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/>
+        <circle cx="58" cy="72" r="26" fill="#FBFAF4"/>
+        <ellipse cx="58" cy="125" rx="34" ry="30" fill="#FBFAF4"/>
+        <circle cx="49" cy="68" r="3.4" fill="#0B1020"/><circle cx="67" cy="68" r="3.4" fill="#0B1020"/>
+        <ellipse cx="58" cy="80" rx="3" ry="2.2" fill="#E9A6B8"/>
+      </svg>
+    </div>
+    <div class="borde"></div>
+  </div>
+</main>
+<p class="pista">Has caído por la madriguera</p>
+<p class="subpista">Alguien se asoma de vez en cuando</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Alguien vive ahí dentro.", "Espera a que se asome.", "Toca al conejo justo cuando saca la cabeza."]);
+  Comun.nivel("V", null);
+  const conejo = document.getElementById("conejo");
+  let fuera = false, cazado = false;
+
+  function asomar() {
+    if (cazado) return;
+    fuera = true; conejo.classList.add("fuera");
+    Comun.tono(700, 0, .08, .06, "sine");
+    setTimeout(() => {
+      if (cazado) return;
+      fuera = false; conejo.classList.remove("fuera");
+      setTimeout(asomar, 1800 + Math.random() * 2200);
+    }, 1000);
+  }
+  setTimeout(asomar, 1500);
+
+  conejo.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    if (!fuera || cazado) return;
+    cazado = true;
+    conejo.classList.add("cazado");
+    [440, 349.23, 261.63].forEach((f, i) => Comun.tono(f, i * .1, .3, .15));
+    Comun.vibrar(30);
+    setTimeout(() => Comun.superado("oscuridad.html", "V"), 700);
+  });
+</script>
+</body>
+</html>

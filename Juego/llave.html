@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Cerrojo</title>
+<style>
+  .pasillo { background: radial-gradient(ellipse at 50% 40%, #2A3966 0%, #0B1020 80%); }
+  .puerta { position: absolute; left: 50%; top: 42%; width: min(56vw, 260px); transform: translate(-50%, -50%); perspective: 600px; }
+  .puerta svg { width: 100%; display: block; }
+  .hoja { transform-origin: 0 50%; transition: transform 1.2s ease; transform-box: fill-box; }
+  .abierta .hoja { transform: rotateY(-75deg) scaleX(.3); }
+  .luz-puerta { opacity: 0; transition: opacity 1.2s; }
+  .abierta .luz-puerta { opacity: 1; }
+  .llave { position: absolute; width: 90px; transform: translate(-50%, -50%) rotate(-30deg); cursor: grab; touch-action: none; }
+  .llave svg { width: 100%; display: block; filter: drop-shadow(0 0 8px rgba(253,216,53,.5)); }
+</style>
+</head>
+<body>
+<main class="escena pasillo entrada" id="escena">
+  <div class="puerta" id="puerta">
+    <svg viewBox="0 0 200 320">
+      <rect x="10" y="10" width="180" height="300" fill="#05080F"/>
+      <rect class="luz-puerta" x="10" y="10" width="180" height="300" fill="#F2E9C9"/>
+      <g class="hoja">
+        <rect x="10" y="10" width="180" height="300" rx="4" fill="#6D4C33"/>
+        <rect x="30" y="30" width="140" height="110" rx="4" fill="none" stroke="#5A3D28" stroke-width="5"/>
+        <rect x="30" y="170" width="140" height="120" rx="4" fill="none" stroke="#5A3D28" stroke-width="5"/>
+        <circle cx="160" cy="160" r="10" fill="#C9A86A"/>
+        <path d="M157 175 L163 175 L165 195 L155 195Z" fill="#05080F"/>
+      </g>
+    </svg>
+  </div>
+  <div class="llave" id="llave">
+    <svg viewBox="0 0 100 40"><circle cx="18" cy="20" r="14" fill="none" stroke="#FDD835" stroke-width="7"/>
+      <path d="M32 17 H95 V23 H85 V32 H78 V23 H70 V30 H63 V23 H32Z" fill="#FDD835"/></svg>
+  </div>
+</main>
+<p class="pista">Esta puerta está cerrada</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Hay algo brillante en el suelo.", "Arrastra la llave con el dedo.", "Llévala hasta la cerradura, debajo del pomo."]);
+  Comun.nivel("XXV", null);
+  const llave = document.getElementById("llave"), puerta = document.getElementById("puerta");
+  let x = innerWidth * .5, y = innerHeight * .78, arrastrando = false, hecho = false;
+  const colocar = () => { llave.style.left = x + "px"; llave.style.top = y + "px"; };
+  colocar();
+  llave.addEventListener("pointerdown", e => { arrastrando = true; llave.setPointerCapture(e.pointerId); Comun.tono(1200, 0, .05, .06, "square"); });
+  llave.addEventListener("pointermove", e => { if (!arrastrando || hecho) return; x = e.clientX; y = e.clientY; colocar(); comprobar(); });
+  llave.addEventListener("pointerup", () => arrastrando = false);
+  function comprobar() {
+    const r = puerta.getBoundingClientRect();
+    const cx = r.left + r.width * (160 / 200), cy = r.top + r.height * (185 / 320);
+    if (Math.hypot(x - cx, y - cy) < 35) {
+      hecho = true; arrastrando = false;
+      x = cx; y = cy; colocar();
+      llave.style.transition = "transform .4s"; llave.style.transform = "translate(-15%, -50%) rotate(0deg) scale(.5)";
+      Comun.tono(900, 0, .08, .12, "square"); Comun.tono(600, .25, .1, .12, "square"); Comun.vibrar([20, 100, 40]);
+      setTimeout(() => { llave.style.opacity = 0; puerta.classList.add("abierta"); Comun.tono(220, 0, 1, .08, "sine"); }, 600);
+      setTimeout(() => Comun.superado("casa.html", "XXV"), 2200);
+    }
+  }
+</script>
+</body>
+</html>

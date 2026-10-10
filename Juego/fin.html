@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Fin</title>
+<style>
+  .final { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4vh; text-align: center; padding: 10vw; }
+  .final h1 { font-weight: 500; font-size: clamp(30px, 9vw, 54px); line-height: 1.15; }
+  .final p { opacity: .6; font-size: 18px; }
+  .final a { color: var(--rosa); font-size: 18px; }
+  .conejo { width: 34vw; max-width: 160px; animation: asomar 4s ease-in-out infinite; }
+  @keyframes asomar { 0%, 100% { transform: translateY(10px); } 50% { transform: translateY(-6px); } }
+</style>
+</head>
+<body>
+<main class="escena final entrada">
+  <svg class="conejo" viewBox="0 0 120 130" aria-hidden="true">
+    <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/>
+    <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/>
+    <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+    <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/>
+    <circle cx="58" cy="70" r="26" fill="#FBFAF4"/>
+    <circle cx="49" cy="66" r="3.4" fill="#0B1020"/><circle cx="67" cy="66" r="3.4" fill="#0B1020"/>
+    <ellipse cx="58" cy="78" rx="3" ry="2.2" fill="#E9A6B8"/>
+    <ellipse cx="60" cy="122" rx="56" ry="10" fill="#05080F"/>
+  </svg>
+  <h1>Has seguido al conejo blanco hasta el final</h1>
+  <p>Fin… por ahora</p>
+  <a href="arbol.html">Volver a empezar</a>
+</main>
+<script src="comun.js"></script>
+<script>
+  document.body.insertAdjacentHTML("beforeend", '<div class="fundido"></div>');
+  addEventListener("pointerdown", () => {
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .14, 1.4, .12, "sine"));
+  }, { once: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Memoria</title>
+<style>
+  .tablero { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%);
+    width: min(82vw, 380px); aspect-ratio: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .luz { border: none; border-radius: 26px; cursor: pointer; opacity: .35; transition: opacity .12s, transform .12s; }
+  .luz.activa { opacity: 1; transform: scale(1.04); box-shadow: 0 0 40px currentColor; }
+  .ronda { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; opacity: .6; font-size: 18px; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <div class="tablero" id="tablero"></div>
+  <div class="ronda" id="ronda"></div>
+</main>
+<p class="pista">Repite lo que veas</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Las luces se encienden en un orden.", "Cuando terminen, tócalas tú en el mismo orden.", "Son cuatro rondas, cada una con una luz más. Si fallas, se repite la misma."]);
+  Comun.nivel("XXXIV", null);
+  const COLORES = ["#E53935", "#FDD835", "#43A047", "#1E88E5"];
+  const NOTAS = [329.63, 392.00, 523.25, 659.25];
+  const tablero = document.getElementById("tablero"), ronda = document.getElementById("ronda");
+  const luces = COLORES.map((c, i) => {
+    const b = document.createElement("button");
+    b.className = "luz"; b.style.background = c; b.style.color = c; b.setAttribute("aria-label", "Luz " + (i + 1));
+    b.addEventListener("pointerdown", () => pulsar(i));
+    tablero.appendChild(b); return b;
+  });
+  const RONDAS = [3, 4, 5, 6];
+  let secuencia = [], r = 0, paso = 0, escuchando = false;
+  for (let i = 0; i < 6; i++) secuencia.push(Math.floor(Math.random() * 4));
+  const espera = ms => new Promise(res => setTimeout(res, ms));
+  async function encender(i, ms = 380) {
+    luces[i].classList.add("activa"); Comun.tono(NOTAS[i], 0, ms / 1000, .18);
+    await espera(ms); luces[i].classList.remove("activa");
+  }
+  async function mostrar() {
+    escuchando = false;
+    ronda.textContent = `Ronda ${r + 1} de ${RONDAS.length}`;
+    await espera(700);
+    for (let k = 0; k < RONDAS[r]; k++) { await encender(secuencia[k]); await espera(170); }
+    paso = 0; escuchando = true;
+  }
+  async function pulsar(i) {
+    if (!escuchando) return;
+    encender(i, 220); Comun.vibrar(10);
+    if (i !== secuencia[paso]) {
+      escuchando = false; Comun.tono(110, .1, .5, .2, "sawtooth"); Comun.vibrar([60, 40, 60]);
+      Comun.avisar("Otra vez, con calma"); await espera(900); mostrar(); return;
+    }
+    if (++paso === RONDAS[r]) {
+      escuchando = false;
+      if (++r === RONDAS.length) { await espera(400); Comun.superado("piano.html", "XXXIV"); }
+      else { await espera(500); mostrar(); }
+    }
+  }
+  Comun.inicio("Cuatro luces que recuerdan", "Empezar", async () => { mostrar(); });
+</script>
+</body>
+</html>

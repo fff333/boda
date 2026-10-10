@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Siesta</title>
+<style>
+  .salon { background: linear-gradient(#1B2546 0%, #141B36 65%, #2A2218 66%, #1C160F 100%); }
+  .gato { position: absolute; left: 50%; top: 62%; width: min(60vw, 280px); transform: translate(-50%, -50%); cursor: pointer; }
+  .gato svg { width: 100%; display: block; overflow: visible; }
+  .zzz { font-size: 26px; opacity: .7; animation: zeta 2.4s ease-in-out infinite; }
+  @keyframes zeta { 0% { opacity: 0; transform: translate(0,0); } 40% { opacity: .8; } 100% { opacity: 0; transform: translate(20px,-40px); } }
+  .despierto .zzz { display: none; }
+  .ojos-abiertos { display: none; }
+  .despierto .ojos-abiertos { display: inline; }
+  .despierto .ojos-cerrados { display: none; }
+  .gato.ronroneo svg { animation: ronroneo .3s ease; }
+  @keyframes ronroneo { 50% { transform: scale(1.03, .97); } }
+  .bocadillo {
+    position: absolute; left: 50%; top: 22%; transform: translateX(-50%); width: 82vw; max-width: 380px;
+    background: #F2E9C9; color: #0B1020; border-radius: 22px; padding: 20px; text-align: center;
+    font-size: clamp(20px, 5.6vw, 28px); line-height: 1.3; opacity: 0; transition: opacity 1s; pointer-events: none;
+  }
+  .bocadillo.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena salon entrada" id="escena">
+  <div class="bocadillo" id="bocadillo">Blanca por dentro,<br>verde por fuera.<br>Si quieres que te lo diga,<br>espera.</div>
+  <div class="gato" id="gato">
+    <svg viewBox="0 0 200 130">
+      <text class="zzz" x="140" y="20" fill="#F2E9C9" font-family="Georgia" font-style="italic">z</text>
+      <ellipse cx="110" cy="95" rx="78" ry="32" fill="#4A4F63"/>
+      <path d="M185 95 Q200 60 175 50" stroke="#4A4F63" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <circle cx="55" cy="75" r="32" fill="#4A4F63"/>
+      <path d="M30 55 L32 25 L50 47Z M80 55 L78 25 L60 47Z" fill="#4A4F63"/>
+      <path d="M35 50 L36 34 L46 46Z M75 50 L74 34 L64 46Z" fill="#E9A6B8"/>
+      <g class="ojos-cerrados" stroke="#0B1020" stroke-width="2.5" fill="none" stroke-linecap="round">
+        <path d="M38 74 Q44 79 50 74"/><path d="M60 74 Q66 79 72 74"/>
+      </g>
+      <g class="ojos-abiertos"><ellipse cx="44" cy="73" rx="5" ry="7" fill="#FDD835"/><ellipse cx="66" cy="73" rx="5" ry="7" fill="#FDD835"/>
+        <ellipse cx="44" cy="73" rx="1.6" ry="5" fill="#0B1020"/><ellipse cx="66" cy="73" rx="1.6" ry="5" fill="#0B1020"/></g>
+      <path d="M52 84 L58 84 L55 88Z" fill="#E9A6B8"/>
+    </svg>
+  </div>
+</main>
+<p class="pista" id="pista">El gato sabe un secreto, pero duerme</p>
+<p class="subpista" id="sub"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Hay que despertar al gato.", "Haz ruido cerca del móvil o tócalo varias veces.", "Es una fruta. Su nombre empieza por P."]);
+  Comun.nivel("XXIII", { manzana: "Casi. Escucha bien el final del acertijo", fruta: "¿Qué fruta?", platano: "Ese es amarillo por fuera" });
+  const gato = document.getElementById("gato"), escena = document.getElementById("escena");
+  const bocadillo = document.getElementById("bocadillo"), pista = document.getElementById("pista");
+  let toques = 0, despierto = false, medir = null;
+  function despertar() {
+    if (despierto) return; despierto = true;
+    escena.classList.add("despierto");
+    const c = Comun.audio();
+    if (c) { // miau
+      const o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
+      o.type = "sawtooth"; o.frequency.setValueAtTime(500, t); o.frequency.linearRampToValueAtTime(800, t + .15); o.frequency.linearRampToValueAtTime(420, t + .6);
+      const f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 1500;
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.15, t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + .65);
+      o.connect(f).connect(g).connect(c.destination); o.start(t); o.stop(t + .7);
+    }
+    Comun.vibrar(40);
+    pista.style.opacity = 0;
+    setTimeout(() => bocadillo.classList.add("visible"), 600);
+  }
+  gato.addEventListener("pointerdown", () => {
+    gato.classList.remove("ronroneo"); void gato.offsetWidth; gato.classList.add("ronroneo");
+    Comun.tono(90, 0, .3, .1, "sine");
+    if (++toques >= 3) despertar();
+  });
+  Comun.inicio("Shhh… alguien duerme la siesta", "Entrar", async () => {
+    medir = await Comun.pedirMicro();
+    (function bucle() { if (medir && medir() > .1) despertar(); if (!despierto) requestAnimationFrame(bucle); })();
+  });
+</script>
+</body>
+</html>

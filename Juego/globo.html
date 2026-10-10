@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Aire</title>
+<style>
+  .fiesta { background: radial-gradient(ellipse at 50% 60%, #2A3966 0%, #0B1020 80%); }
+  .globo { position: absolute; left: 50%; top: 58%; width: 30vw; max-width: 140px; transform-origin: 50% 100%; cursor: pointer; }
+  .globo svg { width: 100%; display: block; overflow: visible; }
+  .globo.explota { animation: pum .25s ease-out forwards; }
+  @keyframes pum { to { opacity: 0; scale: 1.6; } }
+  .confeti { position: absolute; width: 8px; height: 14px; border-radius: 2px; pointer-events: none; animation: caer 1.6s ease-out forwards; }
+  @keyframes caer { to { transform: translate(var(--dx), var(--dy)) rotate(540deg); opacity: 0; } }
+</style>
+</head>
+<body>
+<main class="escena fiesta entrada" id="escena">
+  <div class="globo" id="globo">
+    <svg viewBox="0 0 100 160">
+      <path d="M50 110 Q48 135 54 160" stroke="#F2E9C9" stroke-width="1.5" fill="none" opacity=".6"/>
+      <ellipse cx="50" cy="55" rx="40" ry="52" fill="#E53935"/>
+      <path d="M44 106 L56 106 L50 114Z" fill="#E53935"/>
+      <ellipse cx="36" cy="36" rx="8" ry="14" fill="#FFFFFF" opacity=".35"/>
+    </svg>
+  </div>
+</main>
+<p class="pista">Hincha el globo hasta que explote</p>
+<p class="subpista" id="sub"></p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Los globos se hinchan con aire.", "Sopla hacia el micrófono o toca el globo muchas veces.", "No pares hasta que haga ¡pum!"]);
+  Comun.nivel("XXI", null);
+  const globo = document.getElementById("globo"), escena = document.getElementById("escena");
+  let tam = 1, medir = null, roto = false;
+  function inflar(cuanto) {
+    if (roto) return;
+    tam = Math.min(2.6, tam + cuanto);
+    globo.style.transform = `translate(-50%, -100%) scale(${tam})`;
+    if (tam >= 2.6) explotar();
+  }
+  function explotar() {
+    roto = true; globo.classList.add("explota");
+    const c = Comun.audio();
+    if (c) {
+      const buf = c.createBuffer(1, c.sampleRate * .3, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 4);
+      const s = c.createBufferSource(), g = c.createGain(); g.gain.value = .6;
+      s.buffer = buf; s.connect(g).connect(c.destination); s.start();
+    }
+    Comun.vibrar([60, 30, 60]);
+    const r = globo.getBoundingClientRect();
+    const COL = ["#E53935","#FB8C00","#FDD835","#43A047","#1E88E5","#8E24AA"];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement("div"); p.className = "confeti";
+      p.style.left = (r.left + r.width / 2) + "px"; p.style.top = (r.top + r.height / 3) + "px";
+      p.style.background = COL[i % COL.length];
+      p.style.setProperty("--dx", (Math.random() * 300 - 150) + "px");
+      p.style.setProperty("--dy", (Math.random() * 300 - 50) + "px");
+      escena.appendChild(p);
+    }
+    setTimeout(() => Comun.superado("pez.html", "XXI"), 1500);
+  }
+  globo.style.transform = "translate(-50%, -100%) scale(1)";
+  globo.addEventListener("pointerdown", () => { inflar(.12); Comun.tono(200 + tam * 120, 0, .1, .08, "sine"); });
+  Comun.inicio("Un globo sin hinchar", "Empezar la fiesta", async () => {
+    medir = await Comun.pedirMicro();
+    if (!medir) document.getElementById("sub").textContent = "Toca el globo para hincharlo";
+    (function bucle() { if (medir && medir() > .06) inflar(.012); requestAnimationFrame(bucle); })();
+  });
+</script>
+</body>
+</html>

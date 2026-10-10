@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Esta noche</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 30%, #1E2A4A 0%, #0B1020 75%); }
+  .fases { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); width: min(92vw, 420px);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .fase { aspect-ratio: 1; border: 1px solid rgba(242,233,201,.15); border-radius: 18px; background: rgba(242,233,201,.04); cursor: pointer; padding: 10%; }
+  .fase svg { width: 100%; display: block; }
+  .fase.mal { animation: no .4s; }
+  @keyframes no { 30% { transform: translateX(-6px); } 60% { transform: translateX(5px); } }
+  .fase.bien { background: rgba(242,233,201,.25); border-color: #F2E9C9; }
+  .conejo { position: absolute; left: 50%; top: 28%; width: 16vw; max-width: 70px; transform: translate(-50%, -50%); opacity: .9; }
+</style>
+</head>
+<body>
+<main class="escena noche entrada">
+  <svg class="conejo" viewBox="0 0 120 130" aria-hidden="true"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg>
+  <div class="fases" id="fases"></div>
+</main>
+<p class="pista">Dicen que en la luna vive un conejo. ¿Cómo está la luna hoy?</p>
+<script src="comun.js"></script>
+<script>
+  const NOMBRES = ["Luna nueva", "Luna creciente", "Cuarto creciente", "Gibosa creciente", "Luna llena", "Gibosa menguante", "Cuarto menguante", "Luna menguante"];
+  // Edad de la luna (días desde la última luna nueva)
+  const CICLO = 29.530588853;
+  const edad = (((Date.now() / 86400000 + 2440587.5 - 2451550.1) % CICLO) + CICLO) % CICLO;
+  const hoy = Math.floor(edad / CICLO * 8 + .5) % 8;
+  const aceptadas = new Set([hoy]);
+  const enFase = edad / CICLO * 8 + .5 - Math.floor(edad / CICLO * 8 + .5);
+  if (enFase < .14) aceptadas.add((hoy + 7) % 8);
+  if (enFase > .86) aceptadas.add((hoy + 1) % 8);
+
+  Comun.pistas(["Puedes mirar por la ventana esta noche… o recordar cómo estaba ayer.", "Si está creciendo, la parte iluminada está a la derecha. Si mengua, a la izquierda.", () => "Hoy la luna está en fase de «" + NOMBRES[hoy] + "»."]);
+  Comun.nivel("XX", null);
+
+  // Dibujo de cada fase (iluminación vista desde el hemisferio norte)
+  function dibujo(i) {
+    const f = i / 8, r = 40, k = Math.cos(f * 2 * Math.PI) * r;
+    const derecha = f < .5;
+    if (i === 0) return '<circle cx="50" cy="50" r="40" fill="#1E2A4A" stroke="#F2E9C9" stroke-opacity=".3"/>';
+    if (i === 4) return '<circle cx="50" cy="50" r="40" fill="#F2E9C9"/>';
+    const s = derecha ? 1 : 0;
+    const interiorDerecha = k > 0 ? derecha : !derecha;
+    const d = `M50 10 A40 40 0 0 ${s} 50 90 A${Math.abs(k)} 40 0 0 ${interiorDerecha ? 0 : 1} 50 10Z`;
+    return '<circle cx="50" cy="50" r="40" fill="#1E2A4A"/><path d="' + d + '" fill="#F2E9C9"/>';
+  }
+  const cont = document.getElementById("fases"); let hecho = false;
+  NOMBRES.forEach((n, i) => {
+    const b = document.createElement("button");
+    b.className = "fase"; b.setAttribute("aria-label", n);
+    b.innerHTML = '<svg viewBox="0 0 100 100">' + dibujo(i) + '</svg>';
+    b.addEventListener("click", () => {
+      if (hecho) return;
+      if (aceptadas.has(i)) {
+        hecho = true; b.classList.add("bien");
+        [523.25, 659.25, 783.99].forEach((f, k) => Comun.tono(f, k * .15, 1, .12, "sine")); Comun.vibrar(40);
+        setTimeout(() => Comun.superado("globo.html", "XX"), 1200);
+      } else {
+        b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal");
+        Comun.tono(160, 0, .25, .12, "sine"); Comun.avisar("Esa no es la luna de hoy");
+      }
+    });
+    cont.appendChild(b);
+  });
+</script>
+</body>
+</html>

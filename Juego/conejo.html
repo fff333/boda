@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La cena</title>
+<style>
+  .prado { background: linear-gradient(#141B36 0%, #1B2546 60%, #22301F 61%, #18220F 100%); }
+  .conejo { position: absolute; left: 50%; top: 40%; width: 34vw; max-width: 150px; transform: translate(-50%, -50%); }
+  .zanahoria { position: absolute; width: 15vw; max-width: 70px; transform: translate(-50%, -50%); cursor: pointer; border: none; background: none; }
+  .zanahoria svg { width: 100%; display: block; }
+  .zanahoria.mordida svg { animation: mordisco .35s ease; }
+  @keyframes mordisco { 40% { transform: rotate(-14deg) scale(.9); } }
+</style>
+</head>
+<body>
+<main class="escena prado entrada" id="prado">
+  <svg class="conejo" viewBox="0 0 120 130" aria-hidden="true">
+    <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/>
+    <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/>
+    <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+    <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/>
+    <ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/>
+    <circle cx="56" cy="66" r="24" fill="#FBFAF4"/>
+    <circle cx="47" cy="63" r="3.4" fill="#0B1020"/>
+    <ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/>
+  </svg>
+</main>
+<p class="pista">¿Cuántas zanahorias tiene el conejo para cenar?</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Cuenta con calma.", "Toca cada zanahoria mientras cuentas.", "Son más de cuatro y menos de seis. Escríbelo con letras."]);
+  Comun.nivel("XIV", { "5": "Escríbelo con letras", cuatro: "Cuenta otra vez", seis: "Cuenta otra vez" });
+  const SITIOS = [[18,66],[38,74],[60,68],[80,75],[48,85]];
+  const prado = document.getElementById("prado");
+  SITIOS.forEach(([x, y], i) => {
+    const b = document.createElement("button");
+    b.className = "zanahoria"; b.setAttribute("aria-label", "Zanahoria");
+    b.style.left = x + "%"; b.style.top = y + "%";
+    b.style.rotate = (i % 2 ? 18 : -14) + "deg";
+    b.innerHTML = `<svg viewBox="0 0 60 100"><path d="M30 95 L14 30 Q30 18 46 30Z" fill="#FB8C00"/>
+      <path d="M20 45 L28 47 M24 62 L32 63 M27 78 L33 79" stroke="#C26300" stroke-width="2"/>
+      <path d="M30 28 Q22 8 14 4 M30 28 Q30 6 30 0 M30 28 Q38 8 46 4" stroke="#43A047" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`;
+    b.addEventListener("pointerdown", () => {
+      b.classList.remove("mordida"); void b.offsetWidth; b.classList.add("mordida");
+      Comun.tono(300 + i * 80, 0, .12, .15, "square"); Comun.vibrar(10);
+    });
+    prado.appendChild(b);
+  });
+</script>
+</body>
+</html>

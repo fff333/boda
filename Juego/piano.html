@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Notación</title>
+<style>
+  .teclado { position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%); width: 94vw; max-width: 460px; height: 38vh; display: flex; gap: 4px; }
+  .tecla { flex: 1; border: none; border-radius: 0 0 10px 10px; background: #F2E9C9; cursor: pointer;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px;
+    font-family: inherit; font-style: italic; font-size: 15px; color: #8C7A4E; transition: background .1s; }
+  .tecla.activa { background: #E9A6B8; color: #0B1020; }
+  .tocar { position: absolute; left: 50%; top: 25%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%;
+    border: 1px solid rgba(242,233,201,.4); background: rgba(242,233,201,.08); color: var(--crema); font-size: 28px; cursor: pointer; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <button class="tocar" id="tocar" aria-label="Escuchar la melodía">♪</button>
+  <div class="teclado" id="teclado"></div>
+</main>
+<p class="pista">Cada país escribe la música a su manera</p>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Toca la nota musical de arriba y escucha con atención.", "En inglés las notas se escriben con letras: do = C, re = D, mi = E, fa = F, sol = G, la = A, si = B.", "La melodía es do, la, fa, mi. Cámbialas por sus letras."]);
+  Comun.nivel("XXXV", { dolafami: "Esas son las notas. ¿Cómo se escriben con letras?", cdef: "Esa es la escala. Escucha la melodía", melodia: "¿Qué dice la melodía?" });
+  const NOMBRES = ["do", "re", "mi", "fa", "sol", "la", "si"];
+  const FREQ = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+  const MELODIA = [0, 5, 3, 2];
+  const teclado = document.getElementById("teclado");
+  const teclas = NOMBRES.map((n, i) => {
+    const b = document.createElement("button");
+    b.className = "tecla"; b.textContent = n;
+    b.addEventListener("pointerdown", () => sonar(i, 300));
+    teclado.appendChild(b); return b;
+  });
+  function sonar(i, ms) {
+    teclas[i].classList.add("activa"); Comun.tono(FREQ[i], 0, ms / 1000 + .3, .22); Comun.vibrar(8);
+    setTimeout(() => teclas[i].classList.remove("activa"), ms);
+  }
+  let sonando = false;
+  document.getElementById("tocar").addEventListener("click", () => {
+    if (sonando) return; sonando = true;
+    MELODIA.forEach((n, k) => setTimeout(() => sonar(n, 450), k * 650));
+    setTimeout(() => sonando = false, MELODIA.length * 650);
+  });
+</script>
+</body>
+</html>
