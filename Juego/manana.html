@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Vueltas</title>
+<style>
+  .feria { background: radial-gradient(ellipse at 50% 50%, #2A1F44 0%, #0B1020 80%); }
+  .bola { position: absolute; left: 50%; top: 52%; width: min(70vw, 320px); aspect-ratio: 1; transform: translate(-50%, -50%);
+    border-radius: 50%; overflow: hidden; background: radial-gradient(circle at 35% 30%, #4A5A9A 0%, #2A3966 45%, #141B36 100%);
+    box-shadow: 0 0 60px rgba(120,140,255,.35); }
+  .acertijo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+    padding: 18%; font-size: clamp(18px, 5vw, 26px); line-height: 1.3; color: #E8ECFF; }
+  .niebla { position: absolute; inset: -20%; background: radial-gradient(circle at 40% 40%, rgb(220,225,245), rgb(180,190,225) 50%, rgb(140,150,200));
+    animation: remolino 8s linear infinite; }
+  @keyframes remolino { to { transform: rotate(360deg); } }
+  .peana { position: absolute; left: 50%; top: calc(52% + min(35vw, 160px) - 10px); transform: translateX(-50%); width: min(50vw, 220px); }
+  .barra { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 4px; border-radius: 2px; background: rgba(242,233,201,.15); }
+  .barra span { display: block; height: 100%; width: 0; border-radius: 2px; background: var(--crema); }
+</style>
+</head>
+<body>
+<main class="escena feria entrada">
+  <div class="bola" id="bola">
+    <p class="acertijo">Cuanto más le quitas,<br>más grande se hace</p>
+    <div class="niebla" id="niebla"></div>
+  </div>
+  <svg class="peana" viewBox="0 0 200 60" aria-hidden="true"><path d="M30 0 L170 0 L190 60 L10 60Z" fill="#5A3D52"/></svg>
+  <div class="barra"><span id="barra"></span></div>
+</main>
+<p class="pista">El futuro solo se ve después de dar muchas vueltas</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["La bola quiere dar vueltas.", "Pon el móvil plano sobre la mesa y gíralo una vuelta entera. O dibuja círculos alrededor de la bola con el dedo.", "Piensa en algo que crece cuanto más cavas."]);
+  Comun.nivel("XXXVI", { hoyo: "Casi. Busca otra palabra", pozo: "Casi. Algo más sencillo", deuda: "Buena respuesta, pero no es la que busco", zanja: "Casi. Algo más redondo" });
+  const bola = document.getElementById("bola"), niebla = document.getElementById("niebla"), barra = document.getElementById("barra");
+  let giro = 0, alfaPrev = null, dedoPrev = null, hecho = false;
+  function sumar(delta) {
+    if (hecho) return;
+    giro = Math.min(360, giro + Math.abs(delta));
+    const p = giro / 360;
+    niebla.style.opacity = 1 - p; barra.style.width = (p * 100) + "%";
+    if (Math.floor(giro / 45) !== Math.floor((giro - Math.abs(delta)) / 45)) { Comun.tono(400 + giro, 0, .15, .08, "sine"); Comun.vibrar(8); }
+    if (p >= 1) { hecho = true; [523.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .15, 1, .12, "sine")); }
+  }
+  const dif = (a, b) => ((a - b + 540) % 360) - 180;
+  function alOrientar(e) {
+    if (e.alpha == null) return;
+    if (alfaPrev != null) { const d = dif(e.alpha, alfaPrev); if (Math.abs(d) < 30) sumar(d); }
+    alfaPrev = e.alpha;
+  }
+  function angulo(e) { const r = bola.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; }
+  addEventListener("pointerdown", e => { dedoPrev = angulo(e); });
+  addEventListener("pointermove", e => { if (dedoPrev == null) return; const a = angulo(e); sumar(dif(a, dedoPrev) * .5); dedoPrev = a; });
+  addEventListener("pointerup", () => dedoPrev = null);
+  Comun.inicio("Una vieja bola de cristal", "Acercarse", async () => {
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+  });
+</script>
+</body>
+</html>

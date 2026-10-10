@@ -64,7 +64,7 @@
     }, 250);
     if (caidas === peras.length) setTimeout(() => Comun.superado("llave.html", "XXI"), 1900);
   }
-  let conSensor = false;
+  let conSensor = true;
   // Tocar el árbol solo funciona si el móvil no tiene sensor de movimiento
   arbol.addEventListener("pointerdown", () => {
     if (!conSensor) sacudir();
@@ -72,13 +72,13 @@
   });
   function alMover(e) {
     const a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
-    conSensor = true;
     const m = Math.hypot(a.x, a.y, a.z);
     if (prev != null && Math.abs(m - prev) > 12) sacudir();
     prev = m;
   }
   Comun.inicio("Un huerto al atardecer", "Entrar", async () => {
-    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    conSensor = await Comun.pedirMovimiento();
+    if (conSensor) addEventListener("devicemotion", alMover);
   });
 </script>
 </body>

@@ -76,8 +76,8 @@
   function bucle(ahora) {
     const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
     if (!apagada) {
-      const soplando = (medir && medir() > .14) || dedo;
-      luz = soplando ? luz - dt / 900 : Math.min(1, luz + dt / 4500);
+      const soplando = (medir && medir() > .09) || dedo;
+      luz = soplando ? luz - dt / 450 : Math.min(1, luz + dt / 9000);
       if (luz <= 0) apagar();
     }
     const l = Math.max(0, luz);

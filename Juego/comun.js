@@ -8,8 +8,8 @@ const SERVIDOR = "";
 // Utilidades compartidas por todos los niveles
 const Comun = (() => {
   // Orden de los niveles (cada uno es un archivo .html) y su código para volver a él
-  const NIVELES = ["arbol", "vela", "globo", "arcoiris", "espejo", "madriguera", "oscuridad", "eco", "reloj", "brujula", "polar", "silencio", "siete", "conejo", "cinco", "nube", "sol", "fases", "pez", "gato", "pera", "llave", "casa", "dormir", "zanahoria", "tarde", "tumbado", "susurro", "trebol", "escondite", "sonido", "luna", "semaforo", "piano", "cafe", "futuro", "agujero", "32", "faro", "pi", "laberinto", "eclipse", "melodia", "beethoven", "6", "42", "1969", "bach", "13", "roma", "radio", "mozart", "14", "la", "cuba", "10", "taxi", "pulso", "dado", "16", "prisma", "verde", "312211", "cumpleanos", "23", "647", "oido", "relojero", "75", "violin", "octava", "bravo"];
-  const CODIGOS = {"arbol": "GPYH", "vela": "9G9F", "globo": "JXP8", "arcoiris": "KVUG", "espejo": "LXT9", "madriguera": "6U23", "oscuridad": "YTKC", "eco": "4KAG", "reloj": "8PEQ", "brujula": "XEEP", "polar": "JQPF", "silencio": "7HTQ", "siete": "A88E", "conejo": "W84N", "cinco": "QNW9", "nube": "AXCP", "sol": "AFFB", "fases": "7ZC3", "pez": "QJXS", "gato": "ZCHY", "pera": "RKYQ", "llave": "B8EZ", "casa": "VPEA", "dormir": "GFWN", "zanahoria": "RHLM", "tarde": "EHR7", "tumbado": "5TFZ", "susurro": "VCX7", "trebol": "HHX4", "escondite": "HQX8", "sonido": "9YFH", "luna": "6MEN", "semaforo": "JLU4", "piano": "CTV2", "cafe": "4TEH", "futuro": "G9QQ", "agujero": "J62F", "32": "GMJS", "faro": "DEQ3", "pi": "ABAV", "laberinto": "QWUS", "eclipse": "69K3", "melodia": "54T2", "beethoven": "RN9V", "6": "DZAG", "42": "3WN7", "1969": "PHSA", "bach": "LM5F", "13": "TF9V", "roma": "CQKJ", "radio": "8WV7", "mozart": "GCSH", "14": "848B", "la": "3DJJ", "cuba": "LDH7", "10": "LUZ7", "taxi": "3QUR", "pulso": "FAB4", "dado": "W9N7", "16": "4GL3", "prisma": "JF5A", "verde": "VTDG", "312211": "6TA7", "cumpleanos": "HXLU", "23": "5D4N", "647": "PVFW", "oido": "Q5JX", "relojero": "BRPG", "75": "PQVB", "violin": "4X5A", "octava": "LTE9", "bravo": "96RF"};
+  const NIVELES = ["arbol", "vela", "globo", "arcoiris", "espejo", "madriguera", "oscuridad", "eco", "reloj", "brujula", "polar", "silencio", "siete", "conejo", "fases", "pez", "gato", "pera", "llave", "dormir", "zanahoria", "tarde", "tumbado", "susurro", "trebol", "escondite", "sonido", "luna", "semaforo", "piano", "cafe", "manana", "agujero", "32", "faro", "pi", "laberinto", "eclipse", "melodia", "beethoven", "6", "42", "1969", "bach", "13", "roma", "radio", "mozart", "14", "la", "cuba", "10", "taxi", "pulso", "dado", "16", "prisma", "verde", "312211", "cumpleanos", "23", "647", "oido", "relojero", "75", "violin", "octava", "bravo"];
+  const CODIGOS = {"arbol": "GPYH", "vela": "9G9F", "globo": "JXP8", "arcoiris": "KVUG", "espejo": "LXT9", "madriguera": "6U23", "oscuridad": "YTKC", "eco": "4KAG", "reloj": "8PEQ", "brujula": "XEEP", "polar": "JQPF", "silencio": "7HTQ", "siete": "A88E", "conejo": "AFFB", "fases": "7ZC3", "pez": "QJXS", "gato": "ZCHY", "pera": "RKYQ", "llave": "B8EZ", "dormir": "GFWN", "zanahoria": "RHLM", "tarde": "EHR7", "tumbado": "5TFZ", "susurro": "VCX7", "trebol": "HHX4", "escondite": "HQX8", "sonido": "9YFH", "luna": "6MEN", "semaforo": "JLU4", "piano": "CTV2", "cafe": "4TEH", "manana": "G9QQ", "agujero": "J62F", "32": "GMJS", "faro": "DEQ3", "pi": "ABAV", "laberinto": "QWUS", "eclipse": "69K3", "melodia": "54T2", "beethoven": "RN9V", "6": "DZAG", "42": "3WN7", "1969": "PHSA", "bach": "LM5F", "13": "TF9V", "roma": "CQKJ", "radio": "8WV7", "mozart": "GCSH", "14": "848B", "la": "3DJJ", "cuba": "LDH7", "10": "LUZ7", "taxi": "3QUR", "pulso": "FAB4", "dado": "W9N7", "16": "4GL3", "prisma": "JF5A", "verde": "VTDG", "312211": "6TA7", "cumpleanos": "HXLU", "23": "5D4N", "647": "PVFW", "oido": "Q5JX", "relojero": "BRPG", "75": "PQVB", "violin": "4X5A", "octava": "LTE9", "bravo": "96RF"};
   const ELOGIOS = {
     "arbol": "Has seguido sin dudar. Buena señal.",
     "vela": "Viste en la oscuridad lo que otros no ven.",
@@ -24,16 +24,12 @@ const Comun = (() => {
     "polar": "Constancia. Es lo que separa a los que terminan.",
     "silencio": "Pocos saben callar a tiempo.",
     "siete": "Lo difícil ya pasó. Ahora, a disfrutar.",
-    "conejo": "Ni una se te escapa.",
-    "cinco": "El cielo brilla un poco más gracias a ti.",
-    "nube": "Has despejado el día.",
-    "sol": "Dos manos, una idea. Bien pensado.",
+    "conejo": "Dos manos, una idea. Bien pensado.",
     "fases": "Sabes mirar al cielo. Eso no lo hace cualquiera.",
     "pez": "Buen pulso. El pez ya no tiene hambre.",
     "gato": "Has despertado algo más que un gato.",
     "pera": "Cosecha perfecta.",
     "llave": "Todas las puertas se te abren.",
-    "casa": "Ya hay luz en casa. Y en tu cabeza también.",
     "dormir": "Dulces sueños, conejito. Bien hecho.",
     "zanahoria": "Buen ojo para los colores.",
     "tarde": "Llegas justo a tiempo. El conejo no tanto.",
@@ -46,7 +42,7 @@ const Comun = (() => {
     "semaforo": "Memoria de elefante. Y de las buenas.",
     "piano": "Tienes oído y cultura. Una mezcla rara.",
     "cafe": "La paciencia también es una forma de inteligencia.",
-    "futuro": "El futuro se aclara cuando lo miras de frente.",
+    "manana": "El futuro se aclara cuando lo miras de frente.",
     "agujero": "Mirar por un agujero y ver tanto. Bien hecho.",
     "32": "Has descifrado lo que un emperador quiso ocultar.",
     "faro": "Pocos cuentan la luz. Tú la has entendido.",
@@ -90,25 +86,21 @@ const Comun = (() => {
     "vela": "La llama de una vela alcanza unos 1.400 °C en su parte más caliente.",
     "globo": "Michael Faraday fabricó los primeros globos de goma en 1824 para sus experimentos con hidrógeno.",
     "arcoiris": "Un arcoíris es en realidad un círculo completo: desde el suelo solo vemos la mitad, pero desde un avión se puede ver entero.",
-    "espejo": "La idea de los siete años de mala suerte viene de la antigua Roma, donde se creía que la vida se renovaba cada siete años.",
-    "madriguera": "Las madrigueras de los conejos forman redes de túneles que pueden tener decenas de entradas.",
+    "espejo": "Las madrigueras de los conejos forman redes de túneles que pueden tener decenas de entradas.",
+    "madriguera": "Un conejo puede correr a más de 50 km/h y huye en zigzag para despistar a quien lo persigue.",
     "oscuridad": "Los ojos de un conejo están a los lados de la cabeza: puede ver casi 360° sin girarse.",
     "eco": "Para oír un eco claro, la pared tiene que estar al menos a unos 17 metros: el sonido tarda una décima de segundo en ir y volver.",
     "reloj": "El reloj de pulsera se popularizó durante la Primera Guerra Mundial porque en las trincheras era más práctico que el de bolsillo.",
     "brujula": "Las primeras brújulas se usaron en China hace unos 2.000 años, y al principio servían para la adivinación, no para navegar.",
-    "polar": "La estrella Polar no es la más brillante del cielo: ocupa más o menos el puesto 48.",
+    "polar": "La escarcha se forma cuando el vapor de agua del aire se congela directamente sobre una superficie fría, sin llegar a ser líquido.",
     "silencio": "Los conejos pueden dormir con los ojos abiertos para estar alerta ante los depredadores.",
     "siete": "Isaac Newton dividió el arcoíris en siete colores para que coincidieran con las siete notas de la escala musical.",
-    "conejo": "Las zanahorias no son la comida ideal de los conejos: tienen mucho azúcar y solo deberían comerlas de vez en cuando.",
-    "cinco": "Algunas estrellas que ves de noche están tan lejos que su luz tardó miles de años en llegar hasta ti.",
-    "nube": "Una nube de tamaño mediano puede pesar más de 500 toneladas.",
-    "sol": "El Sol es unas 400 veces más grande que la Luna, pero también está unas 400 veces más lejos: por eso parecen del mismo tamaño en un eclipse.",
+    "conejo": "El Sol es unas 400 veces más grande que la Luna, pero también está unas 400 veces más lejos: por eso parecen del mismo tamaño en un eclipse.",
     "fases": "En Asia se dice que las manchas de la luna dibujan un conejo machacando algo en un mortero.",
     "pez": "Los peces de colores tienen mejor memoria de lo que se cree: pueden recordar cosas durante meses.",
     "gato": "Los gatos duermen entre 12 y 16 horas al día.",
     "pera": "La pera es pariente de la manzana: las dos pertenecen a la familia de las rosas.",
     "llave": "Las cerraduras más antiguas que se conocen eran de madera y tienen unos 4.000 años.",
-    "casa": "Thomas Edison no inventó la bombilla, pero en 1879 consiguió una que duraba lo suficiente para usarla en las casas.",
     "dormir": "Los conejos son crepusculares: están más activos al amanecer y al atardecer.",
     "zanahoria": "Las primeras zanahorias que se cultivaron no eran naranjas, sino moradas o amarillas.",
     "tarde": "El Conejo Blanco de Alicia siempre llega tarde y lleva un reloj de bolsillo en el chaleco.",
@@ -121,7 +113,7 @@ const Comun = (() => {
     "semaforo": "El primer semáforo se instaló en Londres en 1868 y funcionaba con gas.",
     "piano": "Los nombres do, re, mi… vienen de las primeras sílabas de un himno medieval en latín.",
     "cafe": "Según la leyenda, el café se descubrió cuando un pastor de Etiopía vio a sus cabras muy animadas tras comer sus frutos.",
-    "futuro": "Intentar ver el futuro en una bola de cristal se llama cristalomancia, y ya se practicaba en la Edad Media.",
+    "manana": "Intentar ver el futuro en una bola de cristal se llama cristalomancia, y ya se practicaba en la Edad Media.",
     "agujero": "Las mirillas usan una lente de ojo de pez que permite ver hasta unos 180° desde dentro.",
     "32": "Julio César usaba este cifrado, con un desplazamiento de tres letras, en sus mensajes militares.",
     "faro": "El Faro de Alejandría, una de las siete maravillas del mundo antiguo, medía más de 100 metros.",
@@ -159,7 +151,7 @@ const Comun = (() => {
     "octava": "Un piano de cola tiene 88 teclas, que cubren algo más de siete octavas.",
     "bravo": "«Bravo» viene del italiano: en la ópera se dice «brava» a una cantante y «bravi» a un grupo."
   };
-  const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
+  const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "tomorrow": "manana", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
 
   // Si el nivel se carga dentro de index.html, los permisos ya se pidieron allí
   const marco = (() => {
@@ -380,7 +372,8 @@ const Comun = (() => {
       if (!w) { r.classList.remove("abierta"); return; }
       if (ALIAS[idioma] && ALIAS[idioma][w]) w = ALIAS[idioma][w];
       if (casi[w]) { avisar(casi[w]); tono(330, 0, .3, .12, "sine"); return; }
-      if (w !== archivo && await existe(w + ".html") && (NIVELES.includes(w) || w === "fin")) {
+      const siguiente = indice >= 0 ? (NIVELES[indice + 1] || "fin") : null;
+      if (w === siguiente && await existe(w + ".html")) {
         input.blur();
         tono(523.25, 0, .5, .18); tono(783.99, .12, .8, .18);
         vibrar(40); superado(w + ".html");

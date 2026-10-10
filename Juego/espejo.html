@@ -63,7 +63,7 @@
 <script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
-  Comun.pistas(["A este espejo le pasa algo. Quizá haya que hacerle algo a él.", "Agita el móvil con fuerza o golpea el espejo con el dedo varias veces.", "¿Cómo se llama la casa que cava un conejo bajo tierra?"]);
+  Comun.pistas(["A este espejo le pasa algo. Quizá haya que hacerle algo a él.", "Tocarlo no sirve. Agita el móvil con fuerza, varias veces.", "¿Cómo se llama la casa que cava un conejo bajo tierra?"]);
   Comun.nivel("V", { conejo: "Él lo cavó. ¿Cómo se llama lo que cavó?", agujero: "Tiene un nombre más preciso", tunel: "Tiene un nombre más preciso", siete: "La mala suerte no es el camino", liebre: "Casi. Busca su casa" });
 
   const marco = document.getElementById("marco"), mensaje = document.getElementById("mensaje");
@@ -103,7 +103,15 @@
     }
   }
 
-  marco.addEventListener("pointerdown", golpe);
+  let conSensor = true;
+  // Tocar el espejo solo funciona si el móvil no tiene sensor de movimiento
+  marco.addEventListener("pointerdown", () => {
+    if (!conSensor) { golpe(); return; }
+    if (roto) return;
+    marco.classList.remove("golpe"); void marco.offsetWidth; marco.classList.add("golpe");
+    Comun.tono(900, 0, .05, .05, "sine");
+    Comun.avisar("Así no se rompe. Prueba a agitar el móvil");
+  });
 
   function alMover(e) {
     const a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
@@ -113,7 +121,8 @@
   }
 
   Comun.inicio("Sujeta fuerte el móvil", "Entrar", async () => {
-    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    conSensor = await Comun.pedirMovimiento();
+    if (conSensor) addEventListener("devicemotion", alMover);
   });
 </script>
 </body>

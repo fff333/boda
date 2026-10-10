@@ -54,11 +54,11 @@
 <script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
-  Comun.pistas(["Hay que despertar al gato.", "Haz ruido cerca del móvil o tócalo varias veces.", "Es una fruta. Su nombre empieza por P."]);
+  Comun.pistas(["Hay que despertar al gato.", "Tocarlo no sirve. Grítale cerca del móvil.", "Es una fruta. Su nombre empieza por P."]);
   Comun.nivel("XX", { manzana: "Casi. Escucha bien el final del acertijo", fruta: "¿Qué fruta?", platano: "Ese es amarillo por fuera" });
   const gato = document.getElementById("gato"), escena = document.getElementById("escena");
   const bocadillo = document.getElementById("bocadillo"), pista = document.getElementById("pista");
-  let toques = 0, despierto = false, medir = null;
+  let toques = 0, despierto = false, medir = null, conMicro = true;
   function despertar() {
     if (despierto) return; despierto = true;
     escena.classList.add("despierto");
@@ -77,11 +77,13 @@
   gato.addEventListener("pointerdown", () => {
     gato.classList.remove("ronroneo"); void gato.offsetWidth; gato.classList.add("ronroneo");
     Comun.tono(90, 0, .3, .1, "sine");
-    if (++toques >= 3) despertar();
+    // Tocarlo solo lo despierta si no hay micrófono
+    if (!conMicro) { if (++toques >= 3) despertar(); }
+    else if (!despierto) Comun.avisar("Así no se despierta. Prueba a gritarle");
   });
   Comun.inicio("Shhh… alguien duerme la siesta", "Entrar", async () => {
-    medir = await Comun.pedirMicro();
-    (function bucle() { if (medir && medir() > .1) despertar(); if (!despierto) requestAnimationFrame(bucle); })();
+    medir = await Comun.pedirMicro(); conMicro = !!medir;
+    (function bucle() { if (medir && medir() > .15) despertar(); if (!despierto) requestAnimationFrame(bucle); })();
   });
 </script>
 </body>

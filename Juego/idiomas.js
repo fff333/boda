@@ -2,6 +2,14 @@
 window.TRADUCCION = window.TRADUCCION || {};
 window.TRADUCCION.en = {
   textos: {
+    "El futuro será…": "The future will be… (in Spanish: «mañana», tomorrow)",
+    "En el poso pone FUTURO. Pero ¿cuándo llega el futuro? Empieza por M.": "The grounds say FUTURE. But when does the future arrive? (In Spanish it starts with M: «mañana», tomorrow.)",
+    "Tocarlo no sirve. Grítale cerca del móvil.": "Tapping won't work. Shout at it near the phone.",
+    "Así no se despierta. Prueba a gritarle": "That won't wake it. Try shouting at it",
+    "Un conejo puede correr a más de 50 km/h y huye en zigzag para despistar a quien lo persigue.": "A rabbit can run at over 50 km/h and zigzags to throw off whoever is chasing it.",
+    "La escarcha se forma cuando el vapor de agua del aire se congela directamente sobre una superficie fría, sin llegar a ser líquido.": "Frost forms when water vapour in the air freezes directly onto a cold surface, without ever becoming liquid.",
+    "Tocarlo no sirve. Agita el móvil con fuerza, varias veces.": "Tapping won't work. Shake your phone hard, several times.",
+    "Así no se rompe. Prueba a agitar el móvil": "That won't break it. Try shaking your phone",
     "¿Sabías que…?": "Did you know…?",
     "El Conejo Blanco aparece en «Alicia en el país de las maravillas», que Lewis Carroll publicó en 1865.": "The White Rabbit appears in «Alice's Adventures in Wonderland», published by Lewis Carroll in 1865.",
     "La llama de una vela alcanza unos 1.400 °C en su parte más caliente.": "A candle flame reaches about 1,400 °C at its hottest point.",
