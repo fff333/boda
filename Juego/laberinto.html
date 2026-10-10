@@ -19,10 +19,11 @@
 </main>
 <p class="pista">Lleva la luz hasta la salida</p>
 <p class="subpista" id="sub" style="bottom: calc(env(safe-area-inset-bottom) + 76px)"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Inclina el móvil para mover la bola.", "Si se descoloca, toca la pantalla para volver a centrar la inclinación.", "La salida es la casilla rosa, abajo a la derecha. Ve despacio en las curvas."]);
-  Comun.nivel("XLII", null);
+  Comun.nivel("XLI", null);
   // Laberinto generado siempre igual (semilla fija), 6 × 8 celdas
   const CC = 6, FF = 8, COLS = CC * 2 + 1, FILAS = FF * 2 + 1;
   let semilla = 7;
@@ -84,7 +85,7 @@
       if (!choca(bx, by + vy)) by += vy; else vy *= -.2;
       if (Math.floor(bx / T) === SALIDA.x && Math.floor(by / T) === SALIDA.y) {
         hecho = true; [392, 523.25, 659.25, 783.99].forEach((f, i) => Comun.tono(f, i * .12, .8, .14, "sine")); Comun.vibrar([30, 50, 60]);
-        setTimeout(() => Comun.superado("eclipse.html", "XLII"), 1200);
+        setTimeout(() => Comun.superado("eclipse.html", "XLI"), 1200);
       }
     }
     dibujar(); requestAnimationFrame(bucle);

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Ángulo</title>
+<style>
+
+  .reloj { position: absolute; left: 50%; top: 52%; width: min(72vw, 320px); transform: translate(-50%, -50%); }
+  .reloj svg { width: 100%; display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="reloj"><svg viewBox="0 0 200 200" id="svg">
+    <circle cx="100" cy="100" r="92" fill="#F7F0DC" stroke="#C9A86A" stroke-width="6"/>
+    <g id="marcas"></g>
+    <line x1="100" y1="100" x2="100" y2="50" stroke="#3E2A1A" stroke-width="6" stroke-linecap="round" transform="rotate(105 100 100)"/>
+    <line x1="100" y1="100" x2="100" y2="24" stroke="#E9A6B8" stroke-width="4" stroke-linecap="round" transform="rotate(180 100 100)"/>
+    <circle cx="100" cy="100" r="5" fill="#3E2A1A"/>
+  </svg></div>
+</main>
+<p class="pista">Son las tres y media. ¿Cuántos grados separan las agujas?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Ojo: la aguja corta no está justo en el 3.", "Cada hora son 30 grados, y en media hora la aguja corta avanza la mitad: 15 grados.", "La larga está a 180°, la corta a 90° + 15° = 105°."]);
+  Comun.nivel("", { "90": "La aguja corta también se mueve", "105": "Esa es la posición de la aguja corta", "180": "Esa es la de la larga", setentaycinco: "Escríbelo con números" });
+  const g = document.getElementById("marcas");
+  for (let i = 1; i <= 12; i++) { const a = (i * 30 - 90) * Math.PI / 180; g.insertAdjacentHTML("beforeend", `<text x="${100 + Math.cos(a) * 74}" y="${100 + Math.sin(a) * 74 + 5}" text-anchor="middle" font-family="Georgia" font-size="15" fill="#5A3A1E">${i}</text>`); }
+
+</script>
+</body>
+</html>

@@ -34,10 +34,11 @@
   <div class="barra"><span id="barra"></span></div>
 </main>
 <p class="pista">El futuro solo se ve después de dar muchas vueltas</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["La bola quiere dar vueltas.", "Pon el móvil plano sobre la mesa y gíralo una vuelta entera. O dibuja círculos alrededor de la bola con el dedo.", "Piensa en algo que crece cuanto más cavas."]);
-  Comun.nivel("XXXVII", { hoyo: "Casi. Busca otra palabra", pozo: "Casi. Algo más sencillo", deuda: "Buena respuesta, pero no es la que busco", zanja: "Casi. Algo más redondo" });
+  Comun.nivel("XXXVI", { hoyo: "Casi. Busca otra palabra", pozo: "Casi. Algo más sencillo", deuda: "Buena respuesta, pero no es la que busco", zanja: "Casi. Algo más redondo" });
   const bola = document.getElementById("bola"), niebla = document.getElementById("niebla"), barra = document.getElementById("barra");
   let giro = 0, alfaPrev = null, dedoPrev = null, hecho = false;
   function sumar(delta) {

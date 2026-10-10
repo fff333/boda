@@ -29,13 +29,15 @@
   </div>
 </main>
 <p class="pista">Las horas también deletrean</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Fíjate en dónde se para la aguja en cada salto.", "Apunta cada letra que señala, en orden, hasta que haga una pausa.", "Son siete letras. Es un objeto que sirve para no perderse."]);
   Comun.nivel("IX", { tiempo: "El tiempo solo es el mensajero", hora: "Fíjate en dónde se para" });
 
-  const LETRAS = ["B","E","R","M","U","T","J","N","L","O","A","S"];
-  const SECUENCIA = [0, 2, 4, 6, 4, 8, 10]; // posiciones de la palabra
+  const EN = Comun.idioma === "en";
+  const LETRAS = EN ? ["C","E","O","T","M","R","P","N","A","L","S","U"] : ["B","E","R","M","U","T","J","N","L","O","A","S"];
+  const SECUENCIA = EN ? [0, 2, 4, 6, 8, 10, 10] : [0, 2, 4, 6, 4, 8, 10]; // posiciones de la palabra
   const marcas = document.getElementById("marcas"), aguja = document.getElementById("aguja");
   const textos = LETRAS.map((l, i) => {
     const a = (i * 30 - 90) * Math.PI / 180;
@@ -53,6 +55,7 @@
   function moverA(i) {
     const destino = i * 30;
     let delta = ((destino - angulo) % 360 + 360) % 360; // siempre en sentido horario
+    if (delta === 0) delta = 360; // letra repetida: da una vuelta entera
     angulo += delta;
     aguja.style.transform = `rotate(${angulo}deg)`;
     textos.forEach(t => t.classList.remove("marcada"));

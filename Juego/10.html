@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Mensaje</title>
+<style>
+
+  .movil { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); width: min(70vw, 280px); background: #263238; border-radius: 24px; padding: 18px; }
+  .teclas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tecla { aspect-ratio: 1.3; border-radius: 12px; border: none; background: #455A64; color: #F2E9C9; font-family: inherit; font-size: 22px; font-style: normal; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+  .tecla small { font-size: 10px; opacity: .7; letter-spacing: .05em; }
+  .tecla.activa { background: #E9A6B8; color: #0B1020; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <button class="boton-musica" id="tocar" style="top:13%" aria-label="Escuchar">♪</button>
+  <div class="movil"><div class="teclas" id="teclas"></div></div>
+</main>
+<p class="pista" style="top:calc(env(safe-area-inset-top) + 22%)">Alguien escribe un mensaje con un móvil antiguo</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Fíjate en qué tecla se pulsa y cuántas veces seguidas.", "En los móviles antiguos, pulsar el 2 una vez era A, dos veces B, tres veces C…", "8 = T, 2 = A, 9-9 = X, 4-4-4 = I."]);
+  Comun.nivel("", { "829944": "Esas son las teclas. ¿Qué letras forman?" });
+  const T = [["1", ""], ["2", "abc"], ["3", "def"], ["4", "ghi"], ["5", "jkl"], ["6", "mno"], ["7", "pqrs"], ["8", "tuv"], ["9", "wxyz"], ["*", ""], ["0", "␣"], ["#", ""]];
+  const F = { "1": [697, 1209], "2": [697, 1336], "3": [697, 1477], "4": [770, 1209], "5": [770, 1336], "6": [770, 1477], "7": [852, 1209], "8": [852, 1336], "9": [852, 1477], "*": [941, 1209], "0": [941, 1336], "#": [941, 1477] };
+  const cont = document.getElementById("teclas"), teclas = {};
+  function pitar(k, cuando = 0) { F[k].forEach(f => Comun.tono(f, cuando, .14, .08, "sine")); }
+  T.forEach(([k, l]) => {
+    const b = document.createElement("button"); b.className = "tecla"; b.innerHTML = `${k}<small>${l.toUpperCase()}</small>`;
+    b.addEventListener("pointerdown", () => { pitar(k); b.classList.add("activa"); setTimeout(() => b.classList.remove("activa"), 150); });
+    cont.appendChild(b); teclas[k] = b;
+  });
+  const SEC = [["8"], ["2"], ["9", "9"], ["4", "4", "4"]];
+  let sonando = false;
+  document.getElementById("tocar").addEventListener("click", () => {
+    if (sonando) return; sonando = true; let t = 300;
+    SEC.forEach(g => { g.forEach(k => { setTimeout(() => { pitar(k); teclas[k].classList.add("activa"); setTimeout(() => teclas[k].classList.remove("activa"), 160); }, t); t += 280; }); t += 900; });
+    setTimeout(() => sonando = false, t);
+  });
+
+</script>
+</body>
+</html>

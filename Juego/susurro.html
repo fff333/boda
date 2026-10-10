@@ -34,10 +34,11 @@
 </main>
 <p class="pista">El conejito quiere contarte un secreto</p>
 <p class="subpista">Sube el volumen y tócale una oreja</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["El conejito habla muy bajito.", "Sube el volumen del móvil y toca una de sus orejas.", "Dice el nombre de una planta que trae suerte. Escribe lo que oyes."]);
-  Comun.nivel("XXXI", { trevol: "Casi. Se escribe con be", suerte: "¿Qué planta da suerte?", planta: "¿Qué planta?" });
+  Comun.nivel("XXVIII", { trevol: "Casi. Se escribe con be", suerte: "¿Qué planta da suerte?", planta: "¿Qué planta?" });
   const conejo = document.getElementById("conejo"), escrito = document.getElementById("escrito");
   let veces = 0;
   function susurrar() {
@@ -45,9 +46,10 @@
     veces++;
     if ("speechSynthesis" in window) {
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance("trébol");
-      u.lang = "es-ES"; u.rate = .75; u.pitch = 1.5; u.volume = 1;
-      const voz = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith("es"));
+      const EN = Comun.idioma === "en";
+      const u = new SpeechSynthesisUtterance(EN ? "clover" : "trébol");
+      u.lang = EN ? "en-US" : "es-ES"; u.rate = .75; u.pitch = 1.5; u.volume = 1;
+      const voz = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith(EN ? "en" : "es"));
       if (voz) u.voice = voz;
       speechSynthesis.speak(u);
     }

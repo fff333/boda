@@ -33,10 +33,11 @@
   </div>
 </main>
 <p class="pista">Ya es de noche. Que no falte luz en casa</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Las ventanas están a oscuras.", "Toca una ventana para encender la luz.", "Enciéndelas todas."]);
-  Comun.nivel("XXVI", null);
+  Comun.nivel("XXIII", null);
   const SITIOS = [[60,125],[128,125],[196,125],[60,195],[196,195],[134,60]];
   const g = document.getElementById("ventanas");
   let luces = 0;
@@ -51,7 +52,7 @@
       Comun.tono(440 + luces * 60, 0, .4, .12, "sine"); Comun.vibrar(10);
       if (++luces === SITIOS.length) {
         [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => Comun.tono(f, .3 + k * .15, 1, .12, "sine"));
-        setTimeout(() => Comun.superado("dormir.html", "XXVI"), 1500);
+        setTimeout(() => Comun.superado("dormir.html", "XXIII"), 1500);
       }
     });
     g.appendChild(r);

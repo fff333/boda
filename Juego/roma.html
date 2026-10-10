@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Puntos</title>
+<style>
+
+  .celdas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 4vw; }
+  .celda { width: 13vw; max-width: 60px; }
+  .celda svg { width: 100%; display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="celdas" id="celdas"></div></main>
+<p class="pista">Hay quien lee con los dedos</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Es braille: cada letra es un grupo de puntos en relieve.", "Abecedario braille:\n\na ⠁  b ⠃  c ⠉  d ⠙  e ⠑\nf ⠋  g ⠛  h ⠓  i ⠊  j ⠚\nk ⠅  l ⠇  m ⠍  n ⠝  o ⠕\np ⠏  q ⠟  r ⠗  s ⠎  t ⠞\nu ⠥  v ⠧  w ⠺  x ⠭  y ⠽  z ⠵", "Las letras son R, A, D, I, O."]);
+  Comun.nivel("", { braille: "Ese es el sistema. ¿Qué pone?" });
+  // puntos: 1 4 / 2 5 / 3 6
+  const LETRAS = [[1, 2, 3, 5], [1], [1, 4, 5], [2, 4], [1, 3, 5]];
+  const POS = { 1: [14, 14], 2: [14, 40], 3: [14, 66], 4: [40, 14], 5: [40, 40], 6: [40, 66] };
+  const cont = document.getElementById("celdas");
+  LETRAS.forEach(l => {
+    const d = document.createElement("div"); d.className = "celda";
+    d.innerHTML = '<svg viewBox="0 0 54 80">' + [1, 2, 3, 4, 5, 6].map(k => `<circle cx="${POS[k][0]}" cy="${POS[k][1]}" r="9" fill="${l.includes(k) ? "#F2E9C9" : "rgba(242,233,201,.1)"}"/>`).join("") + "</svg>";
+    cont.appendChild(d);
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Distancia</title>
+<style>
+
+  .pares { position: absolute; left: 0; right: 0; top: 40%; display: flex; justify-content: center; gap: 24px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="pares">
+    <button class="boton-musica" style="position:static;transform:none" data-p="57,69" aria-label="Pareja 1">1</button>
+    <button class="boton-musica" style="position:static;transform:none" data-p="60,72" aria-label="Pareja 2">2</button>
+    <button class="boton-musica" style="position:static;transform:none" data-p="67,79" aria-label="Pareja 3">3</button>
+  </div>
+</main>
+<p class="pista">Es la misma nota… pero no suena igual. ¿Cómo se llama esta distancia?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Cada botón toca la misma nota dos veces: una grave y otra aguda.", "Entre una y otra hay ocho notas blancas: do, re, mi, fa, sol, la, si, do.", "Su nombre viene del número ocho."]);
+  Comun.nivel("", { "8": "Casi. ¿Cómo se llama esa distancia?", ocho: "Casi. ¿Cómo se llama esa distancia?", doble: "Sí, la frecuencia se duplica. ¿Cómo se llama?", intervalo: "Sí, es un intervalo. ¿Cuál?" });
+  document.querySelectorAll("[data-p]").forEach(b => b.addEventListener("click", () => {
+    const [a, c] = b.dataset.p.split(",").map(Number);
+    Motor.nota(a, 0, 1); Motor.nota(c, .7, 1.2);
+  }));
+
+</script>
+</body>
+</html>

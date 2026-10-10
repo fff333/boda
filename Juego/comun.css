@@ -147,3 +147,92 @@ button:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
 }
 .panel-pista .otra { background: #F2E9C9; color: #0B1020; border: none; }
 .panel-pista .cerrar { background: none; color: #F2E9C9; border: 1px solid rgba(242,233,201,.3); }
+
+/* Menú */
+.numero { left: 64px; top: calc(env(safe-area-inset-top) + 20px); }
+.boton-menu {
+  position: fixed; z-index: 35; top: calc(env(safe-area-inset-top) + 8px); left: 12px;
+  width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(242,233,201,.35); background: rgba(11,16,32,.6); color: #F2E9C9; font-size: 18px;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.panel-menu {
+  position: fixed; inset: 0; z-index: 45; background: rgba(5,8,15,.6);
+  display: flex; align-items: center; justify-content: center; padding: 8vw;
+  opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+.panel-menu.abierto { opacity: 1; pointer-events: auto; }
+.panel-menu .tarjeta {
+  width: 100%; max-width: 380px; max-height: 86vh; overflow-y: auto;
+  background: #141B36; color: #F2E9C9; border: 1px solid rgba(242,233,201,.2); border-radius: 22px;
+  padding: 24px 22px 18px; text-align: center; display: flex; flex-direction: column; gap: 10px;
+  font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+}
+.panel-menu .contador { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; opacity: .5; font-style: normal; }
+.panel-menu .mi-codigo { font-size: 16px; opacity: .8; margin-bottom: 6px; }
+.panel-menu .mi-codigo b, .superado .sup-codigo b { font-style: normal; letter-spacing: .15em; }
+.panel-menu .accion, .panel-menu .cerrar {
+  font: inherit; font-size: 17px; border-radius: 30px; padding: 12px; cursor: pointer;
+  background: rgba(242,233,201,.08); color: #F2E9C9; border: 1px solid rgba(242,233,201,.3);
+}
+.panel-menu .cerrar { background: #F2E9C9; color: #0B1020; border: none; margin-top: 6px; }
+.panel-menu .fila-codigo { display: flex; gap: 8px; }
+.panel-menu .fila-codigo input {
+  flex: 1; min-width: 0; font: inherit; font-size: 18px; font-style: normal; letter-spacing: .15em; text-transform: uppercase;
+  background: rgba(242,233,201,.06); color: #F2E9C9; border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 10px 16px;
+  -webkit-user-select: text; user-select: text;
+}
+.panel-menu .accion.corta { padding: 10px 18px; }
+.superado .sup-codigo { font-size: 16px; opacity: .7; margin-top: 10px; }
+
+/* Piano y controles musicales */
+.piano {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 94vw; max-width: 480px; height: 30vh;
+  bottom: calc(env(safe-area-inset-bottom) + 92px);
+}
+.tecla-b, .tecla-n {
+  position: absolute; top: 0; cursor: pointer; font-family: inherit; font-style: italic;
+  display: flex; align-items: flex-end; justify-content: center; touch-action: none;
+}
+.tecla-b { bottom: 0; background: #F2E9C9; border: 1px solid #0B1020; border-radius: 0 0 8px 8px; color: #8C7A4E; font-size: 13px; padding-bottom: 8px; }
+.tecla-n { height: 60%; background: #141B36; border: 1px solid #000; border-radius: 0 0 6px 6px; z-index: 2; color: #9AA3B8; font-size: 9px; padding-bottom: 5px; }
+.tecla-b.activa, .tecla-n.activa { background: #E9A6B8 !important; color: #0B1020; }
+.boton-musica {
+  position: absolute; left: 50%; transform: translateX(-50%); width: 72px; height: 72px; border-radius: 50%;
+  border: 1px solid rgba(242,233,201,.4); background: rgba(242,233,201,.08); color: #F2E9C9; font-size: 28px; cursor: pointer;
+}
+.boton-musica:active { background: rgba(242,233,201,.2); }
+.centro { position: absolute; left: 0; right: 0; text-align: center; padding: 0 8vw; }
+.grande { font-size: clamp(30px, 9vw, 52px); line-height: 1.2; }
+.boton-texto {
+  font: inherit; font-size: 18px; color: #F2E9C9; background: rgba(242,233,201,.08);
+  border: 1px solid rgba(242,233,201,.35); border-radius: 30px; padding: 12px 22px; cursor: pointer;
+}
+
+/* Valoración al superar un nivel */
+.superado { overflow-y: auto; justify-content: center; padding: 10vw 8vw; }
+.superado p { margin-bottom: 4px; }
+.valorar { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 18px; width: 100%; max-width: 340px; }
+.v-titulo { font-size: 15px; opacity: .7; margin-top: 6px; }
+.v-fila { display: flex; gap: 8px; }
+.v-fila button {
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font: inherit; font-style: normal; font-size: 20px;
+  background: rgba(242,233,201,.06); color: rgba(242,233,201,.6); border: 1px solid rgba(242,233,201,.25);
+}
+.v-fila[data-k="diversion"] button.on { color: #FFD54F; border-color: #FFD54F; background: rgba(255,213,79,.12); }
+.v-fila[data-k="dificultad"] button.on { color: #0B1020; background: #E9A6B8; border-color: #E9A6B8; }
+.sup-seguir {
+  margin-top: 22px; font: inherit; font-size: 19px; color: #0B1020; background: #F2E9C9;
+  border: none; border-radius: 40px; padding: 13px 40px; cursor: pointer;
+}
+
+/* Curiosidad del nivel */
+.curiosidad {
+  margin-top: 14px; max-width: 360px; padding: 14px 18px; border-radius: 18px;
+  background: rgba(242,233,201,.07); border: 1px solid rgba(242,233,201,.18);
+}
+.cur-titulo { display: block; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; font-style: normal; opacity: .55; margin-bottom: 6px; }
+.superado .curiosidad .cur-texto { font-size: 16px; line-height: 1.4; max-width: none; transform: none; margin: 0; }
+.superado { gap: 10px; }
+.valorar { margin-top: 8px; }

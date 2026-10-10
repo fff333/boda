@@ -13,41 +13,57 @@
   html, body { width: 100%; height: 100%; overflow: hidden; background: #0B1020; }
   #juego { position: fixed; inset: 0; width: 100vw; height: 100dvh; border: 0; display: block; }
   .portada {
-    position: fixed; inset: 0; z-index: 10; background: #0B1020; color: #F2E9C9;
+    position: fixed; inset: 0; z-index: 10; background: radial-gradient(ellipse at 50% 30%, #1E2A4A 0%, #0B1020 75%); color: #F2E9C9;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 4vh; padding: 10vw; text-align: center;
+    gap: 3vh; padding: 8vw; text-align: center; overflow-y: auto;
     font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
     transition: opacity .8s ease;
   }
   .portada.oculta { opacity: 0; pointer-events: none; }
-  .portada h1 { font-weight: 500; font-size: clamp(30px, 9vw, 52px); line-height: 1.15; }
-  .portada .nota { font-size: 16px; opacity: .55; max-width: 26ch; line-height: 1.4; }
-  .portada button {
-    font: inherit; font-size: 20px; color: #0B1020; background: #F2E9C9;
-    border: none; border-radius: 40px; padding: 14px 36px; cursor: pointer;
+  .portada h1 { font-weight: 500; font-size: clamp(32px, 10vw, 56px); line-height: 1.1; }
+  .portada .nota { font-size: 15px; opacity: .55; max-width: 28ch; line-height: 1.4; }
+  .conejo { width: 90px; }
+  .nombre {
+    font: inherit; font-size: 19px; text-align: center; color: #F2E9C9; width: min(74vw, 300px);
+    background: rgba(242,233,201,.07); border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 12px 18px; outline: none;
   }
-  .portada button:focus-visible { outline: 3px solid #E9A6B8; outline-offset: 3px; }
-  .ojo { width: 90px; opacity: .85; }
+  .nombre::placeholder { color: rgba(242,233,201,.4); }
+  .principal {
+    font: inherit; font-size: 21px; color: #0B1020; background: #F2E9C9;
+    border: none; border-radius: 40px; padding: 14px 44px; cursor: pointer;
+  }
+  .secundarios { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .secundarios button, .secundarios a {
+    font: inherit; font-size: 15px; color: #F2E9C9; background: none; text-decoration: none;
+    border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 9px 16px; cursor: pointer;
+  }
+  button:focus-visible, input:focus-visible { outline: 3px solid #E9A6B8; outline-offset: 3px; }
 </style>
 </head>
 <body>
 <section class="portada" id="portada">
-  <svg class="ojo" viewBox="0 0 120 130" aria-hidden="true">
+  <svg class="conejo" viewBox="0 0 120 130" aria-hidden="true">
     <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/>
+    <ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/>
     <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+    <ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/>
     <circle cx="58" cy="76" r="28" fill="#FBFAF4"/><circle cx="49" cy="72" r="3.4" fill="#0B1020"/><circle cx="67" cy="72" r="3.4" fill="#0B1020"/>
     <ellipse cx="58" cy="84" rx="3" ry="2.2" fill="#E9A6B8"/>
   </svg>
-  <svg style="display:none" viewBox="0 0 100 60">
-    <path d="M6 30 Q50 -6 94 30 Q50 66 6 30Z" fill="none" stroke="#F2E9C9" stroke-width="2.5"/>
-    <circle cx="50" cy="30" r="14" fill="#3949AB"/><circle cx="50" cy="30" r="6" fill="#05080F"/>
-  </svg>
-  <h1>Este juego escucha, siente y vibra</h1>
-  <p class="nota">Te pedirá permiso para usar el micrófono y el movimiento del móvil. Solo una vez.</p>
-  <button id="empezar">Empezar</button>
+  <h1>Sigue al conejo blanco</h1>
+  <input class="nombre" id="nombre" type="text" maxlength="20" autocomplete="nickname" placeholder="¿Cómo te llamas?" aria-label="Tu nombre">
+  <button class="principal" id="empezar">Empezar</button>
+  <p class="nota">Este juego usa el micrófono, la cámara y el movimiento del móvil. Te pedirá permiso.</p>
+  <div class="secundarios">
+    <button id="idioma">🌐 English</button>
+    <a href="ranking.html" id="ranking" hidden>🏆 Ranking</a>
+    <button id="reiniciar" hidden>Empezar de cero</button>
+  </div>
 </section>
 <iframe id="juego" title="Juego" allow="microphone; camera; autoplay; accelerometer; gyroscope; magnetometer"></iframe>
 
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
 <script>
   // Este archivo es el marco del juego: pide los permisos una sola vez
   // y carga cada nivel dentro, compartiendo micrófono, audio y movimiento.
@@ -57,53 +73,51 @@
   window.MOVIMIENTO_OK = false;
 
   const PRIMERO = "arbol.html";
-  const juego = document.getElementById("juego");
-  const portada = document.getElementById("portada");
-  const boton = document.getElementById("empezar");
+  const juego = document.getElementById("juego"), portada = document.getElementById("portada");
+  const boton = document.getElementById("empezar"), nombre = document.getElementById("nombre");
 
-  // Si hay partida guardada en la dirección (#nivel.html), continuar desde ahí
-  const guardado = location.hash.slice(1);
-  const inicial = /^[a-z0-9]+\.html$/.test(guardado) ? guardado : PRIMERO;
-  if (inicial !== PRIMERO) boton.textContent = "Continuar";
+  nombre.value = Comun.leer("nombre", "");
+  document.getElementById("idioma").textContent = Comun.idioma === "es" ? "🌐 English" : "🌐 Español";
+  document.getElementById("idioma").addEventListener("click", () => { Comun.guardar("idioma", Comun.idioma === "es" ? "en" : "es"); location.reload(); });
+  if (Comun.servidor) document.getElementById("ranking").hidden = false;
+
+  // Continuar donde se quedó
+  const actual = Comun.leer("actual", "");
+  let inicial = Comun.NIVELES.includes(actual) ? actual + ".html" : PRIMERO;
+  if (inicial !== PRIMERO) {
+    boton.textContent = Comun.t("Continuar") ;
+    const r = document.getElementById("reiniciar"); r.hidden = false;
+    r.addEventListener("click", () => { inicial = PRIMERO; r.hidden = true; boton.textContent = Comun.t("Empezar"); });
+  }
 
   boton.addEventListener("click", async () => {
+    const n = nombre.value.trim().slice(0, 20);
+    if (n) Comun.guardar("nombre", n);
+
     // 1. Audio (se desbloquea con este toque y sirve para todos los niveles)
-    try {
-      window.AUDIO = new (window.AudioContext || window.webkitAudioContext)();
-      window.AUDIO.resume();
-    } catch (e) {}
+    try { window.AUDIO = new (window.AudioContext || window.webkitAudioContext)(); window.AUDIO.resume(); } catch (e) {}
 
     // 2. Movimiento: en iPhone hay que pedirlo en el mismo toque, sin esperas antes
     const peticiones = [];
-    if (typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function")
+    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function")
       peticiones.push(DeviceOrientationEvent.requestPermission().catch(() => "denied"));
-    if (typeof DeviceMotionEvent !== "undefined" &&
-        typeof DeviceMotionEvent.requestPermission === "function")
+    if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function")
       peticiones.push(DeviceMotionEvent.requestPermission().catch(() => "denied"));
 
     // 3. Micrófono
     const micro = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
-      ? navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
-        }).catch(() => null)
+      ? navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }).catch(() => null)
       : Promise.resolve(null);
 
     const respuestas = await Promise.all(peticiones);
     window.MOVIMIENTO_OK = peticiones.length ? respuestas.includes("granted") : true;
-
     const flujo = await micro;
     if (flujo && window.AUDIO) {
       const an = window.AUDIO.createAnalyser(); an.fftSize = 1024;
       window.AUDIO.createMediaStreamSource(flujo).connect(an);
       const buf = new Float32Array(an.fftSize);
-      window.MICRO = () => {
-        an.getFloatTimeDomainData(buf);
-        let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i];
-        return Math.sqrt(s / buf.length);
-      };
+      window.MICRO = () => { an.getFloatTimeDomainData(buf); let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); };
     }
-
     escucharMovimiento();
     juego.src = inicial;
     portada.classList.add("oculta");
@@ -115,25 +129,14 @@
     try { const ev = new w.Event(tipo); Object.assign(ev, datos); w.dispatchEvent(ev); } catch (e) {}
   }
   function escucharMovimiento() {
-    const orientacion = tipo => e => reenviar(tipo, {
-      alpha: e.alpha, beta: e.beta, gamma: e.gamma, absolute: e.absolute,
-      webkitCompassHeading: e.webkitCompassHeading
-    });
+    const orientacion = tipo => e => reenviar(tipo, { alpha: e.alpha, beta: e.beta, gamma: e.gamma, absolute: e.absolute, webkitCompassHeading: e.webkitCompassHeading });
     addEventListener("deviceorientation", orientacion("deviceorientation"));
     addEventListener("deviceorientationabsolute", orientacion("deviceorientationabsolute"));
-    addEventListener("devicemotion", e => reenviar("devicemotion", {
-      acceleration: e.acceleration, accelerationIncludingGravity: e.accelerationIncludingGravity
-    }));
+    addEventListener("devicemotion", e => reenviar("devicemotion", { acceleration: e.acceleration, accelerationIncludingGravity: e.accelerationIncludingGravity }));
   }
 
-  // Guardar el nivel actual en la dirección y copiar su título
-  juego.addEventListener("load", () => {
-    try {
-      const nombre = juego.contentWindow.location.pathname.split("/").pop();
-      if (nombre) history.replaceState(null, "", "#" + nombre);
-      document.title = juego.contentDocument.title || document.title;
-    } catch (e) {}
-  });
+  // Copiar el título del nivel a la pestaña
+  juego.addEventListener("load", () => { try { document.title = juego.contentDocument.title || document.title; } catch (e) {} });
 </script>
 </body>
 </html>

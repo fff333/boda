@@ -37,10 +37,11 @@
 </main>
 <p class="pista">El conejito tiene hambre. Enséñale algo de su color favorito</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Al conejito le encanta un color.", "Es el color de las zanahorias.", "Busca algo naranja (una naranja, una zanahoria, un juguete…) y ponlo dentro del círculo de la cámara."]);
-  Comun.nivel("XXVIII", null);
+  Comun.nivel("XXV", null);
   const escena = document.getElementById("escena"), video = document.getElementById("video"), progreso = document.getElementById("progreso");
   const conejo = document.getElementById("conejo"), sub = document.getElementById("sub");
   const lienzo = document.createElement("canvas"); lienzo.width = 24; lienzo.height = 24;
@@ -52,7 +53,7 @@
     for (let i = 0; i < 6; i++) Comun.tono(300 + Math.random() * 100, i * .2, .08, .12, "square");
     Comun.vibrar([20, 180, 20, 180, 20]);
     if (flujo) flujo.getTracks().forEach(t => t.stop());
-    setTimeout(() => Comun.superado("tarde.html", "XXVIII"), 1600);
+    setTimeout(() => Comun.superado("tarde.html", "XXV"), 1600);
   }
   function hsv(r, g, b) {
     r /= 255; g /= 255; b /= 255;

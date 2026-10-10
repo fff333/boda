@@ -13,8 +13,11 @@
   .agua { background: linear-gradient(#1E4E8C 0%, #0E2A55 100%); }
   .pez { position: absolute; width: 70px; transform: translate(-50%, -50%); pointer-events: none; }
   .pez svg { width: 100%; display: block; transition: transform .2s; }
-  .comida { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #FDD835;
-    box-shadow: 0 0 14px #FDD835; transform: translate(-50%, -50%); animation: flotar 2s ease-in-out infinite; }
+  .comida { position: absolute; z-index: 3; width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle, #FFF59D 0%, #FDD835 55%, #F9A825 100%);
+    box-shadow: 0 0 22px 6px rgba(253,216,53,.75); transform: translate(-50%, -50%); animation: flotar 1.6s ease-in-out infinite; pointer-events: none; }
+  .comida::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px solid rgba(253,216,53,.7); animation: aro 1.6s ease-out infinite; }
+  @keyframes aro { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  .pez { z-index: 4; }
   @keyframes flotar { 50% { margin-top: -8px; } }
   .burbuja { position: absolute; border: 2px solid rgba(255,255,255,.4); border-radius: 50%; animation: subir 6s linear infinite; }
   @keyframes subir { from { transform: translateY(0); } to { transform: translateY(-110vh); } }
@@ -34,12 +37,13 @@
   </div>
   <div class="contador-pez" id="cuenta">0 / 3</div>
 </main>
-<p class="pista">El pez tiene hambre</p>
+<p class="pista">El pez tiene hambre. Llévalo hasta la comida</p>
 <p class="subpista" id="sub">Inclina el móvil</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["El pez se mueve hacia donde inclinas el móvil.", "Llévalo hasta la bolita amarilla.", "Necesita comer tres veces."]);
-  Comun.nivel("XXII", null);
+  Comun.nivel("XIX", null);
   const agua = document.getElementById("agua"), pez = document.getElementById("pez"), pezsvg = document.getElementById("pezsvg");
   const comida = document.getElementById("comida"), cuenta = document.getElementById("cuenta"), sub = document.getElementById("sub");
   let W = innerWidth, H = innerHeight, px = W / 2, py = H / 2, tx = px, ty = py;
@@ -51,10 +55,11 @@
     b.style.animationDelay = (-Math.random() * 6) + "s"; agua.appendChild(b);
   }
   function nuevaComida() {
-    cx = W * (.15 + Math.random() * .7); cy = H * (.25 + Math.random() * .5);
+    W = innerWidth; H = innerHeight;
+    do { cx = W * (.15 + Math.random() * .7); cy = H * (.28 + Math.random() * .42); } while (Math.hypot(cx - px, cy - py) < Math.min(W, H) * .3);
     comida.style.left = cx + "px"; comida.style.top = cy + "px";
   }
-  nuevaComida();
+  addEventListener("resize", () => { W = innerWidth; H = innerHeight; nuevaComida(); });
   function alOrientar(e) {
     if (e.beta == null) return; giro = true; sub.textContent = "";
     if (!base) base = { b: e.beta, g: e.gamma };
@@ -64,6 +69,7 @@
   addEventListener("pointermove", e => { if (!giro) { tx = e.clientX; ty = e.clientY; } });
   addEventListener("pointerdown", e => { if (!giro) { tx = e.clientX; ty = e.clientY; } else base = null; });
   Comun.inicio("Una pecera", "Asomarse", async () => {
+    W = innerWidth; H = innerHeight; px = tx = W / 2; py = ty = H / 2; nuevaComida();
     if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
     setTimeout(() => { if (!giro) sub.textContent = "Arrastra el dedo para guiar al pez"; }, 2000);
     requestAnimationFrame(bucle);
@@ -76,7 +82,7 @@
     if (!hecho && Math.hypot(px - cx, py - cy) < 40) {
       comidas++; cuenta.textContent = comidas + " / 3";
       Comun.tono(700, 0, .1, .15, "sine"); Comun.tono(900, .08, .12, .12, "sine"); Comun.vibrar(20);
-      if (comidas >= 3) { hecho = true; comida.style.display = "none"; setTimeout(() => Comun.superado("gato.html", "XXII"), 900); }
+      if (comidas >= 3) { hecho = true; comida.style.display = "none"; setTimeout(() => Comun.superado("gato.html", "XIX"), 900); }
       else nuevaComida();
     }
     requestAnimationFrame(bucle);

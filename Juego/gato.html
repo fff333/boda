@@ -51,10 +51,11 @@
 </main>
 <p class="pista" id="pista">El gato sabe un secreto, pero duerme</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Hay que despertar al gato.", "Haz ruido cerca del móvil o tócalo varias veces.", "Es una fruta. Su nombre empieza por P."]);
-  Comun.nivel("XXIII", { manzana: "Casi. Escucha bien el final del acertijo", fruta: "¿Qué fruta?", platano: "Ese es amarillo por fuera" });
+  Comun.nivel("XX", { manzana: "Casi. Escucha bien el final del acertijo", fruta: "¿Qué fruta?", platano: "Ese es amarillo por fuera" });
   const gato = document.getElementById("gato"), escena = document.getElementById("escena");
   const bocadillo = document.getElementById("bocadillo"), pista = document.getElementById("pista");
   let toques = 0, despierto = false, medir = null;

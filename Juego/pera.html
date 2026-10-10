@@ -35,11 +35,12 @@
   </svg>
 </main>
 <p class="pista">Las peras ya están maduras</p>
-<p class="subpista">Llena la cesta</p>
+<p class="subpista">Sacude el árbol para llenar la cesta</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
-  Comun.pistas(["Las peras no van a caer solas.", "Agita el móvil o toca el árbol.", "Hacen falta tres peras en la cesta."]);
-  Comun.nivel("XXIV", null);
+  Comun.pistas(["Las peras no van a caer solas.", "Agita el móvil con fuerza, como si sacudieras el árbol.", "Hacen falta tres peras en la cesta."]);
+  Comun.nivel("XXI", null);
   const arbol = document.getElementById("arbol"), grupo = document.getElementById("peras");
   const SITIOS = [[100, 110], [190, 90], [150, 170]];
   const peras = SITIOS.map(([x, y]) => {
@@ -61,11 +62,17 @@
       p.style.transform = `translateY(${330 - SITIOS[caidas - 1][1]}px)`;
       setTimeout(() => { Comun.tono(420, 0, .12, .15); }, 900);
     }, 250);
-    if (caidas === peras.length) setTimeout(() => Comun.superado("llave.html", "XXIV"), 1900);
+    if (caidas === peras.length) setTimeout(() => Comun.superado("llave.html", "XXI"), 1900);
   }
-  arbol.addEventListener("pointerdown", sacudir);
+  let conSensor = false;
+  // Tocar el árbol solo funciona si el móvil no tiene sensor de movimiento
+  arbol.addEventListener("pointerdown", () => {
+    if (!conSensor) sacudir();
+    else { arbol.classList.remove("agitado"); void arbol.offsetWidth; arbol.classList.add("agitado"); Comun.avisar("Así no caen. Prueba a agitar el móvil"); }
+  });
   function alMover(e) {
     const a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
+    conSensor = true;
     const m = Math.hypot(a.x, a.y, a.z);
     if (prev != null && Math.abs(m - prev) > 12) sacudir();
     prev = m;

@@ -55,10 +55,11 @@
 </main>
 <p class="pista">Has caído por la madriguera</p>
 <p class="subpista">Alguien se asoma de vez en cuando</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Alguien vive ahí dentro.", "Espera a que se asome.", "Toca al conejo justo cuando saca la cabeza."]);
-  Comun.nivel("V", null);
+  Comun.nivel("VI", null);
   const conejo = document.getElementById("conejo");
   let fuera = false, cazado = false;
 
@@ -81,7 +82,7 @@
     conejo.classList.add("cazado");
     [440, 349.23, 261.63].forEach((f, i) => Comun.tono(f, i * .1, .3, .15));
     Comun.vibrar(30);
-    setTimeout(() => Comun.superado("oscuridad.html", "V"), 700);
+    setTimeout(() => Comun.superado("oscuridad.html", "VI"), 700);
   });
 </script>
 </body>

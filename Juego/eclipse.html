@@ -27,10 +27,11 @@
 </main>
 <p class="pista" id="pista">Tapa el sol</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Inclina el móvil para mover la luna.", "Tapa el sol por completo y mantenlo tapado unos segundos.", "Durante un eclipse todo se queda en silencio. Tú también debes callar."]);
-  Comun.nivel("XLIII", null);
+  Comun.nivel("XLII", null);
   const cielo = document.getElementById("cielo"), sol = document.getElementById("sol"), luna = document.getElementById("luna");
   const final = document.getElementById("final"), pista = document.getElementById("pista"), sub = document.getElementById("sub");
   let W = innerWidth, H = innerHeight;
@@ -74,7 +75,7 @@
       if (progreso >= 1) {
         hecho = true; pista.style.opacity = 0; final.classList.add("visible");
         [261.63, 392, 523.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .25, 2, .1, "sine")); Comun.vibrar([100, 80, 200]);
-        setTimeout(() => Comun.superado("fin.html", "XLIII"), 3500);
+        setTimeout(() => Comun.superado("melodia.html", "XLII"), 3500);
       }
     }
     requestAnimationFrame(bucle);

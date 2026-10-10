@@ -23,10 +23,11 @@
   <div class="ronda" id="ronda"></div>
 </main>
 <p class="pista">Repite lo que veas</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Las luces se encienden en un orden.", "Cuando terminen, tócalas tú en el mismo orden.", "Son cuatro rondas, cada una con una luz más. Si fallas, se repite la misma."]);
-  Comun.nivel("XXXIV", null);
+  Comun.nivel("XXXIII", null);
   const COLORES = ["#E53935", "#FDD835", "#43A047", "#1E88E5"];
   const NOTAS = [329.63, 392.00, 523.25, 659.25];
   const tablero = document.getElementById("tablero"), ronda = document.getElementById("ronda");
@@ -60,7 +61,7 @@
     }
     if (++paso === RONDAS[r]) {
       escuchando = false;
-      if (++r === RONDAS.length) { await espera(400); Comun.superado("piano.html", "XXXIV"); }
+      if (++r === RONDAS.length) { await espera(400); Comun.superado("piano.html", "XXXIII"); }
       else { await espera(500); mostrar(); }
     }
   }

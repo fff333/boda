@@ -42,10 +42,11 @@
   </div>
 </main>
 <p class="pista">Esta puerta está cerrada</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Hay algo brillante en el suelo.", "Arrastra la llave con el dedo.", "Llévala hasta la cerradura, debajo del pomo."]);
-  Comun.nivel("XXV", null);
+  Comun.nivel("XXII", null);
   const llave = document.getElementById("llave"), puerta = document.getElementById("puerta");
   let x = innerWidth * .5, y = innerHeight * .78, arrastrando = false, hecho = false;
   const colocar = () => { llave.style.left = x + "px"; llave.style.top = y + "px"; };
@@ -62,7 +63,7 @@
       llave.style.transition = "transform .4s"; llave.style.transform = "translate(-15%, -50%) rotate(0deg) scale(.5)";
       Comun.tono(900, 0, .08, .12, "square"); Comun.tono(600, .25, .1, .12, "square"); Comun.vibrar([20, 100, 40]);
       setTimeout(() => { llave.style.opacity = 0; puerta.classList.add("abierta"); Comun.tono(220, 0, 1, .08, "sine"); }, 600);
-      setTimeout(() => Comun.superado("casa.html", "XXV"), 2200);
+      setTimeout(() => Comun.superado("casa.html", "XXII"), 2200);
     }
   }
 </script>

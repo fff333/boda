@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Al revés</title>
+<style>
+
+  #derecho { display: none; top: 52%; }
+  .ver-derecho #derecho { display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" id="escena">
+  <button class="boton-musica" id="reves" style="top:34%" aria-label="Escuchar">♪</button>
+  <button class="boton-musica" id="derecho" aria-label="Escuchar al derecho">↺</button>
+</main>
+<p class="pista">Esta canción suena rara… ¿Qué se celebra con ella?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  const escena = document.getElementById("escena");
+  Comun.pistas(["Algo no suena bien… ¿y si la escuchas en sentido contrario?", "Ahora tienes un botón ↺ para escucharla al derecho.", "Se canta soplando velas."], n => { if (n >= 2) escena.classList.add("ver-derecho"); });
+  Comun.nivel("", { cumpleanosfeliz: "Casi. Solo una palabra: ¿qué se celebra?", felicidades: "¿Qué se celebra?", fiesta: "¿Qué fiesta?" });
+  const M = [{ n: 67, d: .75 }, { n: 67, d: .25 }, 69, 67, 72, { n: 71, d: 2 }, { n: 67, d: .75 }, { n: 67, d: .25 }, 69, 67, 74, { n: 72, d: 2 },
+             { n: 67, d: .75 }, { n: 67, d: .25 }, 79, 76, 72, 71, { n: 69, d: 2 }, { n: 77, d: .75 }, { n: 77, d: .25 }, 76, 72, 74, { n: 72, d: 2 }];
+  let sonando = false;
+  async function tocar(lista) { if (sonando) return; sonando = true; await Motor.melodia(lista, { pulso: .4 }); sonando = false; }
+  document.getElementById("reves").addEventListener("click", () => tocar([...M].reverse()));
+  document.getElementById("derecho").addEventListener("click", () => tocar(M));
+
+</script>
+</body>
+</html>

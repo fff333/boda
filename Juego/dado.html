@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Dados</title>
+<style>
+
+  .dados { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); display: flex; gap: 6vw; }
+  .dado { width: 22vw; max-width: 100px; }
+  .dado svg { width: 100%; display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="dados" id="dados"></div></main>
+<p class="pista">Suma los puntos de las caras que tocan la mesa</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["No puedes verlas, pero puedes saberlas: en un dado, las caras opuestas siempre suman lo mismo.", "Las caras opuestas de un dado suman 7.", "Las caras de abajo son 6, 6 y 4."]);
+  Comun.nivel("", { "5": "Esas son las de arriba", dieciseis: "Escríbelo con números", "21": "Solo las de abajo" });
+  const P = { 1: [[50, 50]], 3: [[25, 25], [50, 50], [75, 75]] };
+  const cont = document.getElementById("dados");
+  [1, 1, 3].forEach(n => {
+    const d = document.createElement("div"); d.className = "dado";
+    d.innerHTML = `<svg viewBox="0 0 100 130"><path d="M10 30 L50 10 L90 30 L90 100 L50 120 L10 100Z" fill="#D9D2BE"/><path d="M10 30 L50 50 L90 30 L50 10Z" fill="#FBFAF4"/><path d="M50 50 L50 120" stroke="#B8B09A"/>` +
+      P[n].map(([x, y]) => { const px = 10 + (x / 100) * 40 + (y / 100) * 40, py = 30 - (x / 100) * 20 + (y / 100) * 20; return `<ellipse cx="${px}" cy="${py}" rx="5" ry="3" fill="#0B1020"/>`; }).join("") + "</svg>";
+    cont.appendChild(d);
+  });
+
+</script>
+</body>
+</html>

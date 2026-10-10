@@ -36,10 +36,11 @@
 <div class="tapa" id="tapa"></div>
 <p class="pista" id="pista">El conejito quiere jugar al escondite</p>
 <p class="subpista" id="sub">Pero no se esconde si le miras</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Para jugar al escondite, alguien tiene que dejar de mirar.", "Sal un momento de la app (ve a la pantalla de inicio) y vuelve.", "Cuando vuelvas, busca unas orejas que asoman detrás de un arbusto y tócalas."]);
-  Comun.nivel("XXXIII", null);
+  Comun.nivel("XXX", null);
   const escena = document.getElementById("escena"), pista = document.getElementById("pista"), sub = document.getElementById("sub");
   const cont = document.getElementById("arbustos"), tapa = document.getElementById("tapa"), contar = document.getElementById("contar");
   const SITIOS = [[20, 70], [52, 78], [82, 68]];
@@ -54,7 +55,7 @@
       if (i === sitio) {
         hecho = true; escena.classList.remove("escondido"); pista.textContent = "¡Te encontré!";
         [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => Comun.tono(f, k * .12, .5, .12)); Comun.vibrar(40);
-        setTimeout(() => Comun.superado("semaforo.html", "XXXIII"), 1500);
+        setTimeout(() => Comun.superado("sonido.html", "XXX"), 1500);
       } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(180, 0, .15, .1, "sine"); }
     });
     cont.appendChild(b); return b;

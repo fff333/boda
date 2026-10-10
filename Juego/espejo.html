@@ -26,11 +26,14 @@
     opacity: 0; transition: opacity 1.5s ease 1.2s; pointer-events: none;
   }
   .mensaje.visible { opacity: 1; }
+  .indicacion { display: block; margin-top: 26px; font-size: 17px; opacity: .65; }
+  .respuesta.llamar .boton-ojo { animation: llamar 1.4s ease-in-out infinite; }
+  @keyframes llamar { 50% { transform: scale(1.18); box-shadow: 0 0 24px rgba(242,233,201,.6); } }
 </style>
 </head>
 <body>
 <main class="escena entrada">
-  <p class="mensaje" id="mensaje">Detrás del cristal hay un túnel que baja.<br>Lo cavó alguien de orejas largas.</p>
+  <p class="mensaje" id="mensaje">Detrás del cristal hay un túnel que baja.<br>Lo cavó alguien de orejas largas.<br>¿Cómo se llama?<span class="indicacion">Escribe la respuesta tocando el conejito de abajo</span></p>
   <div class="marco" id="marco" role="button" aria-label="Espejo">
     <svg viewBox="0 0 200 280">
       <defs>
@@ -57,10 +60,11 @@
   </div>
 </main>
 <p class="pista" id="pista">No te mires demasiado</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["A este espejo le pasa algo. Quizá haya que hacerle algo a él.", "Agita el móvil con fuerza o golpea el espejo con el dedo varias veces.", "¿Cómo se llama la casa que cava un conejo bajo tierra?"]);
-  Comun.nivel("IV", { conejo: "Él lo cavó. ¿Cómo se llama lo que cavó?", agujero: "Tiene un nombre más preciso", tunel: "Tiene un nombre más preciso", siete: "La mala suerte no es el camino", liebre: "Casi. Busca su casa" });
+  Comun.nivel("V", { conejo: "Él lo cavó. ¿Cómo se llama lo que cavó?", agujero: "Tiene un nombre más preciso", tunel: "Tiene un nombre más preciso", siete: "La mala suerte no es el camino", liebre: "Casi. Busca su casa" });
 
   const marco = document.getElementById("marco"), mensaje = document.getElementById("mensaje");
   const pista = document.getElementById("pista");
@@ -94,6 +98,8 @@
       cristal(true); Comun.vibrar([80, 40, 120]);
       pista.style.opacity = 0;
       mensaje.classList.add("visible");
+      // que el botón de respuesta llame la atención
+      setTimeout(() => document.querySelector(".respuesta").classList.add("llamar"), 2500);
     }
   }
 

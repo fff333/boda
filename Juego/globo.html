@@ -32,10 +32,11 @@
 </main>
 <p class="pista">Hincha el globo hasta que explote</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Los globos se hinchan con aire.", "Sopla hacia el micrófono o toca el globo muchas veces.", "No pares hasta que haga ¡pum!"]);
-  Comun.nivel("XXI", null);
+  Comun.nivel("III", null);
   const globo = document.getElementById("globo"), escena = document.getElementById("escena");
   let tam = 1, medir = null, roto = false;
   function inflar(cuanto) {
@@ -64,7 +65,7 @@
       p.style.setProperty("--dy", (Math.random() * 300 - 50) + "px");
       escena.appendChild(p);
     }
-    setTimeout(() => Comun.superado("pez.html", "XXI"), 1500);
+    setTimeout(() => Comun.superado("arcoiris.html", "III"), 1500);
   }
   globo.style.transform = "translate(-50%, -100%) scale(1)";
   globo.addEventListener("pointerdown", () => { inflar(.12); Comun.tono(200 + tam * 120, 0, .1, .08, "sine"); });

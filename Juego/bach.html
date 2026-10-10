@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Conejos</title>
+<style>
+
+  .meses { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(92vw, 420px); display: flex; flex-direction: column; gap: 8px; }
+  .mes { display: flex; align-items: center; gap: 10px; font-size: 16px; }
+  .mes b { width: 64px; font-weight: 500; opacity: .6; }
+  .mes .parejas { display: flex; gap: 3px; flex-wrap: wrap; flex: 1; }
+  .mes .parejas span { width: 16px; height: 16px; }
+  .mes .num { width: 30px; text-align: right; font-size: 20px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="meses" id="meses"></div></main>
+<p class="pista" style="font-size:clamp(16px,4.4vw,22px)">Cada pareja de conejos tiene una pareja de crías al mes, a partir de su segundo mes de vida. ¿Cuántas parejas habrá el mes 7?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Fíjate en cómo crecen los números.", "Cada mes es la suma de los dos meses anteriores.", "5 + 8."]);
+  Comun.nivel("", { trece: "Escríbelo con números", "12": "Cuenta otra vez", "21": "Ese es el mes 8" });
+  const cont = document.getElementById("meses");
+  const conejo = '<svg viewBox="0 0 20 20"><ellipse cx="7" cy="5" rx="2" ry="5" fill="#FBFAF4"/><ellipse cx="13" cy="5" rx="2" ry="5" fill="#FBFAF4"/><circle cx="10" cy="13" r="6" fill="#FBFAF4"/></svg>';
+  [1, 1, 2, 3, 5, 8, null].forEach((n, i) => {
+    const d = document.createElement("div"); d.className = "mes";
+    d.innerHTML = `<b>Mes ${i + 1}</b><div class="parejas">${n ? Array(n).fill('<span>' + conejo + '</span>').join("") : ""}</div><span class="num">${n ?? "?"}</span>`;
+    cont.appendChild(d);
+  });
+
+</script>
+</body>
+</html>

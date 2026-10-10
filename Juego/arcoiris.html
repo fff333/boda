@@ -75,10 +75,11 @@
   <p class="pista">De mayor a menor</p>
   <div class="velo" id="velo"></div>
 
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Siete franjas, siete colores. ¿Dónde has visto eso en el cielo?", "«Mayor a menor» se refiere a la longitud de onda de la luz.", "De arriba abajo: rojo, naranja, amarillo, verde, azul, añil y violeta."]);
-  Comun.nivel("III", null);
+  Comun.nivel("IV", null);
   const SIGUIENTE = "espejo.html";
 
   // Colores del arcoíris ordenados de mayor a menor longitud de onda
@@ -140,7 +141,7 @@
       if (navigator.vibrate) navigator.vibrate([40, 60, 40, 60, 120]);
       NOTAS.forEach((f, i) => nota(f, 0.15 + i * 0.09, 0.4, 0.2));
       nota(523.25, 0.15 + 7 * 0.09, 0.9, 0.25);
-      setTimeout(() => Comun.superado(SIGUIENTE, "III"), 1500);
+      setTimeout(() => Comun.superado(SIGUIENTE, "IV"), 1500);
     }
   }
 

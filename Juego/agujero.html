@@ -32,10 +32,11 @@
 </main>
 <p class="pista" style="z-index:7">Al otro lado hay alguien que escribe en las paredes</p>
 <p class="subpista" id="sub" style="z-index:7"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Inclina el móvil para mirar hacia los lados a través de la mirilla.", "En algún rincón hay una operación escrita.", "Una araña tiene 8 patas y un gato 4. Escribe el resultado con números."]);
-  Comun.nivel("XXXVIII", { treintaydos: "Escríbelo con números", "12": "No las sumes", "84": "Hazlo con números: ocho por cuatro", "8x4": "Ahora haz la cuenta" });
+  Comun.nivel("XXXVII", { treintaydos: "Escríbelo con números", "12": "No las sumes", "84": "Hazlo con números: ocho por cuatro", "8x4": "Ahora haz la cuenta" });
   const pared = document.getElementById("pared"), tapa = document.getElementById("tapa"), sub = document.getElementById("sub");
   let W = innerWidth, H = innerHeight;
   tapa.style.setProperty("--rad", Math.min(W, H) * .2 + "px");

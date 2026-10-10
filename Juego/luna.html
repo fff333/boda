@@ -31,10 +31,11 @@
 </main>
 <p class="pista">La luna está tímida esta noche</p>
 <p class="subpista">Ayúdala a llenarse</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["La luna cambia de forma cada pocos días.", "Toca la luna.", "Sigue tocando hasta que esté llena."]);
-  Comun.nivel("XIX", null);
+  Comun.nivel("XXXII", null);
   const luna = document.getElementById("luna"), sombra = document.getElementById("sombra");
   const FASES = [0, 45, 90, 140, 200];
   let fase = 0;
@@ -53,7 +54,7 @@
         g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.15, t + .2); g.gain.exponentialRampToValueAtTime(.0001, t + 1.7);
         o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.8);
       }
-      setTimeout(() => Comun.superado("fases.html", "XIX"), 2200);
+      setTimeout(() => Comun.superado("semaforo.html", "XXXII"), 2200);
     }
   });
 </script>

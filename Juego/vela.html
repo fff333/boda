@@ -51,6 +51,7 @@
 </main>
 <p class="pista">Algunas palabras solo se leen a oscuras</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["La luz no te deja leer lo que hay escrito.", "¿Cómo se apaga una vela?", "Sopla al micrófono del móvil, fuerte y seguido, hasta que se apague."]);
@@ -92,7 +93,7 @@
     escena.classList.add("apagada");
     Comun.tono(180, 0, .6, .08, "sine");
     Comun.vibrar(60);
-    setTimeout(() => Comun.superado("arcoiris.html", "II"), 3200);
+    setTimeout(() => Comun.superado("globo.html", "II"), 3200);
   }
 </script>
 </body>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Afinar</title>
+<style>
+
+  .diapason { position: absolute; left: 50%; top: 48%; width: min(30vw, 130px); transform: translate(-50%, -50%); cursor: pointer; }
+  .diapason svg { width: 100%; display: block; overflow: visible; }
+  .vibra svg { animation: vib .05s linear 30; }
+  @keyframes vib { 50% { transform: translateX(1.5px); } }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="diapason" id="diapason" role="button" aria-label="Diapasón"><svg viewBox="0 0 60 200">
+    <path d="M14 0 L14 110 Q14 135 30 135 Q46 135 46 110 L46 0 L38 0 L38 108 Q38 125 30 125 Q22 125 22 108 L22 0Z" fill="#B0BEC5"/>
+    <rect x="26" y="134" width="8" height="66" rx="3" fill="#78909C"/>
+  </svg></div>
+</main>
+<p class="pista">Toda la orquesta afina con esta nota. ¿Cuál es?</p>
+<p class="subpista">Toca el diapasón</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Antes de un concierto, todos los músicos tocan esta nota a la vez.", "Vibra 440 veces por segundo.", "Es la nota «la»."]);
+  Comun.nivel("", { "440": "Esa es su frecuencia. ¿Cómo se llama la nota?", diapason: "Ese es el instrumento. ¿Qué nota da?", a: "Así se escribe en inglés. ¿Y en español?" });
+  const d = document.getElementById("diapason");
+  d.addEventListener("click", () => {
+    d.classList.remove("vibra"); void d.offsetWidth; d.classList.add("vibra");
+    const c = Comun.audio(); if (!c) return;
+    const t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.value = 440;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.3, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + 3);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 3.1);
+  });
+
+</script>
+</body>
+</html>

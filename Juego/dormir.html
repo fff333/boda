@@ -53,10 +53,11 @@
 </main>
 <p class="pista">El conejito no puede dormir con tanta luz</p>
 <p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Hay demasiada luz para dormir.", "La cámara del móvil ve la luz. ¿Y si no viera nada?", "Tapa con el dedo la cámara de atrás del móvil unos segundos."]);
-  Comun.nivel("XXVII", null);
+  Comun.nivel("XXIV", null);
   const escena = document.getElementById("escena"), luz = document.getElementById("luz"), video = document.getElementById("video");
   const pantalla = document.getElementById("pantalla"), sub = document.getElementById("sub");
   const lienzo = document.createElement("canvas"); lienzo.width = 32; lienzo.height = 24;
@@ -67,7 +68,7 @@
     escena.classList.add("dormido"); luz.style.opacity = 0; pantalla.setAttribute("fill", "#6B6046");
     if (flujo) flujo.getTracks().forEach(t => t.stop());
     [523.25, 440, 392, 329.63, 392, 261.63].forEach((f, i) => Comun.tono(f, .3 + i * .45, .8, .1, "sine"));
-    setTimeout(() => Comun.superado("zanahoria.html", "XXVII"), 3800);
+    setTimeout(() => Comun.superado("zanahoria.html", "XXIV"), 3800);
   }
   document.getElementById("lampara").addEventListener("pointerdown", () => { if (!flujo) dormir(); });
   Comun.inicio("Es hora de dormir", "Arropar al conejito", async () => {

@@ -93,11 +93,12 @@
     <button id="empezar">Encender la linterna</button>
   </section>
 
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Inclina el móvil para mover la luz por la oscuridad.", "Hay muchos conejos escondidos, pero solo uno es el que buscas.", "Busca al conejo blanco y mantén la luz quieta sobre él."]);
-  Comun.nivel("VI", null);
-  const SIGUIENTE = "despierta.html";
+  Comun.nivel("VII", null);
+  const SIGUIENTE = "eco.html";
 
   const COLORES = ["#E53935","#FB8C00","#FDD835","#43A047","#1E88E5","#8E24AA","#FBFAF4"];
   const ANIL = 6; // el conejo que buscamos es el blanco
@@ -264,7 +265,7 @@
     destello.style.setProperty("--y", objetivo.y + "px");
     objetivo.el.classList.add("salta");
     destello.classList.add("activo");
-    setTimeout(() => Comun.superado(SIGUIENTE, "VI"), 1500);
+    setTimeout(() => Comun.superado(SIGUIENTE, "VII"), 1500);
   }
 
   // Si se vuelve atrás desde la siguiente adivinanza, empezar de cero

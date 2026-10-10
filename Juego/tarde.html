@@ -32,13 +32,14 @@
 </main>
 <p class="pista">«¡Llego tarde, llego tarde!» Pero… ¿qué hora es?</p>
 <p class="subpista">Pon el reloj del conejo en hora</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   const ahora = () => { const d = new Date(); return ((d.getHours() % 12) * 60 + d.getMinutes()); };
   const dosCifras = n => String(n).padStart(2, "0");
   Comun.pistas(["El conejo siempre va con prisa. ¿Qué hora es de verdad, ahora mismo?", "Arrastra la aguja larga (la rosa). La corta la sigue sola.",
     () => { const d = new Date(); return "Mira la hora de tu móvil: son las " + d.getHours() + ":" + dosCifras(d.getMinutes()) + ". Ponla en el reloj y suelta."; }]);
-  Comun.nivel("XXIX", null);
+  Comun.nivel("XXVI", null);
   const ns = "http://www.w3.org/2000/svg", numeros = document.getElementById("numeros");
   for (let i = 1; i <= 12; i++) {
     const a = (i * 30 - 90) * Math.PI / 180, t = document.createElementNS(ns, "text");
@@ -68,7 +69,7 @@
     if (error <= 5) {
       hecho = true;
       [784, 659, 784, 659, 784].forEach((f, i) => Comun.tono(f, i * .12, .1, .15, "square")); Comun.vibrar([20, 40, 20]);
-      setTimeout(() => Comun.superado("tumbado.html", "XXIX"), 1200);
+      setTimeout(() => Comun.superado("tumbado.html", "XXVI"), 1200);
     } else if (error <= 30) Comun.avisar("¡Casi! Afina un poco más");
   });
 </script>

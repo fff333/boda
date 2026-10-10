@@ -46,10 +46,11 @@
   <div class="temperatura" id="temp">90 °C</div>
 </main>
 <p class="pista">Las prisas queman</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Recién hecho, el café está demasiado caliente.", "No toques nada. Solo espera.", "Cuando se enfríe y te lo bebas, mira el poso: dicen que ahí se lee el…"]);
-  Comun.nivel("XXXVI", { poso: "¿Y qué dicen que se lee en el poso?", destino: "Casi. Lo que está por venir", cafe: "Ya estás en él" });
+  Comun.nivel("XXXV", { poso: "¿Y qué dicen que se lee en el poso?", destino: "Casi. Lo que está por venir", cafe: "Ya estás en él" });
   const TIEMPO = 40000;
   const escena = document.getElementById("escena"), temp = document.getElementById("temp"), vapor = document.getElementById("vapor");
   let inicio = null, frio = false;

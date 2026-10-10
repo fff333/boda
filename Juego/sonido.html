@@ -34,6 +34,7 @@
   <div class="morse" id="morse"></div>
 </main>
 <p class="subpista">Toca el altavoz</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   const ALFABETO = "A ·−      B −···    C −·−·\nD −··     E ·          F ··−·\nG −−·    H ····      I ··\nJ ·−−−   K −·−      L ·−··\nM −−     N −·        O −−−\nP ·−−·   Q −−·−    R ·−·\nS ···      T −          U ··−\nV ···−    W ·−−     X −··−\nY −·−−    Z −−··";
@@ -46,8 +47,8 @@
     if (n >= 2) morse.classList.add("visible");
     if (n >= 3) escena.classList.add("con-letras");
   });
-  Comun.nivel("XVIII", { morse: "Eso es el idioma, no el mensaje", sonido: "Ya lo has subido. ¿Qué dice?" });
-  const PALABRA = "LUNA", CODIGO = { L: ".-..", U: "..-", N: "-.", A: ".-" };
+  Comun.nivel("XXXI", { morse: "Eso es el idioma, no el mensaje", sonido: "Ya lo has subido. ¿Qué dice?" });
+  const PALABRA = Comun.idioma === "en" ? "MOON" : "LUNA", CODIGO = { L: ".-..", U: "..-", N: "-.", A: ".-", M: "--", O: "---" };
   const grupos = [...PALABRA].map(l => {
     const g = document.createElement("div"); g.className = "grupo";
     g.innerHTML = `<span class="simbolos">${CODIGO[l].replace(/\./g, "·").replace(/-/g, "−")}</span><span class="letra">${l}</span>`;

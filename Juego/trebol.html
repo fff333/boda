@@ -22,10 +22,11 @@
 <body>
 <main class="escena prado entrada" id="prado"></main>
 <p class="pista" style="text-shadow:0 1px 8px #000">Para tener suerte hace falta encontrar uno especial</p>
+<script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   Comun.pistas(["Mira bien entre todos los tréboles.", "Casi todos tienen tres hojas.", "Busca el único trébol de cuatro hojas y tócalo."]);
-  Comun.nivel("XXXII", null);
+  Comun.nivel("XXIX", null);
   const prado = document.getElementById("prado");
   const hoja = (a, c) => `<ellipse cx="50" cy="30" rx="15" ry="20" fill="${c}" transform="rotate(${a} 50 50)"/>`;
   const dibujo = n => `<svg viewBox="0 0 100 100"><path d="M50 50 Q54 75 48 98" stroke="#2E6B30" stroke-width="4" fill="none"/>` +
@@ -45,7 +46,7 @@
       if (i === especial) {
         hecho = true; b.classList.add("si");
         [659.25, 783.99, 987.77, 1318.5].forEach((f, k) => Comun.tono(f, k * .1, .6, .12, "sine")); Comun.vibrar(40);
-        setTimeout(() => Comun.superado("escondite.html", "XXXII"), 1500);
+        setTimeout(() => Comun.superado("escondite.html", "XXIX"), 1500);
       } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(200, 0, .1, .08, "sine"); }
     });
     prado.appendChild(b);
