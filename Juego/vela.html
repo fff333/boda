@@ -84,11 +84,21 @@
     requestAnimationFrame(bucle);
   }
 
+  let travesura = false;
   function apagar() {
     apagada = true; luz = 0;
     escena.classList.add("apagada");
     Comun.tono(180, 0, .6, .08, "sine");
     Comun.vibrar(60);
+    if (!travesura) {
+      travesura = true;
+      setTimeout(() => {
+        const r = vela.getBoundingClientRect();
+        Comun.sombra(r.left + r.width * 1.25, r.top + r.height * .55, "¡Jajaja! ¿Otra vez?", 2800);
+        setTimeout(() => { apagada = false; luz = .7; escena.classList.remove("apagada"); Comun.tono(520, 0, .3, .08, "triangle"); }, 700);
+      }, 1500);
+      return;
+    }
     setTimeout(() => Comun.superado("globo.html", "II"), 3200);
   }
 </script>

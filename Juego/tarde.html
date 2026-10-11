@@ -30,14 +30,14 @@
     </svg>
   </div>
 </main>
-<p class="pista">«¡Llego tarde, llego tarde!» Pero… ¿qué hora es?</p>
+<p class="pista">¡Qué tarde es! Pero… ¿qué hora es de verdad?</p>
 <p class="subpista">Pon el reloj del conejo en hora</p>
 <script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
   const ahora = () => { const d = new Date(); return ((d.getHours() % 12) * 60 + d.getMinutes()); };
   const dosCifras = n => String(n).padStart(2, "0");
-  Comun.pistas(["El conejo siempre va con prisa. ¿Qué hora es de verdad, ahora mismo?", "Arrastra la aguja larga (la rosa). La corta la sigue sola.",
+  Comun.pistas(["Pompón siempre va con prisa. ¿Qué hora es de verdad, ahora mismo?", "Arrastra la aguja larga (la rosa). La corta la sigue sola.",
     () => { const d = new Date(); return "Mira la hora de tu móvil: son las " + d.getHours() + ":" + dosCifras(d.getMinutes()) + ". Ponla en el reloj y suelta."; }]);
   Comun.nivel("XXVI", null);
   const ns = "http://www.w3.org/2000/svg", numeros = document.getElementById("numeros");

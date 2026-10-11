@@ -49,6 +49,13 @@
       } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(200, 0, .1, .08, "sine"); }
     });
     prado.appendChild(b);
+    if (i === especial) setTimeout(() => {
+      if (hecho) return;
+      const r = b.getBoundingClientRect();
+      const o = Comun.sombra(r.left + r.width / 2, r.top + r.height * .45, "Psst… aquí no hay nada", 0, 46);
+      setTimeout(() => o.classList.remove("dentro"), 3200);
+      setTimeout(() => o.remove(), 3800);
+    }, 9000);
   }
 </script>
 </body>

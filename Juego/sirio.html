@@ -50,6 +50,10 @@
         Comun.avisar("Esa no es la siguiente. Vuelve a empezar"); paso = 0; fila.querySelectorAll(".orden").forEach(o => o.textContent = ""); }
     });
     fila.appendChild(b);
+    if (nombre === "Sirio") setTimeout(() => {
+      const r = b.querySelector(".luz").getBoundingClientRect();
+      Comun.sombra(r.left + r.width / 2, r.top + r.height + 12, "¡Tapada! A ver si la encuentras…", 2600, 70);
+    }, 1500);
   });
 
 </script>
