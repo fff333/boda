@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Telescopio</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .tapa { position: fixed; inset: 0; pointer-events: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas><div class="tapa" id="tapa"></div></main>
+<p class="pista" style="z-index:7">Busca el cinturón de Orión: tres estrellas en fila</p>
+<p class="subpista" id="sub" style="z-index:7"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Inclina el móvil para mover el telescopio por el cielo.", "El cinturón son tres estrellas juntas, del mismo brillo y en línea recta.", "Está abajo a la derecha. Deja el telescopio quieto sobre esas tres estrellas."]);
+  Comun.nivel("", null);
+  const ctx = Cielo.lienzo(document.getElementById("cielo")), tapa = document.getElementById("tapa"), sub = document.getElementById("sub");
+  let W = innerWidth, H = innerHeight, VW = W * 2.6, VH = H * 2.2;
+  const k = Math.min(W, H) / 22;
+  const GRUPOS = [["orion", 5.55, 0, .72, .66], ["casiopea", 1.0, 60, .2, .22], ["osamayor", 12.4, 56, .78, .2], ["canmayor", 6.9, -22, .33, .78], ["pleyades", 3.77, 24.2, .45, .4]];
+  const pos = {};
+  GRUPOS.forEach(([c, ra, de, fx, fy]) => Object.assign(pos, Cielo.disponer(Cielo.C[c].estrellas, ra, de, VW * fx, VH * fy, k)));
+  const objetivo = pos.alnilam;
+  let ox = (VW - W) / 2, oy = (VH - H) / 2, tx = ox, ty = oy, base = null, giro = false, arr = null, quieto = 0, hecho = false, ultimo = performance.now();
+  function alOrientar(e) { if (e.beta == null) return; giro = true; sub.textContent = ""; if (!base) base = { b: e.beta, g: e.gamma };
+    tx = (VW - W) / 2 + (e.gamma - base.g) * (VW - W) / 50; ty = (VH - H) / 2 + (e.beta - base.b) * (VH - H) / 50; }
+  addEventListener("pointerdown", e => { if (giro) base = null; else arr = { x: e.clientX + tx, y: e.clientY + ty }; });
+  addEventListener("pointermove", e => { if (arr) { tx = arr.x - e.clientX; ty = arr.y - e.clientY; } });
+  addEventListener("pointerup", () => arr = null);
+  Comun.inicio("Un telescopio apunta al cielo", "Mirar", async () => {
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    setTimeout(() => { if (!giro) sub.textContent = "Arrastra para mover el telescopio"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    tx = Math.max(0, Math.min(VW - W, tx)); ty = Math.max(0, Math.min(VH - H, ty));
+    ox += (tx - ox) * .12; oy += (ty - oy) * .12;
+    ctx.clearRect(0, 0, W, H); ctx.save(); ctx.translate(-ox, -oy);
+    Cielo.fondo(ctx, VW, VH, 700, 11);
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2], Cielo.E[n][3] || "#FFFFFF");
+    if (hecho) Cielo.dibujarLineas(ctx, pos, Cielo.C.orion.lineas);
+    ctx.restore();
+    const R = Math.min(W, H) * .3;
+    tapa.style.background = `radial-gradient(circle ${R}px at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 90%, #000 100%)`;
+    if (!hecho) {
+      const d = Math.hypot(objetivo[0] - ox - W / 2, objetivo[1] - oy - H / 2);
+      quieto = d < R * .4 ? quieto + dt : 0;
+      if (quieto > 1200) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("liebre.html"), 1800); }
+    }
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

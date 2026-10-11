@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Brillo</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .fila-est { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); display: flex; gap: 3vw; align-items: center; }
+  .est { display: flex; flex-direction: column; align-items: center; gap: 10px; border: none; background: none; color: #F2E9C9; font-family: inherit; font-style: italic; font-size: 13px; cursor: pointer; width: 17vw; max-width: 80px; }
+  .est .luz { border-radius: 50%; }
+  .est .orden { height: 20px; font-style: normal; color: #E9A6B8; font-size: 16px; }
+  .est.mal { animation: no .35s; }
+  @keyframes no { 30% { transform: translateX(-5px); } 60% { transform: translateX(4px); } }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><div class="fila-est" id="fila"></div></main>
+<p class="pista">Ordena las estrellas de la más brillante a la que menos</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Fíjate en el tamaño y el resplandor de cada estrella.", "Sirio es la estrella más brillante del cielo nocturno. La Polar no es de las más brillantes.", "El orden es: Sirio, Arturo, Aldebarán, Polar y Alcor."]);
+  Comun.nivel("", null);
+  const ESTRELLAS = [["Sirio", -1.46, "#E4EEFF"], ["Arturo", -0.05, "#FFD9A0"], ["Aldebarán", 0.86, "#FFB98A"], ["Polar", 1.98, "#FFF4D6"], ["Alcor", 4.0, "#F2E9C9"]];
+  const fila = document.getElementById("fila");
+  let paso = 0, hecho = false;
+  const orden = [3, 0, 4, 1, 2];
+  orden.forEach(i => {
+    const [nombre, mag, color] = ESTRELLAS[i], r = Math.max(4, (4.8 - mag) * 4.2);
+    const b = document.createElement("button"); b.className = "est";
+    b.innerHTML = `<span class="orden"></span><span class="luz" style="width:${r}px;height:${r}px;background:${color};box-shadow:0 0 ${r * 1.2}px ${r * .4}px ${color}"></span><span>${nombre}</span>`;
+    b.addEventListener("click", () => {
+      if (hecho || b.querySelector(".orden").textContent) return;
+      if (i === paso) { paso++; b.querySelector(".orden").textContent = paso; Comun.tono(880 - paso * 80, 0, .3, .12, "sine");
+        if (paso === 5) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("ventana.html"), 1600); } }
+      else { b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal"); Comun.tono(180, 0, .2, .1, "sine");
+        Comun.avisar("Esa no es la siguiente. Vuelve a empezar"); paso = 0; fila.querySelectorAll(".orden").forEach(o => o.textContent = ""); }
+    });
+    fila.appendChild(b);
+  });
+
+</script>
+</body>
+</html>

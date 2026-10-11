@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Una vuelta</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .conejo-c { position: absolute; left: 50%; top: 58%; width: min(36vw, 160px); transform: translate(-50%, -50%); transition: transform .35s cubic-bezier(.3,1.6,.6,1); }
+  .conejo-c svg { width: 100%; display: block; }
+  .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 10px; }
+  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .marcas span.on { background: #F2E9C9; }
+
+  .barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(242,233,201,.15); }
+  .barra-q span { display: block; height: 100%; width: 0; background: #F2E9C9; border-radius: 3px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="conejo-c" id="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div><div class="barra-q"><span id="barra"></span></div></main>
+<p class="pista">El conejito ha perdido algo a su alrededor</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Tendrás que mirar a tu alrededor… con el móvil.", "Gira sobre ti mismo con el móvil delante, como si buscaras algo.", "Da una vuelta completa, en el mismo sentido."]);
+  Comun.nivel("", null);
+  const conejo = document.getElementById("conejo"), barra = document.getElementById("barra"), sub = document.getElementById("sub");
+  let total = 0, prev = null, brujula = false, hecho = false, arr = null;
+  function sumar(d) {
+    if (hecho) return; total += d; const p = Math.min(1, Math.abs(total) / 360);
+    barra.style.width = (p * 100) + "%"; conejo.style.transform = `translate(-50%, -50%) rotate(${total}deg)`;
+    if (p >= 1) { hecho = true; conejo.style.transform = "translate(-50%, -50%)"; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("maracas.html"), 1500); }
+  }
+  function alOrientar(e) {
+    let r = null;
+    if (typeof e.webkitCompassHeading === "number") r = e.webkitCompassHeading; else if (e.absolute && e.alpha != null) r = 360 - e.alpha;
+    if (r == null) return; brujula = true;
+    if (prev != null) { let d = r - prev; if (d > 180) d -= 360; if (d < -180) d += 360; if (Math.abs(d) < 40) sumar(d); }
+    prev = r;
+  }
+  addEventListener("pointerdown", e => { if (!brujula) arr = e.clientX; });
+  addEventListener("pointermove", e => { if (arr == null) return; sumar((e.clientX - arr) * .6); arr = e.clientX; });
+  addEventListener("pointerup", () => arr = null);
+  Comun.inicio("Algo se ha perdido", "Buscar", async () => {
+    if (await Comun.pedirOrientacion()) { addEventListener("deviceorientationabsolute", alOrientar); addEventListener("deviceorientation", alOrientar); }
+    setTimeout(() => { if (!brujula) sub.textContent = "Sin brújula: arrastra el dedo hacia un lado"; }, 2500);
+  });
+
+</script>
+</body>
+</html>

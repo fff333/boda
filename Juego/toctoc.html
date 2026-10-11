@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Toc, toc</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .conejo-c { position: absolute; left: 50%; top: 58%; width: min(36vw, 160px); transform: translate(-50%, -50%); transition: transform .35s cubic-bezier(.3,1.6,.6,1); }
+  .conejo-c svg { width: 100%; display: block; }
+  .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 10px; }
+  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .marcas span.on { background: #F2E9C9; }
+
+  .puerta-m { position: absolute; left: 50%; top: 52%; width: min(46vw, 200px); transform: translate(-50%, -50%); cursor: pointer; }
+  .puerta-m svg { width: 100%; display: block; }
+  .puerta-m.golpe { animation: golpe .15s; }
+  @keyframes golpe { 50% { transform: translate(-50%, -50%) scale(.97); } }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="puerta-m" id="puerta"><svg viewBox="0 0 200 220"><path d="M20 220 L20 100 Q100 0 180 100 L180 220Z" fill="#6D4C33"/><circle cx="150" cy="150" r="7" fill="#C9A86A"/><path d="M40 220 L40 105 Q100 30 160 105 L160 220" fill="none" stroke="#5A3D28" stroke-width="4"/></svg></div>
+  <button class="boton-musica" id="escuchar" style="top:16%" aria-label="Escuchar">♪</button>
+  <div class="marcas" id="marcas"><span></span><span></span><span></span><span></span></div>
+</main>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 130px)">El conejito llama desde dentro. Contéstale igual</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function mismoRitmo(a, b) { if (a.length !== b.length) return false; const da = a.slice(1).map((t, i) => t - a[i]), db = b.slice(1).map((t, i) => t - b[i]);
+    const sa = da.reduce((x, y) => x + y, 0), sb = db.reduce((x, y) => x + y, 0); return da.every((d, i) => Math.abs(d / sa - db[i] / sb) < .09); }
+  Comun.pistas(["Escucha cómo llama el conejito a la puerta.", "Contesta golpeando la mesa con los nudillos, cerca del móvil.", "Es «toc… toc… toc-toc»: dos golpes lentos y dos rápidos."]);
+  Comun.nivel("", null);
+  const RITMO = [0, 600, 1200, 1450];
+  const puerta = document.getElementById("puerta"), marcas = document.querySelectorAll(".marcas span"), sub = document.getElementById("sub");
+  let golpes = [], medir = null, antes = 0, hecho = false, sonando = false;
+  function toc(cuando = 0) { Comun.tono(180, cuando, .08, .4, "square"); Comun.tono(120, cuando, .12, .3, "sine"); }
+  document.getElementById("escuchar").addEventListener("click", () => {
+    if (sonando) return; sonando = true;
+    RITMO.forEach(t => { toc(t / 1000); setTimeout(() => { puerta.classList.remove("golpe"); void puerta.offsetWidth; puerta.classList.add("golpe"); }, t); });
+    setTimeout(() => { sonando = false; golpes = []; marcas.forEach(m => m.classList.remove("on")); }, 1800);
+  });
+  function golpe() {
+    if (hecho || sonando) return; const ahora = performance.now();
+    if (golpes.length && ahora - golpes[golpes.length - 1] < 120) return;
+    if (golpes.length && ahora - golpes[golpes.length - 1] > 2500) golpes = [];
+    golpes.push(ahora); marcas.forEach((m, i) => m.classList.toggle("on", i < golpes.length));
+    if (golpes.length === 4) {
+      if (mismoRitmo(golpes, RITMO)) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("canica.html"), 1500); }
+      else { Comun.avisar("Casi. Escucha otra vez el ritmo"); setTimeout(() => { golpes = []; marcas.forEach(m => m.classList.remove("on")); }, 600); }
+    }
+  }
+  puerta.addEventListener("pointerdown", () => { if (!medir) { toc(); golpe(); } });
+  Comun.inicio("Alguien llama a la puerta", "Acercarse", async () => {
+    medir = await Comun.pedirMicro();
+    if (!medir) sub.textContent = "Sin micrófono: toca la puerta para contestar";
+    (function bucle() { if (medir) { const v = medir(); if (v > .2 && antes <= .2) golpe(); antes = v; } if (!hecho) requestAnimationFrame(bucle); })();
+  });
+
+</script>
+</body>
+</html>
