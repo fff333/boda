@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Acueducto</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .rejilla-a { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); display: grid; gap: 4px; }
+  .pieza { width: min(17vw, 76px); aspect-ratio: 1; background: #3E2A1A; border: none; border-radius: 8px; cursor: pointer; padding: 0; }
+  .pieza svg { width: 100%; height: 100%; display: block; transition: transform .2s; }
+  .etq { position: absolute; font-size: 28px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:linear-gradient(#64B5F6, #BBDEFB 60%, #C9A86A 61%)"><div class="rejilla-a" id="rej"></div></main>
+<p class="pista" style="color:#0B1020">Gira las tuberías para llevar el agua del manantial a la ciudad</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Toca una pieza para girarla.", "El agua entra arriba a la izquierda y tiene que salir abajo a la derecha.", "Sigue el camino pieza a pieza: cada tubería tiene que encajar con la siguiente."]);
+  Comun.nivel("", null);
+  // conexiones: n=1, e=2, s=4, o=8
+  const C = 4, F = 4, rot = b => ((b << 1) | (b >> 3)) & 15;
+  const CAMINO = [[0, 0], [1, 0], [1, 1], [1, 2], [2, 2], [3, 2], [3, 3]];
+  const tipo = Array.from({ length: F }, () => Array(C).fill(0));
+  const dir = (a, b) => b[0] > a[0] ? 2 : b[0] < a[0] ? 8 : b[1] > a[1] ? 4 : 1, op = d => ({ 1: 4, 4: 1, 2: 8, 8: 2 })[d];
+  CAMINO.forEach((p, i) => { let m = 0; if (i === 0) m |= 8; else m |= op(dir(CAMINO[i - 1], p)); if (i === CAMINO.length - 1) m |= 2; else m |= dir(p, CAMINO[i + 1]); tipo[p[1]][p[0]] = m; });
+  for (let y = 0; y < F; y++) for (let x = 0; x < C; x++) if (!tipo[y][x]) tipo[y][x] = Math.random() < .5 ? 5 : 6;
+  const giro = Array.from({ length: F }, () => Array.from({ length: C }, () => 1 + Math.floor(Math.random() * 3)));
+  giro[0][0] = 1;
+  const rej = document.getElementById("rej"); rej.style.gridTemplateColumns = `repeat(${C}, auto)`;
+  const conex = (x, y) => { let m = tipo[y][x]; for (let k = 0; k < giro[y][x]; k++) m = rot(m); return m; };
+  let hecho = false; const piezas = [];
+  function dibujo(m, agua) { const col = agua ? "#64B5F6" : "#C9BE9C"; let s = `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="7" fill="${col}"/>`;
+    [[1, "30,30 30,0"], [2, "30,30 60,30"], [4, "30,30 30,60"], [8, "30,30 0,30"]].forEach(([b, p]) => { if (tipo_m(m) & b) s += `<polyline points="${p}" stroke="${col}" stroke-width="12"/>`; }); return s + "</svg>"; }
+  const tipo_m = m => m;
+  function revisar() {
+    const llega = new Set(); let cola = [[0, 0]];
+    if (conex(0, 0) & 8) { llega.add("0,0"); } else cola = [];
+    while (cola.length) { const [x, y] = cola.shift(), m = conex(x, y);
+      [[1, 0, -1], [2, 1, 0], [4, 0, 1], [8, -1, 0]].forEach(([b, dx, dy]) => { const nx = x + dx, ny = y + dy;
+        if (m & b && nx >= 0 && ny >= 0 && nx < C && ny < F && conex(nx, ny) & op(b) && !llega.has(nx + "," + ny)) { llega.add(nx + "," + ny); cola.push([nx, ny]); } }); }
+    piezas.forEach(([b, x, y]) => b.innerHTML = dibujo(conex(x, y), llega.has(x + "," + y)));
+    if (!hecho && llega.has((C - 1) + "," + (F - 1)) && conex(C - 1, F - 1) & 2) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("mosaico.html"), 1800); }
+  }
+  for (let y = 0; y < F; y++) for (let x = 0; x < C; x++) {
+    const b = document.createElement("button"); b.className = "pieza"; b.setAttribute("aria-label", "Tubería");
+    b.addEventListener("click", () => { if (hecho) return; giro[y][x] = (giro[y][x] + 1) % 4; Comun.tono(500, 0, .05, .06, "square"); revisar(); });
+    rej.appendChild(b); piezas.push([b, x, y]);
+  }
+  revisar();
+
+</script>
+</body>
+</html>

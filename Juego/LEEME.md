@@ -1,6 +1,6 @@
 # Sigue al conejo blanco
 
-Juego de adivinanzas para móvil en HTML. 68 niveles.
+Juego de adivinanzas para móvil en HTML. 107 niveles.
 
 ## 1. Publicarlo en GitHub Pages
 
@@ -18,4 +18,5 @@ GitHub Pages usa HTTPS, así que el micrófono, la cámara y el giroscopio funci
 - `comun.js` contiene el orden de los niveles, sus códigos, los mensajes de ánimo y el menú (☰): volver al nivel anterior, ir a un nivel con su código, y cambiar de idioma.
 - `idiomas.js` contiene las traducciones al inglés. Para añadir otro idioma, copia el bloque `en` y tradúcelo.
 - `motor.js` contiene el piano y las herramientas de los niveles musicales.
+- `cielo.js` contiene las estrellas y constelaciones reales (posiciones, brillo y color) de los niveles del cielo.
 - La partida se guarda en el móvil de cada jugador: al volver, la portada ofrece «Continuar».

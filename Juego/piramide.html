@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Pirámide</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  canvas.lab { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:#000"><canvas class="lab" id="l"></canvas></main>
+<p class="pista">Sal de la pirámide con tu antorcha</p>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 76px)"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Inclina el móvil para mover la antorcha por los pasadizos.", "Si se descoloca, toca la pantalla para volver a centrar la inclinación.", "La salida brilla en la esquina de abajo a la derecha."]);
+  Comun.nivel("", null);
+  const CC = 5, FF = 7, COLS = CC * 2 + 1, FILAS = FF * 2 + 1; let semilla = 11;
+  const azar = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+  const mapa = Array.from({ length: FILAS }, () => Array(COLS).fill(1));
+  (function ex(cx, cy) { mapa[cy * 2 + 1][cx * 2 + 1] = 0; [[1, 0], [-1, 0], [0, 1], [0, -1]].sort(() => azar() - .5).forEach(([dx, dy]) => {
+    const nx = cx + dx, ny = cy + dy; if (nx >= 0 && ny >= 0 && nx < CC && ny < FF && mapa[ny * 2 + 1][nx * 2 + 1]) { mapa[cy * 2 + 1 + dy][cx * 2 + 1 + dx] = 0; ex(nx, ny); } }); })(0, 0);
+  const SAL = { x: COLS - 2, y: FILAS - 2 };
+  const lz = document.getElementById("l"), c = lz.getContext("2d"), sub = document.getElementById("sub"), dpr = Math.min(devicePixelRatio || 1, 2);
+  const T = Math.floor(Math.min(innerWidth * .94 / COLS, innerHeight * .7 / FILAS));
+  lz.width = COLS * T * dpr; lz.height = FILAS * T * dpr; lz.style.width = COLS * T + "px"; lz.style.height = FILAS * T + "px"; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  let bx = 1.5 * T, by = 1.5 * T, vx = 0, vy = 0, ax = 0, ay = 0, base = null, sensor = false, dedo = null, hecho = false;
+  const R = T * .28, muro = (x, y) => { const i = Math.floor(x / T), j = Math.floor(y / T); return j < 0 || i < 0 || j >= FILAS || i >= COLS || mapa[j][i] === 1; };
+  const choca = (x, y) => muro(x - R, y - R) || muro(x + R, y - R) || muro(x - R, y + R) || muro(x + R, y + R);
+  function alOrientar(e) { if (e.beta == null) return; sensor = true; if (!base) base = { b: e.beta, g: e.gamma }; ax = Math.max(-1, Math.min(1, (e.gamma - base.g) / 25)); ay = Math.max(-1, Math.min(1, (e.beta - base.b) / 25)); }
+  addEventListener("pointerdown", e => { if (sensor) base = null; else dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointermove", e => { if (dedo) dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointerup", () => { dedo = null; if (!sensor) ax = ay = 0; });
+  Comun.inicio("Dentro de la gran pirámide", "Encender la antorcha", async () => {
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: mantén el dedo hacia donde quieras ir"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    if (!sensor && dedo) { const r = lz.getBoundingClientRect(), dx = dedo[0] - (r.left + bx), dy = dedo[1] - (r.top + by), d = Math.hypot(dx, dy) || 1; ax = dx / d * Math.min(1, d / 80); ay = dy / d * Math.min(1, d / 80); }
+    const max = T * .15; vx = Math.max(-max, Math.min(max, (vx + ax * T * .012) * .93)); vy = Math.max(-max, Math.min(max, (vy + ay * T * .012) * .93));
+    if (!hecho) { if (!choca(bx + vx, by)) bx += vx; else vx = 0; if (!choca(bx, by + vy)) by += vy; else vy = 0;
+      if (Math.floor(bx / T) === SAL.x && Math.floor(by / T) === SAL.y) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("pitagoras.html"), 1500); } }
+    c.clearRect(0, 0, COLS * T, FILAS * T);
+    for (let y = 0; y < FILAS; y++) for (let x = 0; x < COLS; x++) { c.fillStyle = mapa[y][x] ? "#8D6E4A" : "#3E2A1A"; c.fillRect(x * T, y * T, T + .5, T + .5); }
+    const g = c.createRadialGradient(bx, by, T * .5, bx, by, T * 2.6); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,1)");
+    c.fillStyle = g; c.fillRect(0, 0, COLS * T, FILAS * T);
+    c.fillStyle = "#FFD54F"; c.shadowColor = "#FFD54F"; c.shadowBlur = 20; c.fillRect(SAL.x * T + 3, SAL.y * T + 3, T - 6, T - 6);
+    c.fillStyle = "#FFB74D"; c.shadowColor = "#FFB74D"; c.shadowBlur = 16; c.beginPath(); c.arc(bx, by, R, 0, 7); c.fill(); c.shadowBlur = 0;
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

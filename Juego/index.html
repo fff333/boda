@@ -58,7 +58,7 @@
     <button id="reiniciar" hidden>Empezar de cero</button>
   </div>
 </section>
-<iframe id="juego" title="Juego" allow="microphone; camera; autoplay; accelerometer; gyroscope; magnetometer"></iframe>
+<iframe id="juego" title="Juego" allow="microphone; camera; geolocation; autoplay; accelerometer; gyroscope; magnetometer"></iframe>
 
 <script src="idiomas.js"></script>
 <script src="comun.js"></script>
@@ -68,6 +68,7 @@
   window.ES_MARCO = true;
   window.AUDIO = null;
   window.MICRO = null;
+  window.ANALIZADOR = null;
   window.MOVIMIENTO_OK = false;
 
   const PRIMERO = "arbol.html";
@@ -107,7 +108,7 @@
     window.MOVIMIENTO_OK = peticiones.length ? respuestas.includes("granted") : true;
     const flujo = await micro;
     if (flujo && window.AUDIO) {
-      const an = window.AUDIO.createAnalyser(); an.fftSize = 1024;
+      const an = window.AUDIO.createAnalyser(); an.fftSize = 2048; window.ANALIZADOR = an;
       window.AUDIO.createMediaStreamSource(flujo).connect(an);
       const buf = new Float32Array(an.fftSize);
       window.MICRO = () => { an.getFloatTimeDomainData(buf); let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); };

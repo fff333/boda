@@ -58,7 +58,7 @@
     if (nota100 >= 85) {
       hecho = true; pintar("#FDD835");
       [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .12, .9, .14, "sine")); Comun.vibrar([30, 50, 30]);
-      setTimeout(() => Comun.superado("laberinto.html", "XL"), 1400);
+      setTimeout(() => Comun.superado("jeroglificos.html", "XL"), 1400);
     } else {
       pintar("rgba(233,166,184,.6)"); Comun.tono(180, 0, .3, .1, "sine");
       if (nota100 < 40) Comun.avisar("Tiene que ser redondo y bien cerrado");

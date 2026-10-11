@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La pluma</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .balanza-a { position: absolute; left: 50%; top: 54%; width: min(86vw, 380px); transform: translate(-50%, -50%); }
+  .balanza-a svg { width: 100%; display: block; overflow: visible; }
+  #brazo { transition: transform .6s cubic-bezier(.3,1.4,.6,1); transform-origin: 150px 70px; }
+  .mancha { cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:radial-gradient(ellipse at 50% 30%, #4A3A22, #1A140C 80%)">
+  <div class="balanza-a"><svg viewBox="0 0 300 240">
+    <rect x="144" y="70" width="12" height="150" fill="#C9A86A"/><rect x="110" y="215" width="80" height="12" rx="4" fill="#C9A86A"/>
+    <g id="brazo">
+      <rect x="40" y="66" width="220" height="8" rx="4" fill="#C9A86A"/>
+      <line x1="60" y1="70" x2="40" y2="140" stroke="#C9A86A"/><line x1="60" y1="70" x2="80" y2="140" stroke="#C9A86A"/>
+      <line x1="240" y1="70" x2="220" y2="140" stroke="#C9A86A"/><line x1="240" y1="70" x2="260" y2="140" stroke="#C9A86A"/>
+      <path d="M30 140 Q60 160 90 140Z" fill="#C9A86A"/><path d="M210 140 Q240 160 270 140Z" fill="#C9A86A"/>
+      <path d="M60 138 C40 120 42 100 55 100 C60 100 60 106 60 106 C60 106 60 100 65 100 C78 100 80 120 60 138Z" fill="#E53935"/>
+      <g id="manchas"></g>
+      <path d="M240 138 Q232 110 244 90 Q248 112 240 138Z" fill="#F7F0DC"/><line x1="240" y1="138" x2="243" y2="92" stroke="#C9A86A"/>
+    </g>
+  </svg></div>
+</main>
+<p class="pista">El corazón pesa más que la pluma. Límpialo de sombras</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Los egipcios creían que, al morir, el corazón se pesaba contra una pluma.", "Las manchas oscuras hacen que el corazón pese más.", "Toca todas las manchas del corazón hasta que la balanza quede equilibrada."]);
+  Comun.nivel("", null);
+  const brazo = document.getElementById("brazo"), manchas = document.getElementById("manchas");
+  const M = [[54, 112], [66, 118], [58, 126], [64, 108]]; let quedan = M.length, hecho = false;
+  function pintar() { brazo.style.transform = `rotate(${-quedan * 4}deg)`; }
+  M.forEach(([x, y]) => {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 4.5); c.setAttribute("fill", "#2A1A10"); c.setAttribute("class", "mancha");
+    c.addEventListener("pointerdown", () => { if (hecho) return; c.remove(); quedan--; pintar(); Comun.tono(700 + (4 - quedan) * 100, 0, .2, .1, "sine");
+      if (!quedan) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("escarabajo.html"), 1800); } });
+    manchas.appendChild(c);
+  });
+  pintar();
+
+</script>
+</body>
+</html>

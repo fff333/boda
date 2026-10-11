@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>El hilo</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  canvas.lab { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><canvas class="lab" id="l"></canvas></main>
+<p class="pista" id="pista">Llega hasta el centro sin soltar el hilo</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Arrastra el dedo por los pasillos desde la entrada, sin levantarlo.", "Si atraviesas una pared o levantas el dedo, el hilo se rompe.", "Cuando llegues al Minotauro, vuelve a la entrada siguiendo tu hilo."]);
+  Comun.nivel("", null);
+  const CC = 5, FF = 6; let semilla = 23; const azar = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647;
+  const paredes = Array.from({ length: FF }, () => Array.from({ length: CC }, () => ({ n: 1, s: 1, e: 1, o: 1 }))), vis = new Set();
+  (function ex(x, y) { vis.add(x + "," + y); [[1, 0, "e", "o"], [-1, 0, "o", "e"], [0, 1, "s", "n"], [0, -1, "n", "s"]].sort(() => azar() - .5).forEach(([dx, dy, a, b]) => {
+    const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < CC && ny < FF && !vis.has(nx + "," + ny)) { paredes[y][x][a] = 0; paredes[ny][nx][b] = 0; ex(nx, ny); } }); })(0, 0);
+  const INI = [0, 0], CENTRO = [2, 3];
+  const lz = document.getElementById("l"), c = lz.getContext("2d"), pista = document.getElementById("pista"), dpr = Math.min(devicePixelRatio || 1, 2);
+  const T = Math.floor(Math.min(innerWidth * .9 / CC, innerHeight * .62 / FF));
+  lz.width = CC * T * dpr; lz.height = FF * T * dpr; lz.style.width = CC * T + "px"; lz.style.height = FF * T + "px"; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  let camino = [], fase = 0, hecho = false, activo = false;
+  const celda = e => { const r = lz.getBoundingClientRect(); return [Math.floor((e.clientX - r.left) / T), Math.floor((e.clientY - r.top) / T)]; };
+  function abierto(a, b) { const [x, y] = a, [u, v] = b; if (Math.abs(x - u) + Math.abs(y - v) !== 1) return false; const p = paredes[y][x];
+    return (u > x && !p.e) || (u < x && !p.o) || (v > y && !p.s) || (v < y && !p.n); }
+  function romper() { if (camino.length) { Comun.tono(150, 0, .25, .12, "sine"); Comun.avisar("¡Se ha roto el hilo!"); } camino = []; fase = 0; activo = false; pista.textContent = "Llega hasta el centro sin soltar el hilo"; }
+  lz.addEventListener("pointerdown", e => { if (hecho) return; const k = celda(e); lz.setPointerCapture(e.pointerId); if (k[0] === INI[0] && k[1] === INI[1]) { camino = [k]; activo = true; fase = 0; } });
+  lz.addEventListener("pointermove", e => {
+    if (!activo || hecho) return; const k = celda(e), u = camino[camino.length - 1];
+    if (k[0] === u[0] && k[1] === u[1]) return;
+    if (k[0] < 0 || k[1] < 0 || k[0] >= CC || k[1] >= FF || !abierto(u, k)) { romper(); return; }
+    camino.push(k); Comun.tono(500 + camino.length * 10, 0, .04, .04, "sine");
+    if (fase === 0 && k[0] === CENTRO[0] && k[1] === CENTRO[1]) { fase = 1; Comun.tono(110, 0, .6, .2, "sawtooth"); pista.textContent = "¡El Minotauro! Vuelve a la entrada"; }
+    if (fase === 1 && k[0] === INI[0] && k[1] === INI[1]) { hecho = true; activo = false; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("acueducto.html"), 1600); }
+  });
+  lz.addEventListener("pointerup", () => { if (activo && !hecho) romper(); });
+  (function pintar() {
+    c.clearRect(0, 0, CC * T, FF * T); c.fillStyle = "#E6D3A3"; c.fillRect(0, 0, CC * T, FF * T);
+    c.strokeStyle = "#5A3D28"; c.lineWidth = 4; c.lineCap = "round";
+    for (let y = 0; y < FF; y++) for (let x = 0; x < CC; x++) { const p = paredes[y][x], X = x * T, Y = y * T; c.beginPath();
+      if (p.n && !(x === 0 && y === 0)) { c.moveTo(X, Y); c.lineTo(X + T, Y); } if (p.s) { c.moveTo(X, Y + T); c.lineTo(X + T, Y + T); } if (p.o) { c.moveTo(X, Y); c.lineTo(X, Y + T); } if (p.e) { c.moveTo(X + T, Y); c.lineTo(X + T, Y + T); } c.stroke(); }
+    c.font = (T * .6) + "px serif"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("🐂", (CENTRO[0] + .5) * T, (CENTRO[1] + .5) * T);
+    if (camino.length) { c.strokeStyle = "#E53935"; c.lineWidth = 3; c.beginPath(); camino.forEach(([x, y], i) => i ? c.lineTo((x + .5) * T, (y + .5) * T) : c.moveTo((x + .5) * T, (y + .5) * T)); c.stroke(); }
+    c.fillStyle = "#E53935"; c.beginPath(); c.arc(.5 * T, .5 * T, T * .15, 0, 7); c.fill();
+    requestAnimationFrame(pintar);
+  })();
+
+</script>
+</body>
+</html>

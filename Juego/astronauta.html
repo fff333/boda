@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Gravedad cero</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:#05080F"><canvas class="lienzo" id="l"></canvas></main>
+<p class="pista">Lleva al conejo astronauta hasta la nave</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c = el.getContext("2d");
+    const aj = () => { el.width = innerWidth * dpr; el.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }; aj(); addEventListener("resize", aj); return c; }
+  Comun.pistas(["En el espacio no hay rozamiento: lo que empieza a moverse sigue moviéndose.", "Inclina el móvil con mucha suavidad y frena inclinándolo al revés.", "Esquiva las rocas: si chocas, vuelves a empezar."]);
+  Comun.nivel("", null);
+  const ctx = lienzoCompleto(document.getElementById("l")), sub = document.getElementById("sub");
+  let x, y, vx = 0, vy = 0, ax = 0, ay = 0, sensor = false, dedo = null, hecho = false, base = null, ultimo = performance.now();
+  const rocas = [[.3, .55, 32], [.7, .45, 38], [.5, .32, 26], [.2, .3, 22], [.8, .7, 24]];
+  function reiniciar() { x = innerWidth * .15; y = innerHeight * .8; vx = vy = 0; }
+  reiniciar();
+  function alMover(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; if (!base) base = { x: g.x, y: g.y }; ax = g.x - base.x; ay = g.y - base.y; }
+  addEventListener("pointerdown", e => { if (sensor) base = null; else dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointermove", e => { if (dedo) dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointerup", () => { dedo = null; if (!sensor) ax = ay = 0; });
+  Comun.inicio("Un paseo espacial", "Salir de la nave", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: mantén el dedo hacia donde quieras ir"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50) / 1000; ultimo = ahora;
+    const W = innerWidth, H = innerHeight, nx = W * .85, ny = H * .2;
+    if (!sensor && dedo) { ax = (dedo[0] - x) / W * 6; ay = (dedo[1] - y) / H * 6; }
+    if (!hecho) {
+      vx = (vx + ax * 14 * dt) * .999; vy = (vy + ay * 14 * dt) * .999; x += vx * dt; y += vy * dt;
+      if (x < 15 || x > W - 15) { vx *= -.6; x = Math.max(15, Math.min(W - 15, x)); }
+      if (y < 90 || y > H - 60) { vy *= -.6; y = Math.max(90, Math.min(H - 60, y)); }
+      for (const [fx, fy, r] of rocas) if (Math.hypot(x - W * fx, y - H * fy) < r + 16) { Comun.tono(120, 0, .3, .15, "sawtooth"); Comun.vibrar(60); Comun.avisar("¡Choque! Otra vez"); reiniciar(); break; }
+      if (Math.hypot(x - nx, y - ny) < 40) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("planetas.html"), 1500); }
+    }
+    ctx.clearRect(0, 0, W, H);
+    let s = 3; const az = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 120; i++) { ctx.fillStyle = `rgba(242,233,201,${az() * .6})`; ctx.fillRect(az() * W, az() * H, 1.5, 1.5); }
+    rocas.forEach(([fx, fy, r]) => { ctx.fillStyle = "#6D6458"; ctx.beginPath(); ctx.arc(W * fx, H * fy, r, 0, 7); ctx.fill(); ctx.fillStyle = "#5A5248"; ctx.beginPath(); ctx.arc(W * fx - r * .3, H * fy - r * .2, r * .25, 0, 7); ctx.fill(); });
+    ctx.fillStyle = "#B0BEC5"; ctx.beginPath(); ctx.ellipse(nx, ny, 42, 18, 0, 0, 7); ctx.fill(); ctx.fillStyle = "#64B5F6"; ctx.beginPath(); ctx.arc(nx, ny - 10, 14, Math.PI, 0); ctx.fill();
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = "#FBFAF4"; ctx.beginPath(); ctx.ellipse(-7, -24, 4, 12, -.2, 0, 7); ctx.ellipse(7, -24, 4, 12, .2, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, 0, 14, 0, 7); ctx.fill(); ctx.strokeStyle = "rgba(100,181,246,.8)"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, -2, 19, 0, 7); ctx.stroke();
+    ctx.fillStyle = "#0B1020"; ctx.beginPath(); ctx.arc(-5, -3, 2, 0, 7); ctx.arc(5, -3, 2, 0, 7); ctx.fill();
+    ctx.restore();
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

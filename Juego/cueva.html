@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La cueva</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .oscura { position: absolute; inset: 0; background: #000; transition: opacity .3s; pointer-events: none; }
+  .cueva-d { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 60%, #5A4A3A 0%, #2A2218 60%, #120E0A 100%); }
+  .tesoro { position: absolute; left: 50%; top: 58%; transform: translate(-50%, -50%); font-size: 70px; }
+  video { position: absolute; width: 1px; height: 1px; opacity: 0; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="cueva-d"></div><div class="tesoro">🥕</div><div class="oscura" id="oscura"></div><video id="v" playsinline muted autoplay></video></main>
+<p class="pista" style="z-index:7">La cueva está a oscuras</p>
+<p class="subpista" id="sub" style="z-index:7"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Necesitas luz… pero no la del móvil.", "La cámara de atrás puede «recoger» la luz de tu habitación.", "Apunta la cámara de atrás hacia una lámpara o una ventana iluminada."]);
+  Comun.nivel("", null);
+  const oscura = document.getElementById("oscura"), v = document.getElementById("v"), sub = document.getElementById("sub");
+  const lz = document.createElement("canvas"); lz.width = 32; lz.height = 24; const c = lz.getContext("2d", { willReadFrequently: true });
+  let flujo = null, desde = null, hecho = false;
+  function iluminar() { if (hecho) return; hecho = true; oscura.style.opacity = 0; if (flujo) flujo.getTracks().forEach(t => t.stop()); Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("iman.html"), 2000); }
+  addEventListener("pointerdown", () => { if (!flujo) iluminar(); });
+  Comun.inicio("Una cueva oscura", "Entrar", async () => {
+    try { flujo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 320 } }, audio: false }); v.srcObject = flujo; await v.play(); }
+    catch (e) { flujo = null; sub.textContent = "Sin cámara: toca la pantalla para encender una antorcha"; return; }
+    (function medir() {
+      if (hecho) return;
+      if (v.readyState >= 2) {
+        c.drawImage(v, 0, 0, 32, 24); const d = c.getImageData(0, 0, 32, 24).data; let s = 0, max = 0;
+        for (let i = 0; i < d.length; i += 4) { const l = d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11; s += l; if (l > max) max = l; }
+        const brillo = s / (d.length / 4);
+        oscura.style.opacity = Math.max(.15, 1 - brillo / 200);
+        if (brillo > 170 || max > 250 && brillo > 120) { desde = desde || performance.now(); if (performance.now() - desde > 1200) iluminar(); } else desde = null;
+      }
+      setTimeout(medir, 120);
+    })();
+  });
+
+</script>
+</body>
+</html>

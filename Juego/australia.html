@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Al otro lado</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas></main>
+<p class="pista">El conejito ha viajado a Australia. ¿Cómo ve Orión desde allí?</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Desde el otro lado de la Tierra, el cielo se ve de otra manera.", "En el hemisferio sur, Orión se ve al revés.", "Pon el móvil boca abajo, o gira la imagen con el dedo hasta darle la vuelta."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo), sub = document.getElementById("sub");
+  let W, H, pos, rot = 0, objetivo = 0, prev = null, bocaAbajo = 0, hecho = false, ultimo = performance.now();
+  function colocar() { W = innerWidth; H = innerHeight; pos = Cielo.disponer(Cielo.C.orion.estrellas, 5.55, 0, 0, 0, Math.min(W / 22, H / 34)); }
+  colocar(); addEventListener("resize", colocar);
+  const ang = e => Math.atan2(e.clientY - H * .55, e.clientX - W / 2) * 180 / Math.PI;
+  lienzo.addEventListener("pointerdown", e => { prev = ang(e); lienzo.setPointerCapture(e.pointerId); });
+  lienzo.addEventListener("pointermove", e => { if (prev == null || hecho) return; const a = ang(e); let d = a - prev; if (d > 180) d -= 360; if (d < -180) d += 360; objetivo += d; prev = a; });
+  lienzo.addEventListener("pointerup", () => prev = null);
+  function alOrientar(e) { if (e.beta == null || hecho) return; bocaAbajo = (e.beta < -50 && Math.abs(e.gamma) < 50) ? bocaAbajo || performance.now() : 0; }
+  Comun.inicio("Un viaje al hemisferio sur", "Viajar", async () => { if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar); });
+  function terminar() { hecho = true; objetivo = 180; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); sub.textContent = "¡Así lo ven en Australia!"; setTimeout(() => Comun.superado("osamayor.html"), 2000); }
+  (function pintar(ahora) {
+    rot += (objetivo - rot) * .15;
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 200, 9);
+    ctx.save(); ctx.translate(W / 2, H * .55); ctx.rotate(rot * Math.PI / 180);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.orion.lineas, "rgba(233,166,184,.55)", 1.5);
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2] - .4, Cielo.E[n][3] || "#FFFFFF", 1.2);
+    ctx.restore();
+    if (!hecho) {
+      const r = ((objetivo % 360) + 360) % 360;
+      if (Math.abs(r - 180) < 15 && prev == null) terminar();
+      if (bocaAbajo && performance.now() - bocaAbajo > 1200) terminar();
+    }
+    requestAnimationFrame(pintar);
+  })();
+
+</script>
+</body>
+</html>

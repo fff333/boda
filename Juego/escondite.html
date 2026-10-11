@@ -55,7 +55,7 @@
       if (i === sitio) {
         hecho = true; escena.classList.remove("escondido"); pista.textContent = "¡Te encontré!";
         [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => Comun.tono(f, k * .12, .5, .12)); Comun.vibrar(40);
-        setTimeout(() => Comun.superado("sonido.html", "XXX"), 1500);
+        setTimeout(() => Comun.superado("vaso.html", "XXX"), 1500);
       } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(180, 0, .15, .1, "sine"); }
     });
     cont.appendChild(b); return b;

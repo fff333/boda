@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Diente de león</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><canvas class="lienzo" id="l"></canvas></main>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c = el.getContext("2d");
+    const aj = () => { el.width = innerWidth * dpr; el.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }; aj(); addEventListener("resize", aj); return c; }
+  Comun.pistas(["Pide un deseo…", "Los dientes de león se esparcen con el viento.", "Sopla hacia el micrófono hasta que no quede ni una semilla."]);
+  Comun.nivel("", null);
+  const ctx = lienzoCompleto(document.getElementById("l")), sub = document.getElementById("sub");
+  const N = 48; let medir = null, hecho = false, ultimo = performance.now();
+  const semillas = Array.from({ length: N }, (_, i) => ({ a: i / N * 6.283 + Math.random() * .1, suelta: false, x: 0, y: 0, vx: 0, vy: 0 }));
+  function soplar(fuerza) { semillas.filter(s => !s.suelta).slice(0, Math.ceil(fuerza)).forEach(s => { s.suelta = true; s.vx = 80 + Math.random() * 160; s.vy = -40 - Math.random() * 80; }); }
+  addEventListener("pointerdown", () => { if (!medir) soplar(4); });
+  Comun.inicio("Un diente de león", "Acercarse", async () => {
+    medir = await Comun.pedirMicro(); if (!medir) sub.textContent = "Sin micrófono: toca la pantalla para soplar";
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50) / 1000; ultimo = ahora;
+    if (medir) { const v = medir(); if (v > .08 && Math.random() < v * 3) soplar(1 + v * 6); }
+    const W = innerWidth, H = innerHeight, cx = W / 2, cy = H * .42, R = Math.min(W, H) * .2;
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = "#43A047"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.quadraticCurveTo(cx - 20, cy + H * .25, cx, H); ctx.stroke();
+    ctx.fillStyle = "#8D6E4A"; ctx.beginPath(); ctx.arc(cx, cy, 8, 0, 7); ctx.fill();
+    let quedan = 0;
+    semillas.forEach(s => {
+      let x, y;
+      if (!s.suelta) { quedan++; x = cx + Math.cos(s.a) * R; y = cy + Math.sin(s.a) * R; s.x = x; s.y = y; ctx.strokeStyle = "rgba(242,233,201,.5)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke(); }
+      else { s.vy -= 5 * dt; s.x += s.vx * dt; s.y += s.vy * dt + Math.sin(ahora / 300 + s.a) * .6; x = s.x; y = s.y; }
+      ctx.strokeStyle = "rgba(242,233,201,.9)"; ctx.lineWidth = 1;
+      for (let k = 0; k < 6; k++) { const b = k / 6 * 6.283; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(b) * 7, y + Math.sin(b) * 7); ctx.stroke(); }
+    });
+    if (!hecho && quedan === 0) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("salto.html"), 2200); }
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

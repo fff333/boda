@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>En la Luna</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .bascula { position: absolute; left: 50%; top: 56%; width: min(72vw, 300px); transform: translate(-50%, -50%); touch-action: none; }
+  .bascula svg { width: 100%; display: block; }
+  .dato { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; font-size: 26px; font-style: normal; font-family: "Courier New", monospace; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:radial-gradient(ellipse at 50% 20%, #2A3966, #05080F 75%)">
+  <div class="bascula" id="bascula"><svg viewBox="0 0 200 200" id="svg">
+    <rect x="10" y="40" width="180" height="150" rx="20" fill="#B0BEC5"/><circle cx="100" cy="115" r="62" fill="#F7F0DC"/>
+    <g id="marcas"></g><line id="aguja" x1="100" y1="115" x2="100" y2="62" stroke="#E53935" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="115" r="6" fill="#3E2A1A"/>
+  </svg></div>
+  <div class="dato" id="dato">0 kg</div>
+</main>
+<p class="pista">En la Tierra, el conejo marca 6 kg. Pon la aguja en lo que marcará en la Luna</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["En la Luna la gravedad es mucho más débil que en la Tierra.", "Allí todo pesa seis veces menos.", "6 kg entre 6: arrastra la aguja hasta 1 kg."]);
+  Comun.nivel("", null);
+  const svg = document.getElementById("svg"), aguja = document.getElementById("aguja"), dato = document.getElementById("dato"), bascula = document.getElementById("bascula");
+  const g = document.getElementById("marcas");
+  for (let k = 0; k <= 8; k++) { const a = (-135 + k * 33.75) * Math.PI / 180; g.insertAdjacentHTML("beforeend", `<text x="${100 + Math.sin(a) * 48}" y="${115 - Math.cos(a) * 48 + 4}" text-anchor="middle" font-size="11" font-family="Georgia" fill="#3E2A1A">${k}</text>`); }
+  let kg = 0, arrastrando = false, quieto = null, hecho = false;
+  function pintar() { aguja.setAttribute("transform", `rotate(${-135 + kg * 33.75} 100 115)`); dato.textContent = kg.toFixed(1) + " kg"; }
+  pintar();
+  function mover(e) { const r = bascula.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 115 / 200;
+    let a = Math.atan2(e.clientX - cx, cy - e.clientY) * 180 / Math.PI; a = Math.max(-135, Math.min(135, a)); kg = Math.round((a + 135) / 33.75 * 10) / 10; pintar();
+    if (quieto) { clearTimeout(quieto); quieto = null; } }
+  bascula.addEventListener("pointerdown", e => { arrastrando = true; bascula.setPointerCapture(e.pointerId); mover(e); });
+  bascula.addEventListener("pointermove", e => { if (arrastrando && !hecho) mover(e); });
+  bascula.addEventListener("pointerup", () => { arrastrando = false;
+    if (Math.abs(kg - 1) <= .1) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("semaforo.html"), 1500); }
+    else if (kg > 5) Comun.avisar("Eso pesaría en la Tierra"); });
+
+</script>
+</body>
+</html>

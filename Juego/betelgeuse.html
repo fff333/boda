@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Colores</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas></main>
+<p class="pista">¿Cuál es la estrella más fría de Orión?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Fíjate en el color de cada estrella.", "Las estrellas rojizas son más frías que las azules.", "Es la estrella rojiza del hombro de Orión: Betelgeuse."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo);
+  let W, H, pos, hecho = false;
+  function colocar() { W = innerWidth; H = innerHeight; pos = Cielo.disponer(Cielo.C.orion.estrellas, 5.55, 0, W / 2, H * .55, Math.min(W / 22, H / 34)); }
+  colocar(); addEventListener("resize", colocar);
+  (function pintar() {
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 200, 8);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.orion.lineas, "rgba(242,233,201,.18)", 1);
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2] - .6, Cielo.E[n][3] || "#FFFFFF", 1.3);
+    if (hecho) { ctx.fillStyle = "#FF8A5C"; ctx.font = "italic 18px Georgia"; ctx.fillText("Betelgeuse", pos.betelgeuse[0] + 16, pos.betelgeuse[1] - 10); }
+    requestAnimationFrame(pintar);
+  })();
+  lienzo.addEventListener("pointerdown", e => {
+    if (hecho) return;
+    let mejor = null, d0 = 40;
+    for (const n in pos) { const d = Math.hypot(e.clientX - pos[n][0], e.clientY - pos[n][1]); if (d < d0) { d0 = d; mejor = n; } }
+    if (!mejor) return;
+    if (mejor === "betelgeuse") { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("australia.html"), 1800); }
+    else if (mejor === "rigel") { Comun.tono(180, 0, .2, .1, "sine"); Comun.avisar("Esa es Rigel: azul y muy caliente"); }
+    else { Comun.tono(180, 0, .2, .1, "sine"); Comun.avisar("Esa no. Fíjate en el color"); }
+  });
+
+</script>
+</body>
+</html>
