@@ -62,21 +62,17 @@
   const sub = document.getElementById("sub"), vela = document.getElementById("vela");
   let luz = 1, apagada = false, medir = null, dedo = false, ultimo = performance.now();
 
-  // Sin micrófono: mantener el dedo sobre la llama
-  vela.addEventListener("pointerdown", () => { if (!medir) dedo = true; });
-  addEventListener("pointerup", () => dedo = false);
-  addEventListener("pointercancel", () => dedo = false);
 
   Comun.inicio("Hay una vela encendida", "Entrar", async () => {
     medir = await Comun.pedirMicro();
-    if (!medir) sub.textContent = "Sin micrófono: mantén el dedo en la llama";
+    if (!medir) sub.textContent = "Este nivel necesita el micrófono";
     requestAnimationFrame(bucle);
   });
 
   function bucle(ahora) {
     const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
     if (!apagada) {
-      const soplando = (medir && medir() > .09) || dedo;
+      const soplando = !!(medir && medir() > .09);
       luz = soplando ? luz - dt / 450 : Math.min(1, luz + dt / 9000);
       if (luz <= 0) apagar();
     }
