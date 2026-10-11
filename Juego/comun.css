@@ -251,3 +251,32 @@ button:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
 .capitulo::after { content: ""; width: 60px; height: 2px; background: #E9A6B8; margin-top: 6px; }
 
 .panel-pista .me-rindo { background: none; color: rgba(242,233,201,.7); border: none; font: inherit; font-size: 15px; padding: 8px; cursor: pointer; text-decoration: underline; }
+
+/* Luz de Tilín */
+.luz-tilin { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 320px; font-size: 13px; margin-top: 6px; }
+.luz-tilin .lt-txt { font-style: normal; letter-spacing: .08em; opacity: .7; white-space: nowrap; }
+.luz-tilin .lt-barra { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,213,79,.15); overflow: hidden; }
+.luz-tilin .lt-barra span { display: block; height: 100%; background: linear-gradient(90deg, #FFB300, #FFE082); box-shadow: 0 0 10px #FFD54F; }
+.luz-tilin .lt-num { font-style: normal; color: #FFE082; min-width: 40px; text-align: right; }
+/* Personajes que se asoman */
+.aparicion { position: fixed; z-index: 26; bottom: calc(env(safe-area-inset-bottom) + 110px); width: 96px; pointer-events: none;
+  transition: transform .7s cubic-bezier(.3,1.4,.6,1); display: flex; flex-direction: column; align-items: center; }
+.aparicion.izq { left: 6px; transform: translateX(-200%); align-items: flex-start; }
+.aparicion.der { right: 6px; transform: translateX(200%); align-items: flex-end; }
+.aparicion.dentro, .aparicion.der.dentro { transform: translateX(0); }
+.aparicion.der .figura svg { transform: scaleX(-1); }
+.aparicion .figura { width: 96px; }
+.aparicion .figura svg { width: 100%; display: block; filter: drop-shadow(0 0 6px rgba(242,233,201,.35)); }
+.bocadillo-ap { background: #F2E9C9; color: #0B1020; font-size: 13px; line-height: 1.25; padding: 7px 10px; border-radius: 14px; margin-bottom: 6px; width: max-content; max-width: 150px; text-align: center; }
+.aparicion .figura { animation: balanceo 1.2s ease-in-out infinite; }
+@keyframes balanceo { 50% { transform: rotate(-4deg); } }
+.panel-pista .burla { font-size: 15px; line-height: 1.35; color: #E9A6B8; margin-bottom: 10px; }
+.numero s { opacity: .5; }
+
+/* La sombra traviesa dentro de los niveles */
+.sombra-trav { position: fixed; z-index: 27; pointer-events: none; display: flex; flex-direction: column; align-items: center;
+  transform: translate(-50%, -100%) scale(.2); opacity: 0; transition: transform .45s cubic-bezier(.3,1.5,.6,1), opacity .3s; transform-origin: 50% 100%; }
+.sombra-trav.dentro { transform: translate(-50%, -100%) scale(1); opacity: 1; }
+.sombra-trav .figura { width: 100%; }
+.sombra-trav .figura svg { width: 100%; display: block; filter: drop-shadow(0 0 6px rgba(242,233,201,.35)); }
+.sombra-trav .bocadillo-ap { margin-bottom: 4px; }

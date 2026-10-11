@@ -34,7 +34,7 @@
   Comun.pistas(["Toca los planetas empezando por el que está más cerca del Sol.", "Los cuatro primeros son pequeños y rocosos; los cuatro últimos, gigantes.", "Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano y Neptuno."]);
   Comun.nivel("", null);
   const P = [["Mercurio", 14, "#A1887F"], ["Venus", 20, "#FFCC80"], ["Tierra", 21, "#4FC3F7"], ["Marte", 17, "#E57373"], ["Júpiter", 44, "#D7B899"], ["Saturno", 38, "#E6D3A3"], ["Urano", 28, "#80DEEA"], ["Neptuno", 27, "#5C6BC0"]];
-  const cont = document.getElementById("sistema"); let paso = 0, hecho = false;
+  const cont = document.getElementById("sistema"); let paso = 0, hecho = false, travesura = false;
   [5, 2, 7, 0, 4, 6, 1, 3].forEach(i => {
     const [n, r, c] = P[i], b = document.createElement("button"); b.className = "planeta";
     const anillo = n === "Saturno" ? `;box-shadow:0 0 0 3px #05080F, 0 0 0 6px rgba(230,211,163,.6)` : "";
@@ -42,6 +42,15 @@
     b.addEventListener("click", () => {
       if (hecho || b.querySelector(".n").textContent) return;
       if (i === paso) { paso++; b.querySelector(".n").textContent = paso; Comun.tono(300 + paso * 60, 0, .3, .12, "sine");
+        if (paso === 4 && !travesura) {
+          travesura = true;
+          const jup = [...cont.children].find(x => x.textContent.includes("Júpiter")), r = jup.getBoundingClientRect();
+          setTimeout(() => {
+            jup.style.visibility = "hidden";
+            Comun.sombra(r.left + r.width / 2, r.top + r.height, "¡Este es enorme! Me lo llevo…", 2400);
+            setTimeout(() => { jup.style.visibility = ""; Comun.sombra(r.left + r.width / 2, r.top + r.height, "…vale, vale, toma", 1800); }, 2600);
+          }, 300);
+        }
         if (paso === 8) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("pesoluna.html"), 1600); } }
       else { b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal"); Comun.tono(160, 0, .2, .1, "sine"); Comun.avisar("Ese no va ahí. Vuelve a empezar");
         paso = 0; cont.querySelectorAll(".n").forEach(x => x.textContent = ""); }

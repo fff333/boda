@@ -11,6 +11,7 @@
 <title>Aire</title>
 <style>
   .fiesta { background: radial-gradient(ellipse at 50% 60%, #2A3966 0%, #0B1020 80%); }
+  .globo { transition: opacity .3s; }
   .globo { position: absolute; left: 50%; top: 58%; width: 30vw; max-width: 140px; transform-origin: 50% 100%; cursor: pointer; }
   .globo svg { width: 100%; display: block; overflow: visible; }
   .globo.explota { animation: pum .25s ease-out forwards; }
@@ -38,10 +39,29 @@
   Comun.pistas(["Los globos se hinchan con aire.", "Sopla hacia el micrófono o toca el globo muchas veces.", "No pares hasta que haga ¡pum!"]);
   Comun.nivel("III", null);
   const globo = document.getElementById("globo"), escena = document.getElementById("escena");
-  let tam = 1, medir = null, roto = false;
+  let tam = 1, medir = null, roto = false, travesura = false, pausa = false;
+  function pinchazo() {
+    pausa = true;
+    const r = globo.getBoundingClientRect();
+    Comun.sombra(r.left + r.width * 1.1, r.top + r.height * .55, "¡Ups! Se me escapó el alfiler…", 2600);
+    setTimeout(() => {
+      const c = Comun.audio();
+      if (c) { const b = c.createBuffer(1, c.sampleRate * .15, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+        const s = c.createBufferSource(), g = c.createGain(); g.gain.value = .4; s.buffer = b; s.connect(g).connect(c.destination); s.start(); }
+      Comun.vibrar(40);
+      globo.style.opacity = 0; tam = 1.5;
+      setTimeout(() => {
+        globo.querySelectorAll("ellipse, path").forEach(e => { if (e.getAttribute("fill") === "#E53935") e.setAttribute("fill", "#1E88E5"); });
+        globo.style.transform = `translate(-50%, -100%) scale(${tam})`; globo.style.opacity = 1;
+        Comun.sombra(innerWidth * .78, innerHeight * .8, "Toma, otro. Ya está medio hinchado", 2600);
+        pausa = false;
+      }, 900);
+    }, 900);
+  }
   function inflar(cuanto) {
-    if (roto) return;
+    if (roto || pausa) return;
     tam = Math.min(2.6, tam + cuanto);
+    if (!travesura && tam >= 2.3) { travesura = true; pinchazo(); return; }
     globo.style.transform = `translate(-50%, -100%) scale(${tam})`;
     if (tam >= 2.6) explotar();
   }

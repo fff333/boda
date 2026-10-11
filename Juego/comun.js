@@ -114,7 +114,7 @@ const Comun = (() => {
   };
   // Curiosidad que aparece al superar cada nivel
   const CURIOSIDADES = {
-    "arbol": "El Conejo Blanco aparece en «Alicia en el país de las maravillas», que Lewis Carroll publicó en 1865.",
+    "arbol": "Las crías de conejo nacen sin pelo y con los ojos cerrados, y los abren a los diez días.",
     "vela": "La llama de una vela alcanza unos 1.400 °C en su parte más caliente.",
     "globo": "Michael Faraday fabricó los primeros globos de goma en 1824 para sus experimentos con hidrógeno.",
     "arcoiris": "Un arcoíris es en realidad un círculo completo: desde el suelo solo vemos la mitad, pero desde un avión se puede ver entero.",
@@ -135,7 +135,7 @@ const Comun = (() => {
     "llave": "Las cerraduras más antiguas que se conocen eran de madera y tienen unos 4.000 años.",
     "dormir": "Los conejos son crepusculares: están más activos al amanecer y al atardecer.",
     "zanahoria": "Las primeras zanahorias que se cultivaron no eran naranjas, sino moradas o amarillas.",
-    "tarde": "El Conejo Blanco de Alicia siempre llega tarde y lleva un reloj de bolsillo en el chaleco.",
+    "tarde": "Antes de los relojes, la gente sabía la hora mirando la longitud de su propia sombra.",
     "tumbado": "Cuando un conejo está muy contento, a veces salta en el aire retorciéndose; en inglés se llama «binky».",
     "susurro": "Las orejas de un conejo pueden girar por separado para localizar de dónde viene un sonido.",
     "trebol": "Se calcula que solo uno de cada 5.000 tréboles tiene cuatro hojas.",
@@ -224,126 +224,165 @@ const Comun = (() => {
   };
   // La historia: lo que pasa al superar cada nivel
   const HISTORIA = {
-    "arbol": "El conejo desapareció por un agujero junto al árbol. Antes de caer, dejó algo brillante en la hierba: un trocito de cristal.",
-    "vela": "En la oscuridad, el cristal reflejó la última luz de la vela. Era el cristal de un reloj… pero ¿de quién?",
-    "globo": "Entre el confeti cayó una nota arrugada: «Mi reloj se ha roto. Si me ayudas a arreglarlo, no volveré a llegar tarde. — C.»",
-    "arcoiris": "Cuando la luz quedó en orden, el tiempo pareció detenerse un instante. A lo lejos se oyó un tic… y luego, nada.",
-    "espejo": "Al otro lado del cristal había un túnel. En el suelo, huellas de unas patas grandes… y de unos zapatos.",
-    "madriguera": "El conejo te miró un segundo antes de esconderse. Llevaba la cadena de un reloj… pero sin reloj.",
-    "oscuridad": "«¡Me has encontrado!», susurró el conejo. «Mi reloj estalló en mil pedazos. Ayúdame a buscarlos antes de que el tiempo se desordene del todo».",
-    "eco": "La montaña devolvió tu voz… y algo más: un tic-tac lejano. Entre las rocas brillaba el cristal entero. ¡Has recuperado el cristal del reloj!",
-    "reloj": "Todos los relojes de la madriguera marcaban horas distintas. Sin el reloj del conejo, nadie sabe ya qué hora es.",
-    "brujula": "La aguja de la brújula tembló. Alguien con sombrero pasó corriendo y dejó caer una pluma.",
-    "polar": "Bajo la escarcha había una huella de zapato. No era del conejo. ¿Quién más anda por aquí?",
-    "silencio": "En el silencio se oyó un susurro: «El reloj no se rompió solo…».",
-    "siete": "Siete colores, siete notas, siete años. El conejo recogió del suelo una pieza dorada. ¡Has recuperado la aguja pequeña del reloj!",
-    "conejo": "Durante el eclipse, el conejo llegó jadeando a su casa. «Las piezas que faltan pueden estar en cualquier rincón», dijo.",
-    "fases": "La luna de hoy le recordó algo al conejo: la noche en que se rompió el reloj también había luna.",
-    "pez": "En el fondo de la pecera brillaba algo. Solo era una moneda… pero el conejo la guardó por si acaso.",
-    "gato": "El gato bostezó y dijo: «He visto a un señor con un sombrero enorme salir de aquí con prisas».",
-    "pera": "Entre las peras cayó un tornillo diminuto. «¡Es de mi reloj!», gritó el conejo.",
-    "llave": "La puerta se abrió y dentro todo estaba revuelto, como si alguien hubiera buscado algo con prisa.",
-    "dormir": "El conejo soñó con un reloj que hablaba. Le decía: «Deja de correr».",
-    "zanahoria": "Con la barriga llena, el conejo pensó mejor: «Quien rompió el reloj quería que lo buscáramos juntos».",
-    "tarde": "Sin su reloj, el conejo no sabe qué hora es. Por eso siempre va con tantas prisas.",
-    "tumbado": "Tumbado en la hierba, el conejo vio algo brillar en el cielo, justo donde no había estrellas.",
-    "susurro": "El conejo te contó su secreto: el reloj se lo regaló alguien muy especial… y no recuerda quién.",
-    "trebol": "Bajo el trébol apareció una nota: «Vas por buen camino. — S.»",
-    "escondite": "Al encontrarle, el conejo se rió por primera vez en mucho tiempo. En su escondite brillaba un botoncito. ¡Has recuperado la corona del reloj!",
-    "vaso": "Al vaciar el vaso, en el fondo apareció un engranaje diminuto. Ya tienes el primero.",
-    "arena": "La arena cayó tan despacio que parecía que el tiempo dudara. Sin el reloj, hasta la arena se desordena.",
-    "estatua": "La mariposa se posó un instante y echó a volar hacia el sur. «Sigámosla», dijo el conejo.",
-    "diente": "Las semillas volaron… y una de ellas no era una semilla, sino otro tornillo diminuto.",
-    "salto": "Con tanto salto, al conejo se le cayó algo del bolsillo: un papel con el dibujo de un sombrero.",
-    "silbido": "El conejo salió de su madriguera con algo en la boca: otro engranaje. Ya van dos.",
-    "toctoc": "Quien llamaba no era el conejo. Cuando abriste, solo había un sombrero en el suelo.",
-    "canica": "Dentro de la canica había un remolino de colores que giraba como las agujas de un reloj.",
-    "bocabajo": "Esa noche, el conejo durmió del tirón. Al despertar, junto a su cama había un sobre sellado.",
-    "vuelta": "Dando vueltas, encontrasteis lo que se había perdido: el sobre estaba firmado con una «S».",
-    "maracas": "Al agitar las maracas, de una de ellas cayó un engranaje. Ya van tres.",
-    "cueva": "La luz desveló en la pared de la cueva un dibujo antiguo: un reloj enorme hecho de estrellas.",
-    "iman": "El imán atrajo las zanahorias… y algo más, escondido en la tierra: el muelle del reloj.",
-    "sonido": "El mensaje parecía venir de muy lejos, de más allá de las nubes.",
-    "luna": "La luna llena iluminó un camino hacia el cielo. «Ahí arriba nos espera algo», dijo el conejo. ¡Has recuperado el muelle del reloj!",
-    "telescopio": "Por el telescopio, el conejo vio algo moverse entre las estrellas. Algo con sombrero.",
-    "liebre": "La Liebre del cielo es prima lejana del conejo. Dicen que ella también buscó una vez un reloj perdido.",
-    "betelgeuse": "Las estrellas tienen colores. La esfera del reloj, recordó el conejo, era del color del cielo al amanecer.",
-    "australia": "Desde el otro lado del mundo, el cielo estaba del revés… y el tiempo también: allí ya era mañana.",
-    "osamayor": "La estrella Polar nunca se mueve. «Mi reloj tampoco se movía nunca de mi bolsillo», suspiró el conejo.",
-    "giro": "Las estrellas giran como las agujas de un reloj gigante. Este, por suerte, no se ha roto.",
-    "pleyades": "Entre las mil estrellas había una que parpadeaba distinto: tic, tac, tic, tac.",
-    "sirio": "La estrella más brillante señaló un punto del cielo, justo encima de tu casa.",
-    "ventana": "Al mirar el cielo de verdad, el conejo dijo bajito: «Quizá lo que buscamos no esté tan lejos».",
-    "astronauta": "En la nave había una caja con una nota: «Te falta poco. No te rindas. — S.»",
-    "planetas": "Ocho planetas en orden y, entre ellos, un hueco del tamaño exacto de una aguja de reloj.",
-    "pesoluna": "En la Luna, el conejo encontró una aguja larga y ligera. ¡Has recuperado el minutero del reloj!",
-    "semaforo": "De vuelta en la Tierra, la ciudad estaba llena de luces que recordaban cosas. El conejo seguía sin recordar quién le regaló el reloj.",
-    "piano": "La melodía despertó un recuerdo en el conejo: alguien se la tarareaba cada mañana.",
-    "cafe": "En el poso del café se leía algo más, muy pequeñito: «S.».",
-    "manana": "La bola de cristal mostró un taller lleno de relojes… y la sombra de un sombrero.",
-    "agujero": "Quien escribía en las paredes tenía la misma letra que el autor de las notas firmadas con «S».",
-    "32": "Bajo el mensaje del emperador, alguien había añadido: «El tiempo es un viaje».",
-    "faro": "La luz del faro contaba números que no terminan nunca, como el tiempo cuando no hay reloj.",
-    "pi": "El círculo perfecto encajó en el reloj como un guante. ¡Has recuperado la esfera del reloj!",
-    "jeroglificos": "Los egipcios medían el tiempo con sombras y estrellas. En una pared había un conejo dibujado… con reloj.",
-    "anubis": "Con el corazón ligero, la balanza dejó caer un engranaje antiguo. Ya van cuatro.",
-    "escarabajo": "Cuando el Sol se puso, el conejo comprendió algo: el tiempo no se detiene, aunque se rompa un reloj.",
-    "piramide": "Al salir de la pirámide, un hombre con un sombrero enorme os saludó desde lejos y desapareció.",
-    "pitagoras": "Pitágoras sabía que la música y los números van de la mano. «El tic-tac también es música», dijo el conejo.",
-    "eureka": "En el fondo de la bañera de Arquímedes había un engranaje de oro. Ya van cinco.",
-    "ariadna": "El hilo terminaba atado a una tarjeta: «El Sombrerero. Reparación de relojes y de prisas».",
-    "acueducto": "El agua llegó a la ciudad y movió una rueda que hizo tic-tac durante un segundo.",
-    "mosaico": "El mosaico mostraba a un conejo y a un señor con sombrero tomando el té juntos. ¿Se conocían?",
-    "romano": "Los romanos medían las horas con relojes de sol. «Pero esos no caben en el bolsillo», protestó el conejo.",
-    "laberinto": "Al salir del laberinto, el conejo encontró otro engranaje en la salida. Ya van seis.",
-    "eclipse": "En el silencio del eclipse, una voz dijo: «Os espero en mi taller». A tus pies brillaba algo. ¡Has recuperado la tapa del reloj!",
-    "melodia": "La melodía salía del taller del Sombrerero. La puerta estaba abierta, pero no había nadie.",
-    "beethoven": "En una mesa había una balanza y una nota: «Para arreglar un reloj hace falta equilibrio».",
-    "6": "Las bombillas del taller se encendieron solas. En la pared, cientos de relojes parados a la misma hora.",
-    "42": "Uno de los relojes tenía pegada una foto de la Luna. «Él también ha estado allí», murmuró el conejo.",
-    "1969": "Entre partituras viejas, el conejo encontró el nombre de un compositor… y debajo, escrito a mano, el suyo propio.",
-    "bach": "En un cuaderno, alguien había contado conejos durante meses. «¿Me estaba vigilando?», preguntó el conejo.",
-    "13": "En un cajón había una carta sin terminar: «Querido conejo: lo hice por tu bien…».",
-    "roma": "La carta seguía en braille: «…siempre corres tanto que nunca te paras a conocer a nadie».",
-    "radio": "La radio del taller habló sola: «Si estáis oyendo esto, ya casi lo habéis conseguido».",
-    "mozart": "Detrás del cuadro de cuadrados había un hueco con un engranaje. Ya van siete.",
-    "14": "El diapasón vibró y todos los relojes del taller hicieron tic a la vez. Luego, silencio.",
-    "la": "En un frasco con la etiqueta «Cobre» había tornillos del mismo color que los del reloj.",
-    "cuba": "Tras la cuenta atrás, una pared del taller se abrió como una puerta secreta.",
-    "10": "En el móvil antiguo había un mensaje sin enviar: «Ya viene. Tenlo todo preparado».",
-    "taxi": "El cronómetro se paró justo a tiempo. Por una vez, el conejo no llegaba tarde.",
-    "pulso": "El corazón del conejo latía deprisa. «Siento que el reloj está muy cerca», dijo.",
-    "dado": "Bajo los dados había un plano del taller con una X en una puerta del fondo.",
-    "16": "La luz iluminó la puerta del fondo. Tenía un cartel: «Taller. Prohibido llegar tarde».",
-    "prisma": "Dentro, cada nota tenía un color, como si alguien hubiera pintado la música para que no se perdiera.",
-    "verde": "En la pizarra, alguien había escrito una serie de números que se describía a sí misma. Debajo: «Como tú y yo».",
-    "312211": "Una caja de música tocaba una canción al revés. Era una canción de cumpleaños… pero ¿de quién?",
-    "cumpleanos": "Junto a la tarta había un cartel: «Feliz cumpleaños, conejo». El reloj… fue un regalo de cumpleaños.",
-    "23": "La caja fuerte se abrió: dentro estaban todos los engranajes que faltaban. Solo quedaba montar el reloj.",
-    "647": "El conejo empezó a colocar las piezas mientras tarareaba la melodía. Encajaban una a una.",
-    "oido": "Con todo afinado, el reloj sonó por primera vez: un tic… pero sin tac.",
-    "relojero": "Las agujas ya marcaban la hora. «Las tres y media», leyó el conejo. «La hora del té».",
-    "75": "Detrás de un violín apareció por fin el Sombrerero, con una taza de té en la mano.",
-    "violin": "«Rompí tu reloj a propósito», confesó el Sombrerero. «Era la única forma de que dejaras de correr».",
-    "octava": "«Necesitabas parar y dejar que alguien te ayudara», siguió. «Y mira: lo has encontrado». Y te miró a ti.",
-    "theremin": "Al reloj solo le faltaba una cosa: su latido, el tac. «Está en la música», dijo el Sombrerero.",
-    "copas": "Las copas sonaron como campanas y el reloj tembló en la mano del conejo. Casi…",
-    "cantar": "Tu voz afinada hizo que el reloj diera su primer tic-tac completo.",
-    "director": "La orquesta de conejos tocó al ritmo del reloj. Todos los relojes del mundo volvieron a ponerse en hora.",
-    "bravo": "Con el aplauso, el conejo miró su reloj y sonrió: por primera vez en su vida llegaba a tiempo. Justo a tiempo de darte las gracias."
+    "arbol": "Esa noche cayó una estrella diminuta en el jardín. Pompón la tocó… y su sombra se despegó, la cogió y saltó al agujero del árbol.",
+    "vela": "Al apagarse la vela se oyó una risita en la oscuridad. No era de Pompón. Era de su sombra.",
+    "globo": "Entre el confeti cayó un papel con una huella negra: «¿Me buscas? Tendrás que darte prisa».",
+    "arcoiris": "Con los colores en su sitio, Pompón se miró las patas: sin su sombra, se estaba volviendo un poco transparente.",
+    "espejo": "En el túnel se oía un tintineo, como de campanillas. Algo pequeño y brillante pedía ayuda allá abajo.",
+    "madriguera": "Pompón te miró un segundo antes de esconderse. Estaba asustado: nunca había salido de su jardín.",
+    "oscuridad": "«¡Me has encontrado!», susurró Pompón. «Mi sombra se ha llevado una estrella. ¿Me ayudas a recuperarlas antes de que desaparezca del todo?».",
+    "eco": "La montaña devolvió tu voz… y una vocecita: «¡Tilín, tilín! ¡Me llamo Tilín! ¡Sacadme de aquí!».",
+    "reloj": "De un agujero salió un sombrero de copa que bostezó: «¿Quién me ha despertado? Ah, una sombra con prisa… Pasó por aquí hace un rato».",
+    "brujula": "«Me llamo Sombrero», dijo el sombrero. «Todo lo que entra en mí puede viajar muy lejos. ¿Queréis probar?».",
+    "polar": "Bajo la escarcha había dos huellas: una de sombra… y otra con tres dedos, como de pájaro. ¿Quién más anda tras la estrella?",
+    "silencio": "En el silencio, Pompón oyó algo raro: el jardín ya no sonaba. Ni grillos, ni viento, ni hojas. Alguien se está llevando los sonidos.",
+    "siete": "El Sombrero se puso serio: «Ese tintineo es Tilín, una estrella. Si no vuelve a su sitio en el cielo, se apagará para siempre».",
+    "conejo": "Durante el eclipse, una mancha negra cruzó el cielo graznando y se llevó algo brillante del tejado de Pompón.",
+    "fases": "Tilín vive en la Luna… o eso creía Pompón. «No», dijo el Sombrero, «su casa está más lejos, en una constelación muy especial».",
+    "pez": "El pez abrió la boca para contar algo… pero no le salió ningún sonido. También le han robado la voz.",
+    "gato": "El gato, medio dormido, dijo: «Fue un cuervo enorme. Iba metiendo sonidos en frascos de cristal».",
+    "pera": "Entre las peras cayó una pluma negra y brillante. En la punta tenía escrito: «Don Cuervo».",
+    "llave": "Dentro todo estaba revuelto. Sobre la mesa, una nota de la sombra: «No soy quien crees».",
+    "dormir": "Pompón soñó con su sombra. En el sueño no huía: le señalaba el cielo.",
+    "zanahoria": "Llegó la Abuela Tortuga, despacito: «Las sombras no huyen sin motivo, pequeño. Pregúntate de qué escapa la tuya».",
+    "tarde": "«Sin sombra no sabes la hora», dijo la Abuela Tortuga. «Antes la gente miraba su sombra para saber qué hora era».",
+    "tumbado": "Tumbado en la hierba, Pompón vio un hueco oscuro en el cielo, como si faltara una estrella.",
+    "susurro": "Pompón te contó un secreto: le da miedo desaparecer… pero más miedo le da no volver a ver a su sombra.",
+    "trebol": "Bajo el trébol había otra nota: «El cuervo quiere a Tilín. Yo la estoy escondiendo». Firmado: una huella negra.",
+    "escondite": "Durante un segundo viste a la sombra detrás de un arbusto. Te guiñó un ojo… y desapareció.",
+    "vaso": "En el fondo del vaso había un frasco diminuto. Al abrirlo, sonó la lluvia. ¡Has rescatado el primer sonido!",
+    "arena": "Mientras caía la arena, Pompón notó que sus orejas volvían a verse un poco más.",
+    "estatua": "La mariposa susurró: «Vi a Don Cuervo. Esconde los frascos de sonidos en sitios muy altos».",
+    "diente": "Una semilla no voló: era un frasco con el sonido del viento. ¡Ya van dos sonidos!",
+    "salto": "Con el último salto, a Pompón se le escapó una carcajada. Era la primera risa del jardín en muchos días.",
+    "silbido": "Al silbar, contestó un pájaro desde lejos… con la voz robada de un grillo. Don Cuervo andaba cerca.",
+    "toctoc": "Quien llamaba era la sombra. Cuando abriste, solo quedaba un frasco: el sonido de las hojas. ¡Ya van tres!",
+    "canica": "Dentro de la canica giraba un brillo dorado, igual que el de Tilín. ¿Una pista… o una trampa?",
+    "bocabajo": "Esa noche, Pompón durmió del tirón. Al despertar, alguien había dejado una manta sobre él. Tenía forma de sombra.",
+    "vuelta": "Dando vueltas, encontraste una pluma negra clavada en el suelo, señalando hacia una cueva.",
+    "maracas": "Las maracas devolvieron el ritmo al jardín. Hasta el gato movió la cola al compás.",
+    "cueva": "La luz desveló el escondite del cuervo: frascos y más frascos llenos de sonidos… pero él ya se había ido.",
+    "iman": "Entre las zanahorias había un frasco con el canto de los pájaros. ¡Ya van cuatro sonidos!",
+    "sonido": "El mensaje no venía de la Tierra. Venía de arriba, muy arriba.",
+    "luna": "La luna llena se reflejó en el Sombrero. «Agarraos a mi ala», dijo. «Tilín nos espera en el cielo».",
+    "telescopio": "Por el telescopio se veía a Don Cuervo volando entre las estrellas, con un saco lleno de brillos.",
+    "liebre": "«¡Mira!», dijo el Sombrero. «La Liebre: la constelación de los conejos. Le falta una estrella… justo en la oreja».",
+    "betelgeuse": "«Tilín es de esa constelación», explicó el Sombrero. «Cayó por intentar ver a los conejos de la Tierra».",
+    "australia": "Al otro lado del mundo, la sombra dejó otra nota: «El cuervo no se rinde. Yo tampoco».",
+    "osamayor": "La Polar señaló el camino. Al seguirlo, Pompón notó que ya se veía casi entero otra vez.",
+    "giro": "Mientras el cielo giraba, una sombra pequeña saltaba de estrella en estrella. Llevaba algo que brillaba.",
+    "pleyades": "Entre mil estrellas, una tintineaba distinto. «¡Tilín!», gritó Pompón. Pero desapareció en un parpadeo.",
+    "sirio": "La estrella más brillante habló: «Un cuervo me pidió que le prestara mi brillo. Le dije que no y se enfadó muchísimo».",
+    "ventana": "Al mirar el cielo de verdad, el Sombrero dijo: «Desde aquí también se ve la Liebre. Esta noche, búscala tú».",
+    "astronauta": "En la nave flotaba un frasco con un sonido nuevo: el ronroneo de un gato. ¡Ya van cinco!",
+    "planetas": "Entre los planetas apareció Don Cuervo: «¡Cra! ¿Buscáis esto?». Agitó un frasco y se fue volando hacia la Luna.",
+    "pesoluna": "En la Luna solo quedaba una pluma… y un sombrero idéntico al Sombrero, pero vacío. «Mi hermano», susurró el Sombrero. «El cuervo lo ha usado para viajar».",
+    "semaforo": "De vuelta en la ciudad, las luces parpadeaban como si quisieran contar algo. La Abuela Tortuga escuchaba con atención.",
+    "piano": "La melodía hizo sonreír a Pompón: su madre se la tarareaba cuando era pequeño.",
+    "cafe": "«El cuervo tiene prisa por todo», dijo la Abuela Tortuga. «Por eso se equivoca tanto».",
+    "manana": "La bola de cristal mostró a la sombra protegiendo a Tilín del cuervo. Pompón abrió mucho los ojos: «¡Mi sombra es buena!».",
+    "agujero": "Al otro lado, alguien había dibujado un mapa con cuatro lugares muy antiguos. Al lado, una huella negra.",
+    "32": "Bajo el mensaje cifrado, la sombra había escrito: «El cuervo ha viajado al pasado. Seguidle».",
+    "faro": "La luz del faro se movía como si buscara algo en el mar del tiempo.",
+    "pi": "Con el círculo perfecto, el Sombrero se puso a girar: «¡Agarraos! Nos vamos muy, muy atrás».",
+    "jeroglificos": "En una pared de Egipto había un conejo dibujado… y a su lado, un cuervo con un saco.",
+    "anubis": "La balanza dejó caer un frasco con un sonido antiguo: el arpa de un músico egipcio. ¡Ya van seis!",
+    "escarabajo": "Al ponerse el Sol, la sombra de Pompón se dibujó un instante en la arena… y le saludó con la mano.",
+    "piramide": "A la salida, Don Cuervo os esperaba: «¡Cra! Nunca me alcanzaréis». Y se metió en el sombrero hermano.",
+    "pitagoras": "En Grecia, la cuerda vibró y Pompón oyó a Tilín: «Estoy bien. Vuestra sombra me cuida».",
+    "eureka": "En la bañera de Arquímedes había un frasco con el sonido de las olas. ¡Ya van siete!",
+    "ariadna": "En el centro del laberinto no estaba el Minotauro, sino una pluma de cuervo. Y el hilo seguía… hacia Roma.",
+    "acueducto": "El agua llegó a la ciudad y trajo flotando un frasco: el sonido de una fuente. ¡Ya van ocho!",
+    "mosaico": "El mosaico mostraba a un conejo y a su sombra bailando juntos. Pompón sintió cosquillas en la barriga.",
+    "romano": "Un soldado romano juró haber visto «un pájaro negro con un sombrero» volar hacia un eclipse.",
+    "laberinto": "Al salir del laberinto, la sombra estaba esperando. Esta vez no huyó. «Ven», dijo. «Te lo explicaré todo».",
+    "eclipse": "En el eclipse, la sombra habló por fin: «No te robé la estrella, Pompón. La salvé del cuervo. Ahora necesito tu ayuda».",
+    "melodia": "La sombra os llevó hasta la guarida de Don Cuervo: un nido enorme lleno de cosas brillantes y frascos que zumbaban.",
+    "beethoven": "En una balanza del nido había una nota del cuervo: «Cuando tenga todos los sonidos bonitos, cantaré mejor que nadie».",
+    "6": "Las bombillas iluminaron un rincón con un frasco muy especial: la risa de los niños. ¡Ya van nueve!",
+    "42": "Junto a una foto de la Luna había un dibujo hecho por el cuervo: él mismo, cantando, rodeado de amigos.",
+    "1969": "«El cuervo no es malo», dijo la Abuela Tortuga, que acababa de llegar. «Se ríen de su graznido. Solo quiere que lo escuchen».",
+    "bach": "En un cuaderno, el cuervo había contado todas las veces que nadie le contestó al saludar. Eran muchísimas.",
+    "13": "Detrás de un corazón pintado había una puerta. Desde dentro, un tintineo débil: «Tilín… tilín…».",
+    "roma": "La puerta tenía un mensaje en braille: «Aquí guardo lo más bonito que he encontrado nunca».",
+    "radio": "La radio del nido sonó sola: era el cuervo, practicando una canción. Lo hacía fatal… pero con mucho cariño.",
+    "mozart": "Detrás de un cuadro había un frasco con el sonido del mar. ¡Ya van diez!",
+    "14": "Todos los frascos vibraron a la vez. «Los sonidos quieren volver a casa», dijo la sombra.",
+    "la": "La Abuela Tortuga sonrió: «Paso a paso. Ya casi lo tenéis».",
+    "cuba": "Tras la cuenta atrás, se abrió un hueco secreto en el nido: unas escaleras que bajaban hacia una luz dorada.",
+    "10": "En un móvil antiguo había un mensaje del cuervo sin enviar: «¿Queréis ser mis amigos?».",
+    "taxi": "Justo a tiempo, la sombra apartó a Pompón de una trampa del cuervo: una red llena de purpurina.",
+    "pulso": "El corazón de Pompón latía muy deprisa. Ya se veía entero otra vez… salvo la sombra.",
+    "dado": "Bajo los dados había un plano del nido con una X junto a una caja de música.",
+    "16": "La luz iluminó la caja de música. Dentro, apagándose poco a poco, estaba Tilín.",
+    "prisma": "«Solo se abre con música», dijo la sombra. «El cuervo la cerró con una canción».",
+    "verde": "En la tapa, el cuervo había escrito una serie que se describe a sí misma. Debajo: «Como yo: solo hablo de mí».",
+    "312211": "La caja tocó una canción al revés. Pompón lo entendió: era una canción de cumpleaños… ¡del cuervo!",
+    "cumpleanos": "«Hoy es su cumpleaños y nadie se ha acordado», dijo la Abuela Tortuga. Pompón miró la tarta y tuvo una idea.",
+    "23": "La caja fuerte se abrió: dentro estaba la llave de la caja de música… y una vela de cumpleaños sin estrenar.",
+    "647": "Al tocar la melodía, la caja de música se abrió. Tilín salió volando, débil, pero sonriendo.",
+    "oido": "Con todo afinado, apareció Don Cuervo. No venía a pelear: traía la cabeza gacha.",
+    "relojero": "«Solo quería cantar bonito para que alguien me escuchara», graznó el cuervo. Pompón le tendió la pata.",
+    "75": "«Te escucharemos», dijo Pompón. «Pero los sonidos tienen que volver a su sitio». El cuervo asintió.",
+    "violin": "El cuervo abrió los frascos uno a uno y los sonidos salieron volando hacia el mundo.",
+    "octava": "Solo faltaba devolver a Tilín al cielo. «Para eso hace falta el sonido más fuerte de todos», dijo el Sombrero.",
+    "theremin": "Todos se reunieron para un concierto: Pompón, la sombra, el Sombrero, la Abuela Tortuga… y Don Cuervo, nervioso.",
+    "copas": "Con cada nota, Tilín brillaba un poco más. La sombra se acercó despacio a Pompón.",
+    "cantar": "Cantaste, y Don Cuervo se animó a cantar contigo. Desafinaba… y a nadie le importó.",
+    "director": "La música subió hasta las estrellas. Tilín se elevó, y la sombra la acompañó un trecho para despedirse.",
+    "bravo": "Con el aplauso, Tilín volvió a su sitio en la oreja de la Liebre. La sombra regresó a los pies de Pompón… y desde entonces, dentro de ella brilla una estrellita."
   };
   // Capítulos: empiezan en estos niveles
   const CAPITULOS = {
-    "arbol": ["Capítulo 1", "La caída"],
-    "reloj": ["Capítulo 2", "Las horas perdidas"],
-    "conejo": ["Capítulo 3", "La casa del conejo"],
-    "vaso": ["Capítulo 4", "El jardín revuelto"],
-    "telescopio": ["Capítulo 5", "El cielo"],
+    "arbol": ["Capítulo 1", "La estrella caída"],
+    "reloj": ["Capítulo 2", "Un sombrero que habla"],
+    "conejo": ["Capítulo 3", "El jardín sin sonidos"],
+    "vaso": ["Capítulo 4", "Los frascos del cuervo"],
+    "telescopio": ["Capítulo 5", "Rumbo a las estrellas"],
     "semaforo": ["Capítulo 6", "La ciudad de los recuerdos"],
-    "jeroglificos": ["Capítulo 7", "El viaje en el tiempo"],
-    "melodia": ["Capítulo 8", "El taller del Sombrerero"],
-    "16": ["Capítulo 9", "La puerta del fondo"],
-    "theremin": ["Capítulo 10", "El último tic-tac"]
+    "jeroglificos": ["Capítulo 7", "Viaje al pasado"],
+    "melodia": ["Capítulo 8", "El nido de Don Cuervo"],
+    "16": ["Capítulo 9", "La caja de música"],
+    "theremin": ["Capítulo 10", "El concierto de las estrellas"]
+  };
+  // Personajes que se asoman en algunas pantallas
+  const APARICIONES = {
+    "vela": ["sombra", "Jijiji…"],
+    "globo": ["sombra", "¿Te ayudo? Tengo un alfiler…"],
+    "madriguera": ["sombra", "¡Por aquí no está! (Sí está.)"],
+    "reloj": ["sombrero", "Ejem… ¿alguien me ha llamado?"],
+    "polar": ["cuervo", "¡Cra! Eso brilla…"],
+    "gato": ["cuervo", "¡Cra! Qué siesta tan larga…"],
+    "llave": ["sombra", "Yo ya tengo copia, jiji."],
+    "tarde": ["tortuga", "Las prisas no son buenas, pequeño…"],
+    "trebol": ["sombra", "Yo tengo tres hojas y soy feliz."],
+    "vaso": ["cuervo", "¡Ese frasco es mío! ¡Cra!"],
+    "estatua": ["sombra", "¡Te has movido! …Es broma."],
+    "toctoc": ["sombra", "¿Quién es? …Yo tampoco lo sé."],
+    "vuelta": ["sombra", "Uf… qué mareo."],
+    "cueva": ["tortuga", "Yo vivo aquí desde hace cien años."],
+    "sonido": ["tilin", "Tilín, tilín…"],
+    "astronauta": ["sombrero", "No me gusta nada la gravedad cero."],
+    "semaforo": ["sombra", "Rojo, verde… ¡qué aburrido!"],
+    "cafe": ["tortuga", "Esperar también es un arte."],
+    "jeroglificos": ["sombrero", "Aquí me llamaban «el gran tocado»."],
+    "piramide": ["sombra", "¡Buuu! ¿Te he asustado?"],
+    "mosaico": ["cuervo", "Esa pieza brillante… ¡mía!"],
+    "melodia": ["cuervo", "¡Eh! ¡Esa melodía la robé yo!"],
+    "10": ["sombra", "Yo escribo más rápido con las orejas."],
+    "taxi": ["tortuga", "¿Cinco segundos? Yo tardo eso en parpadear."],
+    "copas": ["tilin", "¡Ya casi estoy en casa!"]
+  };
+  // Comentarios de los personajes al pedir la primera pista
+  const BURLAS = {
+    "arcoiris": "Sombra: «¿Una pista? Yo lo resolví en dos segundos»",
+    "eco": "Sombrero: «Gritar no es de buena educación… salvo hoy»",
+    "siete": "Sombra: «Pista: yo sé la respuesta. Y no te la voy a decir»",
+    "pera": "Don Cuervo: «¡Cra! ¿Las pistas brillan? ¿Me das una?»",
+    "piano": "Abuela Tortuga: «Escucha despacio. Yo siempre lo hago»",
+    "32": "Sombra: «Yo leo al revés, al derecho y de lado»",
+    "bach": "Don Cuervo: «Yo también cuento cosas: cuento brillos»",
+    "23": "Sombra: «Yo abriría esa caja con una sola mirada. Si tuviera ojos de verdad»"
   };
   const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "tomorrow": "manana", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
 
@@ -465,6 +504,7 @@ const Comun = (() => {
         ${HISTORIA[archivo] ? `<p class="relato">${HISTORIA[archivo]}</p>` : ""}
         ${saltado ? "" : `<p class="elogio">${frase}</p>`}
         ${CURIOSIDADES[archivo] ? `<div class="curiosidad"><span class="cur-titulo">¿Sabías que…?</span><p class="cur-texto">${CURIOSIDADES[archivo]}</p></div>` : ""}
+        ${(() => { const luz = Math.round((indice + 1) / NIVELES.length * 100); return `<div class="luz-tilin"><span class="lt-txt">Luz de Tilín</span><div class="lt-barra"><span style="width:${luz}%"></span></div><span class="lt-num">${luz} %</span></div>`; })()}
         ${codigo}
         <button class="sup-seguir">Continuar</button>
       </div>`);
@@ -543,6 +583,8 @@ const Comun = (() => {
       cap.addEventListener("pointerdown", e => { e.stopPropagation(); clearTimeout(t); quitar(); });
     }
     if (indice >= 0) {
+      aparicion();
+      if (archivo === "siete") { const n = document.querySelector(".numero"); n.innerHTML = '<s>13</s> 12½'; n.title = "La sombra ha cambiado el número"; }
       menu();
       guardar("actual", archivo);
       const max = parseInt(leer("max", "0"), 10) || 0;
@@ -603,6 +645,50 @@ const Comun = (() => {
     }, { once: true });
   }
 
+  // ---------- Personajes ----------
+  const FIGURAS = {
+    sombra: `<svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#05080F" transform="rotate(-12 48 28)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#05080F" transform="rotate(10 70 26)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#05080F"/><circle cx="56" cy="66" r="24" fill="#05080F"/><circle cx="47" cy="62" r="5" fill="#F2E9C9"/><circle cx="64" cy="62" r="5" fill="#F2E9C9"/><path d="M46 76 Q55 83 64 76" stroke="#F2E9C9" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+    cuervo: `<svg viewBox="0 0 120 100"><path d="M20 60 Q40 30 75 38 Q100 40 108 55 L92 58 Q80 80 50 82 Q30 80 20 60Z" fill="#141414"/><path d="M40 55 Q55 20 85 30 Q60 45 40 55Z" fill="#222"/><path d="M106 50 L120 54 L106 58Z" fill="#E0A030"/><circle cx="96" cy="48" r="3.5" fill="#F2E9C9"/><path d="M45 82 L42 96 M58 82 L58 96" stroke="#E0A030" stroke-width="3"/></svg>`,
+    sombrero: `<svg viewBox="0 0 120 110"><ellipse cx="60" cy="96" rx="55" ry="10" fill="#1E1E2A"/><rect x="25" y="20" width="70" height="78" rx="6" fill="#262636"/><rect x="25" y="70" width="70" height="12" fill="#8E2433"/><circle cx="48" cy="45" r="7" fill="#F2E9C9"/><circle cx="72" cy="45" r="7" fill="#F2E9C9"/><circle cx="49" cy="46" r="3" fill="#0B1020"/><circle cx="73" cy="46" r="3" fill="#0B1020"/><path d="M50 58 Q60 64 70 58" stroke="#F2E9C9" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+    tortuga: `<svg viewBox="0 0 130 90"><ellipse cx="62" cy="55" rx="45" ry="28" fill="#5D8A4E"/><path d="M30 50 Q62 15 94 50" fill="#7FAE68"/><path d="M45 40 L62 30 L79 40 L70 55 L54 55Z" fill="#5D8A4E" opacity=".6"/><circle cx="112" cy="55" r="13" fill="#A7C98F"/><circle cx="116" cy="51" r="2.5" fill="#0B1020"/><path d="M110 60 Q115 63 120 60" stroke="#0B1020" stroke-width="1.5" fill="none"/><ellipse cx="35" cy="80" rx="8" ry="6" fill="#A7C98F"/><ellipse cx="88" cy="80" rx="8" ry="6" fill="#A7C98F"/></svg>`,
+    tilin: `<svg viewBox="0 0 100 100"><path d="M50 4 L62 36 L96 38 L69 58 L79 92 L50 72 L21 92 L31 58 L4 38 L38 36Z" fill="#FFD54F" stroke="#FFF3C4" stroke-width="2"/><circle cx="41" cy="50" r="4" fill="#0B1020"/><circle cx="59" cy="50" r="4" fill="#0B1020"/><path d="M42 60 Q50 67 58 60" stroke="#0B1020" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`
+  };
+  function vozPersonaje(quien) {
+    if (quien === "sombra") [660, 784, 880].forEach((f, i) => tono(f, i * .09, .12, .06, "sine"));
+    if (quien === "cuervo") { const c = audio(); if (!c) return; const t = c.currentTime, o = c.createOscillator(), g = c.createGain(); o.type = "sawtooth"; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(300, t + .25);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.08, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .3); o.connect(g).connect(c.destination); o.start(t); o.stop(t + .35); }
+    if (quien === "sombrero") [196, 247].forEach((f, i) => tono(f, i * .18, .2, .08, "triangle"));
+    if (quien === "tortuga") [147, 131].forEach((f, i) => tono(f, i * .4, .45, .08, "sine"));
+    if (quien === "tilin") [1568, 2093, 1568].forEach((f, i) => tono(f, i * .12, .3, .05, "sine"));
+  }
+  function aparicion() {
+    const a = APARICIONES[archivo]; if (!a) return;
+    const [quien, texto] = a, lado = Math.random() < .5 ? "izq" : "der";
+    const mostrar = () => {
+      if (document.querySelector(".superado")) return;
+      if (document.querySelector(".inicio:not(.oculto)") || document.querySelector(".capitulo") || document.querySelector(".panel-pista.abierto, .panel-menu.abierto")) { setTimeout(mostrar, 1500); return; }
+      document.body.insertAdjacentHTML("beforeend", `<div class="aparicion ${lado}"><span class="bocadillo-ap">${texto}</span><div class="figura">${FIGURAS[quien]}</div></div>`);
+      const el = document.body.lastElementChild;
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("dentro")));
+      vozPersonaje(quien);
+      setTimeout(() => { el.classList.remove("dentro"); setTimeout(() => el.remove(), 900); }, 3200);
+    };
+    setTimeout(mostrar, 2500 + Math.random() * 2500);
+  }
+
+  // La sombra traviesa aparece en un punto de la pantalla (x, y en píxeles) con un bocadillo
+  function sombra(x, y, texto = "", ms = 2600, ancho = 80) {
+    const medio = Math.max(ancho, texto ? 160 : 0) / 2 + 8;
+    x = Math.min(Math.max(x, medio), innerWidth - medio);
+    y = Math.max(y, ancho * 1.1 + (texto ? 70 : 10));
+    document.body.insertAdjacentHTML("beforeend", `<div class="sombra-trav" style="left:${x}px;top:${y}px;width:${ancho}px">${texto ? `<span class="bocadillo-ap">${texto}</span>` : ""}<div class="figura">${FIGURAS.sombra}</div></div>`);
+    const el = document.body.lastElementChild;
+    vozPersonaje("sombra");
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("dentro")));
+    if (ms) setTimeout(() => { el.classList.remove("dentro"); setTimeout(() => el.remove(), 500); }, ms);
+    return el;
+  }
+
   // Rendirse: pasa al siguiente nivel después de confirmarlo
   function rendirse() {
     if (indice < 0) return;
@@ -638,6 +724,7 @@ const Comun = (() => {
       <button class="boton-pista" aria-label="Pedir una pista">?</button>
       <div class="panel-pista" role="dialog" aria-modal="true" aria-label="Pista">
         <div class="tarjeta">
+          <p class="burla" hidden></p>
           <span class="contador"></span>
           <p class="texto-pista"></p>
           <div class="acciones">
@@ -662,7 +749,8 @@ const Comun = (() => {
     }
     boton.addEventListener("click", e => {
       e.stopPropagation(); audio();
-      if (vistas === 0) vistas = 1;
+      if (vistas === 0) { vistas = 1; const b = panel.querySelector(".burla"); if (BURLAS[archivo]) { b.textContent = BURLAS[archivo]; b.hidden = false; } }
+      else panel.querySelector(".burla").hidden = true;
       mostrar(); panel.classList.add("abierto");
       tono(880, 0, .15, .06, "sine");
     });
@@ -746,7 +834,7 @@ const Comun = (() => {
     return sr / mejor;
   }
 
-  return { audio, tono, vibrar, normalizar, ir, avisar, nivel, inicio, superado, pistas, t, idioma, gravedad, pedirAnalizador, frecuencia,
+  return { sombra, audio, tono, vibrar, normalizar, ir, avisar, nivel, inicio, superado, pistas, t, idioma, gravedad, pedirAnalizador, frecuencia,
            NIVELES, CODIGOS, irACodigo, leer, guardar,
            pedirOrientacion, pedirMovimiento, pedirMicro };
 })();
