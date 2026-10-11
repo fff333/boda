@@ -222,6 +222,129 @@ const Comun = (() => {
     "cantar": "Cuando cantas este «la», tus cuerdas vocales vibran unas 440 veces por segundo.",
     "director": "Los primeros directores marcaban el ritmo golpeando el suelo con un bastón; el compositor Lully se hirió un pie así y murió por la herida."
   };
+  // La historia: lo que pasa al superar cada nivel
+  const HISTORIA = {
+    "arbol": "El conejo desapareció por un agujero junto al árbol. Antes de caer, dejó algo brillante en la hierba: un trocito de cristal.",
+    "vela": "En la oscuridad, el cristal reflejó la última luz de la vela. Era el cristal de un reloj… pero ¿de quién?",
+    "globo": "Entre el confeti cayó una nota arrugada: «Mi reloj se ha roto. Si me ayudas a arreglarlo, no volveré a llegar tarde. — C.»",
+    "arcoiris": "Cuando la luz quedó en orden, el tiempo pareció detenerse un instante. A lo lejos se oyó un tic… y luego, nada.",
+    "espejo": "Al otro lado del cristal había un túnel. En el suelo, huellas de unas patas grandes… y de unos zapatos.",
+    "madriguera": "El conejo te miró un segundo antes de esconderse. Llevaba la cadena de un reloj… pero sin reloj.",
+    "oscuridad": "«¡Me has encontrado!», susurró el conejo. «Mi reloj estalló en mil pedazos. Ayúdame a buscarlos antes de que el tiempo se desordene del todo».",
+    "eco": "La montaña devolvió tu voz… y algo más: un tic-tac lejano. Entre las rocas brillaba el cristal entero. ¡Has recuperado el cristal del reloj!",
+    "reloj": "Todos los relojes de la madriguera marcaban horas distintas. Sin el reloj del conejo, nadie sabe ya qué hora es.",
+    "brujula": "La aguja de la brújula tembló. Alguien con sombrero pasó corriendo y dejó caer una pluma.",
+    "polar": "Bajo la escarcha había una huella de zapato. No era del conejo. ¿Quién más anda por aquí?",
+    "silencio": "En el silencio se oyó un susurro: «El reloj no se rompió solo…».",
+    "siete": "Siete colores, siete notas, siete años. El conejo recogió del suelo una pieza dorada. ¡Has recuperado la aguja pequeña del reloj!",
+    "conejo": "Durante el eclipse, el conejo llegó jadeando a su casa. «Las piezas que faltan pueden estar en cualquier rincón», dijo.",
+    "fases": "La luna de hoy le recordó algo al conejo: la noche en que se rompió el reloj también había luna.",
+    "pez": "En el fondo de la pecera brillaba algo. Solo era una moneda… pero el conejo la guardó por si acaso.",
+    "gato": "El gato bostezó y dijo: «He visto a un señor con un sombrero enorme salir de aquí con prisas».",
+    "pera": "Entre las peras cayó un tornillo diminuto. «¡Es de mi reloj!», gritó el conejo.",
+    "llave": "La puerta se abrió y dentro todo estaba revuelto, como si alguien hubiera buscado algo con prisa.",
+    "dormir": "El conejo soñó con un reloj que hablaba. Le decía: «Deja de correr».",
+    "zanahoria": "Con la barriga llena, el conejo pensó mejor: «Quien rompió el reloj quería que lo buscáramos juntos».",
+    "tarde": "Sin su reloj, el conejo no sabe qué hora es. Por eso siempre va con tantas prisas.",
+    "tumbado": "Tumbado en la hierba, el conejo vio algo brillar en el cielo, justo donde no había estrellas.",
+    "susurro": "El conejo te contó su secreto: el reloj se lo regaló alguien muy especial… y no recuerda quién.",
+    "trebol": "Bajo el trébol apareció una nota: «Vas por buen camino. — S.»",
+    "escondite": "Al encontrarle, el conejo se rió por primera vez en mucho tiempo. En su escondite brillaba un botoncito. ¡Has recuperado la corona del reloj!",
+    "vaso": "Al vaciar el vaso, en el fondo apareció un engranaje diminuto. Ya tienes el primero.",
+    "arena": "La arena cayó tan despacio que parecía que el tiempo dudara. Sin el reloj, hasta la arena se desordena.",
+    "estatua": "La mariposa se posó un instante y echó a volar hacia el sur. «Sigámosla», dijo el conejo.",
+    "diente": "Las semillas volaron… y una de ellas no era una semilla, sino otro tornillo diminuto.",
+    "salto": "Con tanto salto, al conejo se le cayó algo del bolsillo: un papel con el dibujo de un sombrero.",
+    "silbido": "El conejo salió de su madriguera con algo en la boca: otro engranaje. Ya van dos.",
+    "toctoc": "Quien llamaba no era el conejo. Cuando abriste, solo había un sombrero en el suelo.",
+    "canica": "Dentro de la canica había un remolino de colores que giraba como las agujas de un reloj.",
+    "bocabajo": "Esa noche, el conejo durmió del tirón. Al despertar, junto a su cama había un sobre sellado.",
+    "vuelta": "Dando vueltas, encontrasteis lo que se había perdido: el sobre estaba firmado con una «S».",
+    "maracas": "Al agitar las maracas, de una de ellas cayó un engranaje. Ya van tres.",
+    "cueva": "La luz desveló en la pared de la cueva un dibujo antiguo: un reloj enorme hecho de estrellas.",
+    "iman": "El imán atrajo las zanahorias… y algo más, escondido en la tierra: el muelle del reloj.",
+    "sonido": "El mensaje parecía venir de muy lejos, de más allá de las nubes.",
+    "luna": "La luna llena iluminó un camino hacia el cielo. «Ahí arriba nos espera algo», dijo el conejo. ¡Has recuperado el muelle del reloj!",
+    "telescopio": "Por el telescopio, el conejo vio algo moverse entre las estrellas. Algo con sombrero.",
+    "liebre": "La Liebre del cielo es prima lejana del conejo. Dicen que ella también buscó una vez un reloj perdido.",
+    "betelgeuse": "Las estrellas tienen colores. La esfera del reloj, recordó el conejo, era del color del cielo al amanecer.",
+    "australia": "Desde el otro lado del mundo, el cielo estaba del revés… y el tiempo también: allí ya era mañana.",
+    "osamayor": "La estrella Polar nunca se mueve. «Mi reloj tampoco se movía nunca de mi bolsillo», suspiró el conejo.",
+    "giro": "Las estrellas giran como las agujas de un reloj gigante. Este, por suerte, no se ha roto.",
+    "pleyades": "Entre las mil estrellas había una que parpadeaba distinto: tic, tac, tic, tac.",
+    "sirio": "La estrella más brillante señaló un punto del cielo, justo encima de tu casa.",
+    "ventana": "Al mirar el cielo de verdad, el conejo dijo bajito: «Quizá lo que buscamos no esté tan lejos».",
+    "astronauta": "En la nave había una caja con una nota: «Te falta poco. No te rindas. — S.»",
+    "planetas": "Ocho planetas en orden y, entre ellos, un hueco del tamaño exacto de una aguja de reloj.",
+    "pesoluna": "En la Luna, el conejo encontró una aguja larga y ligera. ¡Has recuperado el minutero del reloj!",
+    "semaforo": "De vuelta en la Tierra, la ciudad estaba llena de luces que recordaban cosas. El conejo seguía sin recordar quién le regaló el reloj.",
+    "piano": "La melodía despertó un recuerdo en el conejo: alguien se la tarareaba cada mañana.",
+    "cafe": "En el poso del café se leía algo más, muy pequeñito: «S.».",
+    "manana": "La bola de cristal mostró un taller lleno de relojes… y la sombra de un sombrero.",
+    "agujero": "Quien escribía en las paredes tenía la misma letra que el autor de las notas firmadas con «S».",
+    "32": "Bajo el mensaje del emperador, alguien había añadido: «El tiempo es un viaje».",
+    "faro": "La luz del faro contaba números que no terminan nunca, como el tiempo cuando no hay reloj.",
+    "pi": "El círculo perfecto encajó en el reloj como un guante. ¡Has recuperado la esfera del reloj!",
+    "jeroglificos": "Los egipcios medían el tiempo con sombras y estrellas. En una pared había un conejo dibujado… con reloj.",
+    "anubis": "Con el corazón ligero, la balanza dejó caer un engranaje antiguo. Ya van cuatro.",
+    "escarabajo": "Cuando el Sol se puso, el conejo comprendió algo: el tiempo no se detiene, aunque se rompa un reloj.",
+    "piramide": "Al salir de la pirámide, un hombre con un sombrero enorme os saludó desde lejos y desapareció.",
+    "pitagoras": "Pitágoras sabía que la música y los números van de la mano. «El tic-tac también es música», dijo el conejo.",
+    "eureka": "En el fondo de la bañera de Arquímedes había un engranaje de oro. Ya van cinco.",
+    "ariadna": "El hilo terminaba atado a una tarjeta: «El Sombrerero. Reparación de relojes y de prisas».",
+    "acueducto": "El agua llegó a la ciudad y movió una rueda que hizo tic-tac durante un segundo.",
+    "mosaico": "El mosaico mostraba a un conejo y a un señor con sombrero tomando el té juntos. ¿Se conocían?",
+    "romano": "Los romanos medían las horas con relojes de sol. «Pero esos no caben en el bolsillo», protestó el conejo.",
+    "laberinto": "Al salir del laberinto, el conejo encontró otro engranaje en la salida. Ya van seis.",
+    "eclipse": "En el silencio del eclipse, una voz dijo: «Os espero en mi taller». A tus pies brillaba algo. ¡Has recuperado la tapa del reloj!",
+    "melodia": "La melodía salía del taller del Sombrerero. La puerta estaba abierta, pero no había nadie.",
+    "beethoven": "En una mesa había una balanza y una nota: «Para arreglar un reloj hace falta equilibrio».",
+    "6": "Las bombillas del taller se encendieron solas. En la pared, cientos de relojes parados a la misma hora.",
+    "42": "Uno de los relojes tenía pegada una foto de la Luna. «Él también ha estado allí», murmuró el conejo.",
+    "1969": "Entre partituras viejas, el conejo encontró el nombre de un compositor… y debajo, escrito a mano, el suyo propio.",
+    "bach": "En un cuaderno, alguien había contado conejos durante meses. «¿Me estaba vigilando?», preguntó el conejo.",
+    "13": "En un cajón había una carta sin terminar: «Querido conejo: lo hice por tu bien…».",
+    "roma": "La carta seguía en braille: «…siempre corres tanto que nunca te paras a conocer a nadie».",
+    "radio": "La radio del taller habló sola: «Si estáis oyendo esto, ya casi lo habéis conseguido».",
+    "mozart": "Detrás del cuadro de cuadrados había un hueco con un engranaje. Ya van siete.",
+    "14": "El diapasón vibró y todos los relojes del taller hicieron tic a la vez. Luego, silencio.",
+    "la": "En un frasco con la etiqueta «Cobre» había tornillos del mismo color que los del reloj.",
+    "cuba": "Tras la cuenta atrás, una pared del taller se abrió como una puerta secreta.",
+    "10": "En el móvil antiguo había un mensaje sin enviar: «Ya viene. Tenlo todo preparado».",
+    "taxi": "El cronómetro se paró justo a tiempo. Por una vez, el conejo no llegaba tarde.",
+    "pulso": "El corazón del conejo latía deprisa. «Siento que el reloj está muy cerca», dijo.",
+    "dado": "Bajo los dados había un plano del taller con una X en una puerta del fondo.",
+    "16": "La luz iluminó la puerta del fondo. Tenía un cartel: «Taller. Prohibido llegar tarde».",
+    "prisma": "Dentro, cada nota tenía un color, como si alguien hubiera pintado la música para que no se perdiera.",
+    "verde": "En la pizarra, alguien había escrito una serie de números que se describía a sí misma. Debajo: «Como tú y yo».",
+    "312211": "Una caja de música tocaba una canción al revés. Era una canción de cumpleaños… pero ¿de quién?",
+    "cumpleanos": "Junto a la tarta había un cartel: «Feliz cumpleaños, conejo». El reloj… fue un regalo de cumpleaños.",
+    "23": "La caja fuerte se abrió: dentro estaban todos los engranajes que faltaban. Solo quedaba montar el reloj.",
+    "647": "El conejo empezó a colocar las piezas mientras tarareaba la melodía. Encajaban una a una.",
+    "oido": "Con todo afinado, el reloj sonó por primera vez: un tic… pero sin tac.",
+    "relojero": "Las agujas ya marcaban la hora. «Las tres y media», leyó el conejo. «La hora del té».",
+    "75": "Detrás de un violín apareció por fin el Sombrerero, con una taza de té en la mano.",
+    "violin": "«Rompí tu reloj a propósito», confesó el Sombrerero. «Era la única forma de que dejaras de correr».",
+    "octava": "«Necesitabas parar y dejar que alguien te ayudara», siguió. «Y mira: lo has encontrado». Y te miró a ti.",
+    "theremin": "Al reloj solo le faltaba una cosa: su latido, el tac. «Está en la música», dijo el Sombrerero.",
+    "copas": "Las copas sonaron como campanas y el reloj tembló en la mano del conejo. Casi…",
+    "cantar": "Tu voz afinada hizo que el reloj diera su primer tic-tac completo.",
+    "director": "La orquesta de conejos tocó al ritmo del reloj. Todos los relojes del mundo volvieron a ponerse en hora.",
+    "bravo": "Con el aplauso, el conejo miró su reloj y sonrió: por primera vez en su vida llegaba a tiempo. Justo a tiempo de darte las gracias."
+  };
+  // Capítulos: empiezan en estos niveles
+  const CAPITULOS = {
+    "arbol": ["Capítulo 1", "La caída"],
+    "reloj": ["Capítulo 2", "Las horas perdidas"],
+    "conejo": ["Capítulo 3", "La casa del conejo"],
+    "vaso": ["Capítulo 4", "El jardín revuelto"],
+    "telescopio": ["Capítulo 5", "El cielo"],
+    "semaforo": ["Capítulo 6", "La ciudad de los recuerdos"],
+    "jeroglificos": ["Capítulo 7", "El viaje en el tiempo"],
+    "melodia": ["Capítulo 8", "El taller del Sombrerero"],
+    "16": ["Capítulo 9", "La puerta del fondo"],
+    "theremin": ["Capítulo 10", "El último tic-tac"]
+  };
   const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "tomorrow": "manana", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
 
   // Si el nivel se carga dentro de index.html, los permisos ya se pidieron allí
@@ -329,16 +452,18 @@ const Comun = (() => {
 
   // ---------- Nivel superado ----------
   let pasando = false;
-  function superado(url) {
+  function superado(url, saltado = false) {
     if (pasando) return; pasando = true;
+    document.querySelectorAll(".panel-pista, .panel-menu, .rendirse").forEach(p => p.classList.remove("abierto"));
     const siguiente = url.replace(/\.html$/, "");
     const nSig = NIVELES.indexOf(siguiente);
     const frase = ELOGIOS[archivo] || "";
     const codigo = nSig >= 0 ? `<span class="sup-codigo">Código del nivel ${nSig + 1}: <b>${CODIGOS[siguiente]}</b></span>` : "";
     document.body.insertAdjacentHTML("beforeend", `
       <div class="superado" role="status">
-        <span class="sup-nivel">Nivel ${indice + 1} superado</span>
-        <p>${frase}</p>
+        <span class="sup-nivel">Nivel ${indice + 1} ${saltado ? "saltado" : "superado"}</span>
+        ${HISTORIA[archivo] ? `<p class="relato">${HISTORIA[archivo]}</p>` : ""}
+        ${saltado ? "" : `<p class="elogio">${frase}</p>`}
         ${CURIOSIDADES[archivo] ? `<div class="curiosidad"><span class="cur-titulo">¿Sabías que…?</span><p class="cur-texto">${CURIOSIDADES[archivo]}</p></div>` : ""}
         ${codigo}
         <button class="sup-seguir">Continuar</button>
@@ -370,6 +495,7 @@ const Comun = (() => {
           <span class="contador">Nivel ${indice + 1}</span>
           <p class="mi-codigo">Código de este nivel: <b>${CODIGOS[archivo] || "—"}</b></p>
           ${anterior ? `<button class="accion" data-a="atras">← Nivel anterior</button>` : ""}
+          <button class="accion" data-a="rendirse">🏳️ Me rindo, pasar de nivel</button>
           <div class="fila-codigo">
             <input type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Código" aria-label="Código de nivel">
             <button class="accion corta" data-a="codigo">Ir</button>
@@ -390,6 +516,7 @@ const Comun = (() => {
     panel.querySelectorAll(".accion").forEach(b => b.addEventListener("click", () => {
       const a = b.dataset.a;
       if (a === "atras") location.href = anterior + ".html";
+      if (a === "rendirse") rendirse();
       if (a === "idioma") { guardar("idioma", idioma === "es" ? "en" : "es"); if (marco && marco.aplicarIdioma) marco.aplicarIdioma(); location.reload(); }
       if (a === "portada") (marco || window).location.href = "index.html";
       if (a === "codigo") {
@@ -406,6 +533,15 @@ const Comun = (() => {
   function nivel(_numero, casi = {}) {
     document.body.insertAdjacentHTML("beforeend",
       `<div class="numero">${indice >= 0 ? indice + 1 : ""}</div><p class="aviso" aria-live="polite"></p>`);
+    if (indice >= 0 && CAPITULOS[archivo]) {
+      const [num, titulo] = CAPITULOS[archivo];
+      document.body.insertAdjacentHTML("beforeend", `<div class="capitulo"><span class="cap-num">${num}</span><h2>${titulo}</h2></div>`);
+      const cap = document.querySelector(".capitulo");
+      requestAnimationFrame(() => requestAnimationFrame(() => cap.classList.add("visible")));
+      const quitar = () => { cap.classList.remove("visible"); setTimeout(() => cap.remove(), 900); };
+      const t = setTimeout(quitar, 2800);
+      cap.addEventListener("pointerdown", e => { e.stopPropagation(); clearTimeout(t); quitar(); });
+    }
     if (indice >= 0) {
       menu();
       guardar("actual", archivo);
@@ -467,6 +603,34 @@ const Comun = (() => {
     }, { once: true });
   }
 
+  // Rendirse: pasa al siguiente nivel después de confirmarlo
+  function rendirse() {
+    if (indice < 0) return;
+    let r = document.querySelector(".rendirse");
+    if (!r) {
+      document.body.insertAdjacentHTML("beforeend", `
+        <div class="panel-pista rendirse" role="dialog" aria-modal="true">
+          <div class="tarjeta">
+            <span class="contador">Me rindo</span>
+            <p class="texto-pista">¿Seguro? Pasarás al siguiente nivel sin resolver este. Siempre podrás volver a él desde el menú.</p>
+            <div class="acciones">
+              <button class="otra si">Sí, pasar de nivel</button>
+              <button class="cerrar no">Seguir intentándolo</button>
+            </div>
+          </div>
+        </div>`);
+      r = document.querySelector(".rendirse");
+      r.addEventListener("pointerdown", e => e.stopPropagation());
+      r.querySelector(".no").addEventListener("click", () => r.classList.remove("abierto"));
+      r.querySelector(".si").addEventListener("click", () => {
+        r.classList.remove("abierto");
+        superado((NIVELES[indice + 1] || "fin") + ".html", true);
+      });
+    }
+    document.querySelectorAll(".panel-pista, .panel-menu").forEach(p => p.classList.remove("abierto"));
+    r.classList.add("abierto");
+  }
+
   // Botón de pistas: se revelan de una en una, de la más sutil a la más clara
   function pistas(lista, alMostrar) {
     let vistas = 0;
@@ -479,6 +643,7 @@ const Comun = (() => {
           <div class="acciones">
             <button class="otra">Otra pista</button>
             <button class="cerrar">Seguir pensando</button>
+            <button class="me-rindo">🏳️ Me rindo</button>
           </div>
         </div>
       </div>`);
@@ -486,12 +651,14 @@ const Comun = (() => {
     const panel = document.querySelector(".panel-pista");
     const texto = panel.querySelector(".texto-pista"), contador = panel.querySelector(".contador");
     const otra = panel.querySelector(".otra");
+    panel.querySelector(".me-rindo").addEventListener("click", e => { e.stopPropagation(); rendirse(); });
     function mostrar() {
       contador.textContent = `Pista ${vistas} de ${lista.length}`;
       const p = lista[vistas - 1];
       texto.textContent = typeof p === "function" ? p() : p;
       if (alMostrar) alMostrar(vistas);
       otra.style.display = vistas < lista.length ? "" : "none";
+      panel.querySelector(".me-rindo").style.display = vistas < lista.length ? "none" : "";
     }
     boton.addEventListener("click", e => {
       e.stopPropagation(); audio();

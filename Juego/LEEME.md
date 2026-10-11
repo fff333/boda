@@ -1,6 +1,6 @@
 # Sigue al conejo blanco
 
-Juego de adivinanzas para móvil en HTML. 107 niveles.
+Juego de adivinanzas para móvil en HTML. 107 niveles unidos por una historia: el reloj del Conejo Blanco se ha roto y hay que encontrar sus piezas.
 
 ## 1. Publicarlo en GitHub Pages
 
@@ -15,7 +15,7 @@ GitHub Pages usa HTTPS, así que el micrófono, la cámara y el giroscopio funci
 
 - `index.html` es la portada: pide los permisos (una sola vez) y carga los niveles dentro.
 - Cada nivel es un archivo. Cuando la respuesta es una palabra, el siguiente nivel se llama igual que la respuesta (`madriguera.html`, `eco.html`…).
-- `comun.js` contiene el orden de los niveles, sus códigos, los mensajes de ánimo y el menú (☰): volver al nivel anterior, ir a un nivel con su código, y cambiar de idioma.
+- `comun.js` contiene el orden de los niveles, la historia (`HISTORIA`) y los capítulos (`CAPITULOS`), sus códigos, los mensajes de ánimo y el menú (☰): volver al nivel anterior, ir a un nivel con su código, y cambiar de idioma.
 - `idiomas.js` contiene las traducciones al inglés. Para añadir otro idioma, copia el bloque `en` y tradúcelo.
 - `motor.js` contiene el piano y las herramientas de los niveles musicales.
 - `cielo.js` contiene las estrellas y constelaciones reales (posiciones, brillo y color) de los niveles del cielo.
