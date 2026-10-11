@@ -155,7 +155,7 @@
   // --- Sonido ---
   function iniciarAudio() {
     try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx = Comun.audio();
       zumbido = audioCtx.createOscillator();
       zumbidoGain = audioCtx.createGain();
       zumbido.type = "sine";
@@ -200,6 +200,8 @@
     }
   });
 
+  // Dentro del juego no hace falta la pantalla de inicio
+  if (window.parent !== window) setTimeout(() => document.getElementById("empezar").click(), 50);
   document.getElementById("empezar").addEventListener("click", async () => {
     iniciarAudio();
     if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);

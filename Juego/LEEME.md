@@ -17,6 +17,7 @@ GitHub Pages usa HTTPS, así que el micrófono, la cámara y el giroscopio funci
 - Cada nivel es un archivo. Cuando la respuesta es una palabra, el siguiente nivel se llama igual que la respuesta (`madriguera.html`, `eco.html`…).
 - `comun.js` contiene el orden de los niveles, la historia (`HISTORIA`), los capítulos (`CAPITULOS`), los personajes que se asoman (`APARICIONES`) y sus comentarios en las pistas (`BURLAS`), sus códigos, los mensajes de ánimo y el menú (☰): volver al nivel anterior, ir a un nivel con su código, y cambiar de idioma.
 - `idiomas.js` contiene las traducciones al inglés. Para añadir otro idioma, copia el bloque `en` y tradúcelo.
+- `mapa.html` es el mapa del mundo de Pompón: un camino por los 107 niveles, con una estrella en los superados. Se abre desde el menú ☰.
 - `motor.js` contiene el piano y las herramientas de los niveles musicales.
 - `cielo.js` contiene las estrellas y constelaciones reales (posiciones, brillo y color) de los niveles del cielo.
 - La partida se guarda en el móvil de cada jugador: al volver, la portada ofrece «Continuar».

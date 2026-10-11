@@ -224,114 +224,115 @@ const Comun = (() => {
   };
   // La historia: lo que pasa al superar cada nivel
   const HISTORIA = {
-    "arbol": "Esa noche cayó una estrella diminuta en el jardín. Pompón la tocó… y su sombra se despegó, la cogió y saltó al agujero del árbol.",
-    "vela": "Al apagarse la vela se oyó una risita en la oscuridad. No era de Pompón. Era de su sombra.",
-    "globo": "Entre el confeti cayó un papel con una huella negra: «¿Me buscas? Tendrás que darte prisa».",
-    "arcoiris": "Con los colores en su sitio, Pompón se miró las patas: sin su sombra, se estaba volviendo un poco transparente.",
-    "espejo": "En el túnel se oía un tintineo, como de campanillas. Algo pequeño y brillante pedía ayuda allá abajo.",
-    "madriguera": "Pompón te miró un segundo antes de esconderse. Estaba asustado: nunca había salido de su jardín.",
-    "oscuridad": "«¡Me has encontrado!», susurró Pompón. «Mi sombra se ha llevado una estrella. ¿Me ayudas a recuperarlas antes de que desaparezca del todo?».",
-    "eco": "La montaña devolvió tu voz… y una vocecita: «¡Tilín, tilín! ¡Me llamo Tilín! ¡Sacadme de aquí!».",
-    "reloj": "De un agujero salió un sombrero de copa que bostezó: «¿Quién me ha despertado? Ah, una sombra con prisa… Pasó por aquí hace un rato».",
-    "brujula": "«Me llamo Sombrero», dijo el sombrero. «Todo lo que entra en mí puede viajar muy lejos. ¿Queréis probar?».",
-    "polar": "Bajo la escarcha había dos huellas: una de sombra… y otra con tres dedos, como de pájaro. ¿Quién más anda tras la estrella?",
-    "silencio": "En el silencio, Pompón oyó algo raro: el jardín ya no sonaba. Ni grillos, ni viento, ni hojas. Alguien se está llevando los sonidos.",
-    "siete": "El Sombrero se puso serio: «Ese tintineo es Tilín, una estrella. Si no vuelve a su sitio en el cielo, se apagará para siempre».",
-    "conejo": "Durante el eclipse, una mancha negra cruzó el cielo graznando y se llevó algo brillante del tejado de Pompón.",
-    "fases": "Tilín vive en la Luna… o eso creía Pompón. «No», dijo el Sombrero, «su casa está más lejos, en una constelación muy especial».",
-    "pez": "El pez abrió la boca para contar algo… pero no le salió ningún sonido. También le han robado la voz.",
-    "gato": "El gato, medio dormido, dijo: «Fue un cuervo enorme. Iba metiendo sonidos en frascos de cristal».",
-    "pera": "Entre las peras cayó una pluma negra y brillante. En la punta tenía escrito: «Don Cuervo».",
-    "llave": "Dentro todo estaba revuelto. Sobre la mesa, una nota de la sombra: «No soy quien crees».",
-    "dormir": "Pompón soñó con su sombra. En el sueño no huía: le señalaba el cielo.",
-    "zanahoria": "Llegó la Abuela Tortuga, despacito: «Las sombras no huyen sin motivo, pequeño. Pregúntate de qué escapa la tuya».",
-    "tarde": "«Sin sombra no sabes la hora», dijo la Abuela Tortuga. «Antes la gente miraba su sombra para saber qué hora era».",
-    "tumbado": "Tumbado en la hierba, Pompón vio un hueco oscuro en el cielo, como si faltara una estrella.",
-    "susurro": "Pompón te contó un secreto: le da miedo desaparecer… pero más miedo le da no volver a ver a su sombra.",
-    "trebol": "Bajo el trébol había otra nota: «El cuervo quiere a Tilín. Yo la estoy escondiendo». Firmado: una huella negra.",
-    "escondite": "Durante un segundo viste a la sombra detrás de un arbusto. Te guiñó un ojo… y desapareció.",
-    "vaso": "En el fondo del vaso había un frasco diminuto. Al abrirlo, sonó la lluvia. ¡Has rescatado el primer sonido!",
-    "arena": "Mientras caía la arena, Pompón notó que sus orejas volvían a verse un poco más.",
-    "estatua": "La mariposa susurró: «Vi a Don Cuervo. Esconde los frascos de sonidos en sitios muy altos».",
-    "diente": "Una semilla no voló: era un frasco con el sonido del viento. ¡Ya van dos sonidos!",
-    "salto": "Con el último salto, a Pompón se le escapó una carcajada. Era la primera risa del jardín en muchos días.",
-    "silbido": "Al silbar, contestó un pájaro desde lejos… con la voz robada de un grillo. Don Cuervo andaba cerca.",
-    "toctoc": "Quien llamaba era la sombra. Cuando abriste, solo quedaba un frasco: el sonido de las hojas. ¡Ya van tres!",
-    "canica": "Dentro de la canica giraba un brillo dorado, igual que el de Tilín. ¿Una pista… o una trampa?",
-    "bocabajo": "Esa noche, Pompón durmió del tirón. Al despertar, alguien había dejado una manta sobre él. Tenía forma de sombra.",
-    "vuelta": "Dando vueltas, encontraste una pluma negra clavada en el suelo, señalando hacia una cueva.",
-    "maracas": "Las maracas devolvieron el ritmo al jardín. Hasta el gato movió la cola al compás.",
-    "cueva": "La luz desveló el escondite del cuervo: frascos y más frascos llenos de sonidos… pero él ya se había ido.",
-    "iman": "Entre las zanahorias había un frasco con el canto de los pájaros. ¡Ya van cuatro sonidos!",
-    "sonido": "El mensaje no venía de la Tierra. Venía de arriba, muy arriba.",
-    "luna": "La luna llena se reflejó en el Sombrero. «Agarraos a mi ala», dijo. «Tilín nos espera en el cielo».",
-    "telescopio": "Por el telescopio se veía a Don Cuervo volando entre las estrellas, con un saco lleno de brillos.",
-    "liebre": "«¡Mira!», dijo el Sombrero. «La Liebre: la constelación de los conejos. Le falta una estrella… justo en la oreja».",
-    "betelgeuse": "«Tilín es de esa constelación», explicó el Sombrero. «Cayó por intentar ver a los conejos de la Tierra».",
-    "australia": "Al otro lado del mundo, la sombra dejó otra nota: «El cuervo no se rinde. Yo tampoco».",
-    "osamayor": "La Polar señaló el camino. Al seguirlo, Pompón notó que ya se veía casi entero otra vez.",
-    "giro": "Mientras el cielo giraba, una sombra pequeña saltaba de estrella en estrella. Llevaba algo que brillaba.",
-    "pleyades": "Entre mil estrellas, una tintineaba distinto. «¡Tilín!», gritó Pompón. Pero desapareció en un parpadeo.",
-    "sirio": "La estrella más brillante habló: «Un cuervo me pidió que le prestara mi brillo. Le dije que no y se enfadó muchísimo».",
-    "ventana": "Al mirar el cielo de verdad, el Sombrero dijo: «Desde aquí también se ve la Liebre. Esta noche, búscala tú».",
-    "astronauta": "En la nave flotaba un frasco con un sonido nuevo: el ronroneo de un gato. ¡Ya van cinco!",
-    "planetas": "Entre los planetas apareció Don Cuervo: «¡Cra! ¿Buscáis esto?». Agitó un frasco y se fue volando hacia la Luna.",
-    "pesoluna": "En la Luna solo quedaba una pluma… y un sombrero idéntico al Sombrero, pero vacío. «Mi hermano», susurró el Sombrero. «El cuervo lo ha usado para viajar».",
-    "semaforo": "De vuelta en la ciudad, las luces parpadeaban como si quisieran contar algo. La Abuela Tortuga escuchaba con atención.",
-    "piano": "La melodía hizo sonreír a Pompón: su madre se la tarareaba cuando era pequeño.",
-    "cafe": "«El cuervo tiene prisa por todo», dijo la Abuela Tortuga. «Por eso se equivoca tanto».",
-    "manana": "La bola de cristal mostró a la sombra protegiendo a Tilín del cuervo. Pompón abrió mucho los ojos: «¡Mi sombra es buena!».",
-    "agujero": "Al otro lado, alguien había dibujado un mapa con cuatro lugares muy antiguos. Al lado, una huella negra.",
-    "32": "Bajo el mensaje cifrado, la sombra había escrito: «El cuervo ha viajado al pasado. Seguidle».",
-    "faro": "La luz del faro se movía como si buscara algo en el mar del tiempo.",
-    "pi": "Con el círculo perfecto, el Sombrero se puso a girar: «¡Agarraos! Nos vamos muy, muy atrás».",
-    "jeroglificos": "En una pared de Egipto había un conejo dibujado… y a su lado, un cuervo con un saco.",
-    "anubis": "La balanza dejó caer un frasco con un sonido antiguo: el arpa de un músico egipcio. ¡Ya van seis!",
-    "escarabajo": "Al ponerse el Sol, la sombra de Pompón se dibujó un instante en la arena… y le saludó con la mano.",
-    "piramide": "A la salida, Don Cuervo os esperaba: «¡Cra! Nunca me alcanzaréis». Y se metió en el sombrero hermano.",
-    "pitagoras": "En Grecia, la cuerda vibró y Pompón oyó a Tilín: «Estoy bien. Vuestra sombra me cuida».",
-    "eureka": "En la bañera de Arquímedes había un frasco con el sonido de las olas. ¡Ya van siete!",
-    "ariadna": "En el centro del laberinto no estaba el Minotauro, sino una pluma de cuervo. Y el hilo seguía… hacia Roma.",
-    "acueducto": "El agua llegó a la ciudad y trajo flotando un frasco: el sonido de una fuente. ¡Ya van ocho!",
-    "mosaico": "El mosaico mostraba a un conejo y a su sombra bailando juntos. Pompón sintió cosquillas en la barriga.",
-    "romano": "Un soldado romano juró haber visto «un pájaro negro con un sombrero» volar hacia un eclipse.",
-    "laberinto": "Al salir del laberinto, la sombra estaba esperando. Esta vez no huyó. «Ven», dijo. «Te lo explicaré todo».",
-    "eclipse": "En el eclipse, la sombra habló por fin: «No te robé la estrella, Pompón. La salvé del cuervo. Ahora necesito tu ayuda».",
-    "melodia": "La sombra os llevó hasta la guarida de Don Cuervo: un nido enorme lleno de cosas brillantes y frascos que zumbaban.",
-    "beethoven": "En una balanza del nido había una nota del cuervo: «Cuando tenga todos los sonidos bonitos, cantaré mejor que nadie».",
-    "6": "Las bombillas iluminaron un rincón con un frasco muy especial: la risa de los niños. ¡Ya van nueve!",
-    "42": "Junto a una foto de la Luna había un dibujo hecho por el cuervo: él mismo, cantando, rodeado de amigos.",
-    "1969": "«El cuervo no es malo», dijo la Abuela Tortuga, que acababa de llegar. «Se ríen de su graznido. Solo quiere que lo escuchen».",
-    "bach": "En un cuaderno, el cuervo había contado todas las veces que nadie le contestó al saludar. Eran muchísimas.",
-    "13": "Detrás de un corazón pintado había una puerta. Desde dentro, un tintineo débil: «Tilín… tilín…».",
-    "roma": "La puerta tenía un mensaje en braille: «Aquí guardo lo más bonito que he encontrado nunca».",
-    "radio": "La radio del nido sonó sola: era el cuervo, practicando una canción. Lo hacía fatal… pero con mucho cariño.",
-    "mozart": "Detrás de un cuadro había un frasco con el sonido del mar. ¡Ya van diez!",
-    "14": "Todos los frascos vibraron a la vez. «Los sonidos quieren volver a casa», dijo la sombra.",
-    "la": "La Abuela Tortuga sonrió: «Paso a paso. Ya casi lo tenéis».",
-    "cuba": "Tras la cuenta atrás, se abrió un hueco secreto en el nido: unas escaleras que bajaban hacia una luz dorada.",
-    "10": "En un móvil antiguo había un mensaje del cuervo sin enviar: «¿Queréis ser mis amigos?».",
-    "taxi": "Justo a tiempo, la sombra apartó a Pompón de una trampa del cuervo: una red llena de purpurina.",
-    "pulso": "El corazón de Pompón latía muy deprisa. Ya se veía entero otra vez… salvo la sombra.",
-    "dado": "Bajo los dados había un plano del nido con una X junto a una caja de música.",
-    "16": "La luz iluminó la caja de música. Dentro, apagándose poco a poco, estaba Tilín.",
-    "prisma": "«Solo se abre con música», dijo la sombra. «El cuervo la cerró con una canción».",
-    "verde": "En la tapa, el cuervo había escrito una serie que se describe a sí misma. Debajo: «Como yo: solo hablo de mí».",
-    "312211": "La caja tocó una canción al revés. Pompón lo entendió: era una canción de cumpleaños… ¡del cuervo!",
-    "cumpleanos": "«Hoy es su cumpleaños y nadie se ha acordado», dijo la Abuela Tortuga. Pompón miró la tarta y tuvo una idea.",
-    "23": "La caja fuerte se abrió: dentro estaba la llave de la caja de música… y una vela de cumpleaños sin estrenar.",
-    "647": "Al tocar la melodía, la caja de música se abrió. Tilín salió volando, débil, pero sonriendo.",
-    "oido": "Con todo afinado, apareció Don Cuervo. No venía a pelear: traía la cabeza gacha.",
-    "relojero": "«Solo quería cantar bonito para que alguien me escuchara», graznó el cuervo. Pompón le tendió la pata.",
-    "75": "«Te escucharemos», dijo Pompón. «Pero los sonidos tienen que volver a su sitio». El cuervo asintió.",
-    "violin": "El cuervo abrió los frascos uno a uno y los sonidos salieron volando hacia el mundo.",
-    "octava": "Solo faltaba devolver a Tilín al cielo. «Para eso hace falta el sonido más fuerte de todos», dijo el Sombrero.",
-    "theremin": "Todos se reunieron para un concierto: Pompón, la sombra, el Sombrero, la Abuela Tortuga… y Don Cuervo, nervioso.",
-    "copas": "Con cada nota, Tilín brillaba un poco más. La sombra se acercó despacio a Pompón.",
-    "cantar": "Cantaste, y Don Cuervo se animó a cantar contigo. Desafinaba… y a nadie le importó.",
-    "director": "La música subió hasta las estrellas. Tilín se elevó, y la sombra la acompañó un trecho para despedirse.",
-    "bravo": "Con el aplauso, Tilín volvió a su sitio en la oreja de la Liebre. La sombra regresó a los pies de Pompón… y desde entonces, dentro de ella brilla una estrellita."
+    "arbol": "Aquella noche, una estrella diminuta cayó en el jardín como una chispa perdida. Pompón alargó la pata para tocarla y, en ese mismo instante, su sombra se despegó de él con un chasquido, atrapó la estrella y saltó al agujero del árbol. Pompón, temblando, fue tras ella.",
+    "vela": "Allí abajo todo era negro y silencioso. Cuando la llama murió, Pompón oyó una risita junto a su oreja. No era suya, aunque se le parecía muchísimo: era la risa de su propia sombra, que se divertía a su costa desde algún rincón de la oscuridad.",
+    "globo": "Entre el confeti que aún flotaba cayó un papel doblado. Por firma tenía una huella negra y, escrita con letra torcida, una sola frase: «¿Me buscas? Date prisa, conejito». Pompón tragó saliva. Su sombra nunca le había hablado así.",
+    "arcoiris": "Con los colores de nuevo en su sitio, Pompón se miró las patas y se le encogió el corazón: veía la hierba a través de ellas. Sin su sombra se estaba volviendo transparente, como el vaho que se borra de un cristal.",
+    "espejo": "Al otro lado del cristal, el túnel bajaba en espiral hacia la tierra húmeda. Desde lo más hondo subía un tintineo frágil, como de campanillas de cristal. Algo pequeño y brillante estaba allí abajo… y sonaba asustado.",
+    "madriguera": "Por fin lo viste de cerca: un conejito blanco de ojos enormes, que se asomaba y se escondía como quien no sabe si fiarse. Pompón nunca había salido de su jardín. Aquella noche, sin embargo, ya no tenía elección.",
+    "oscuridad": "«Me has encontrado», susurró con un hilo de voz. «Me llamo Pompón. Mi sombra se ha llevado una estrella y, sin ella, me voy borrando poco a poco». Te miró con aquellos ojos enormes. «¿Me ayudarás a recuperarlas antes de que desaparezca del todo?».",
+    "eco": "La montaña te devolvió el grito palabra por palabra. Pero cuando el eco se apagó, quedó flotando otra voz, diminuta y lejana, que no era la tuya: «¡Tilín, tilín! ¡Me llamo Tilín! ¡Por favor, que alguien me saque de aquí!».",
+    "reloj": "En lo alto de la colina, un sombrero de copa abandonado bostezó, se estiró y se sacudió el polvo del ala. «¿Una sombra con prisa y una estrella en brazos?», murmuró con voz de terciopelo. «Pasó por aquí hace un rato. Iba hacia el norte».",
+    "brujula": "«Disculpad mis modales», dijo el sombrero con una reverencia. «Me llaman Sombrero, a secas. Todo lo que entra en mí puede viajar muy lejos: más allá de las nubes… e incluso hacia atrás en el tiempo. Puede que os haga falta».",
+    "polar": "Bajo la escarcha aparecieron dos rastros. Uno era de sombra, ligero y saltarín. El otro tenía tres dedos afilados, como las garras de un pájaro grande. Pompón sintió un escalofrío: alguien más andaba tras la estrella.",
+    "silencio": "En aquel silencio, Pompón se dio cuenta de algo inquietante: era demasiado profundo. No cantaban los grillos, no silbaba el viento, no crujía ni una hoja. Alguien se estaba llevando los sonidos del mundo, uno a uno, como quien recoge flores.",
+    "siete": "El Sombrero habló muy serio: «Ese tintineo es Tilín, una estrella que se cayó del cielo. Si no vuelve a su sitio antes de perder toda su luz, se apagará para siempre». Hizo una pausa larga. «Y entonces nadie, nunca, volverá a verla».",
+    "conejo": "Durante el eclipse, una silueta alada cruzó el cielo graznando. Bajó en picado sobre el tejado de Pompón, arrancó con el pico la veleta dorada y se perdió entre las nubes antes de que nadie pudiera gritar.",
+    "fases": "Mirando la luna, Pompón preguntó si allí vivía Tilín. «No», respondió el Sombrero. «Su hogar está mucho más lejos, en una constelación muy especial. Cuando llegue el momento, la reconocerás».",
+    "pez": "El pez dorado se acercó al cristal y abrió la boca para contaros algo importante. No salió ningún sonido, ni siquiera una burbuja: también a él le habían robado la voz. Pero sus ojos, muy abiertos, señalaban hacia el tejado.",
+    "gato": "El gato bostezó, se estiró y habló con voz de siesta: «Fue un cuervo enorme, negro como el carbón. Iba metiendo los sonidos en frascos de cristal y tapándolos con corcho. Y se reía fatal, eso sí».",
+    "pera": "Entre las peras cayó una pluma negra, larga y brillante como el charol. En la punta, alguien había grabado un nombre con letra diminuta y muy presumida: «Don Cuervo». Pompón la guardó en el bolsillo.",
+    "llave": "La puerta se abrió con un quejido. Dentro todo estaba revuelto, como si alguien hubiera buscado algo con mucha prisa. Sobre la mesa esperaba otra nota con la huella negra: «No soy quien crees».",
+    "dormir": "Esa noche, Pompón soñó con su sombra. En el sueño no huía ni se burlaba de él: estaba muy quieta en mitad de un prado y le señalaba el cielo con una pata, como si quisiera enseñarle un secreto.",
+    "zanahoria": "Mientras Pompón comía, apareció la Abuela Tortuga, tan despacio que nadie supo cuándo había llegado. «Las sombras no huyen sin motivo, pequeño», dijo. «Antes de perseguir a la tuya, pregúntate de qué está huyendo».",
+    "tarde": "«Sin sombra no hay hora», murmuró la Abuela Tortuga. «Hace mucho tiempo, la gente miraba su sombra para saber qué hora era. Tú has perdido la tuya… y por eso el tiempo se te escapa entre las patas».",
+    "tumbado": "Tumbado en la hierba, Pompón contaba estrellas para tranquilizarse. Y entonces lo vio: un hueco oscuro en mitad del cielo, pequeño y redondo, como el sitio vacío que deja un diente que se cae.",
+    "susurro": "Pompón te habló muy bajito, casi avergonzado: «Me da miedo desaparecer. Pero me da más miedo no volver a ver a mi sombra. Siempre estaba conmigo… incluso cuando no estaba nadie más».",
+    "trebol": "Bajo el trébol había una nota doblada en cuatro: «El cuervo quiere a Tilín para él solo. Yo la estoy escondiendo. Confía en mí». La firma era una huella negra… y Pompón, por primera vez, dudó.",
+    "escondite": "Durante un segundo viste a la sombra asomada detrás de un arbusto. No huyó enseguida: te miró, te guiñó un ojo con complicidad y se deshizo en el aire como el humo de una vela. Pompón se quedó muy pensativo.",
+    "vaso": "En el fondo del vaso brillaba un frasco diminuto tapado con corcho. Al abrirlo, el jardín se llenó de golpe con el sonido de la lluvia sobre las hojas. Pompón cerró los ojos y sonrió: era el primer sonido rescatado.",
+    "arena": "Mientras caía la arena, Pompón notó un cosquilleo en las orejas. Al mirarse en un charco las vio un poquito más nítidas que antes. Cada sonido que volvía al mundo le devolvía también un pedacito de sí mismo.",
+    "estatua": "La mariposa se posó un instante en su nariz y le habló al oído: «He visto a Don Cuervo. Esconde los frascos en los sitios más raros: dentro de semillas, entre las zanahorias, hasta en las maracas». Y se fue volando.",
+    "diente": "Las semillas se dispersaron como un puñado de estrellas blancas. Una de ellas, sin embargo, cayó pesada: era un frasco con el sonido del viento. Al abrirlo, el aire volvió a silbar entre las ramas. Ya eran dos.",
+    "salto": "Con el último salto, a Pompón se le escapó una carcajada. Era la primera risa que se oía en el jardín desde hacía días, y sonó tan bien que hasta los árboles parecieron estirarse para escucharla.",
+    "silbido": "A tu silbido le respondió un pájaro desde muy lejos… con la voz robada de un grillo. Pompón se estremeció. Don Cuervo había pasado por allí hacía muy poco, y empezaba a cambiar los sonidos de sitio.",
+    "toctoc": "Quien llamaba era la sombra. Cuando abriste, solo quedaba en el umbral un frasco con el murmullo de las hojas. Al lado, escrito con tiza: «Uno más para ti. Sigue buscando». Ya eran tres.",
+    "canica": "Dentro de la canica giraba un brillo dorado, idéntico al de Tilín. Pompón la acercó a la oreja y le pareció oír un tintineo muy lejano. ¿Era una pista… o una trampa del cuervo?",
+    "bocabajo": "Esa noche, Pompón durmió del tirón por primera vez desde la caída de la estrella. Al despertar, alguien le había echado una manta por encima. Tenía la forma exacta de una sombra.",
+    "vuelta": "Dando vueltas, encontraste una pluma negra clavada en la tierra como una flecha. Apuntaba hacia una cueva escondida entre las rocas, de la que salía un zumbido extraño, como de muchas voces encerradas.",
+    "maracas": "Las maracas devolvieron el ritmo al jardín. Primero fue un pie, luego una cola, después todas las orejas: hasta el gato acabó moviéndose al compás, aunque juraría que no.",
+    "cueva": "La luz desveló el escondite del cuervo: estanterías y más estanterías de frascos llenos de sonidos, ordenados con mimo. Allí estaban el croar de las ranas, el crepitar del fuego, una nana olvidada… pero él ya se había marchado.",
+    "iman": "Entre las zanahorias de metal había un frasco con el canto de los pájaros. Cuando lo abriste, el cielo se llenó de trinos y Pompón tuvo que sentarse, emocionado. Ya eran cuatro sonidos rescatados.",
+    "sonido": "El mensaje no venía de la tierra, sino de arriba, de muy arriba. Pompón alzó la vista y, por un instante, una estrella le guiñó un ojo. «Nos está llamando», dijo el Sombrero.",
+    "luna": "La luna llena se reflejó en el ala del Sombrero como en un espejo. «Agarraos fuerte», dijo, inclinándose. «Ha llegado la hora de subir. Tilín nos espera en el cielo».",
+    "telescopio": "Por el telescopio se veía a Don Cuervo surcando el cielo nocturno con un saco a la espalda que tintineaba a cada aleteo. Iba de estrella en estrella, como un ladrón de joyas en una gran ciudad dormida.",
+    "liebre": "«¡Mira!», susurró el Sombrero. «La Liebre: la constelación de los conejos. Fíjate bien… le falta una estrella, justo en la punta de la oreja». Pompón sintió que algo encajaba en su pecho.",
+    "betelgeuse": "«Tilín es de ahí», explicó el Sombrero. «Una noche se asomó demasiado para ver a los conejos de la Tierra… y se cayó. Por eso eligió tu jardín, Pompón. Quería conocerte».",
+    "australia": "Al otro lado del mundo, bajo un cielo del revés, la sombra había dejado otra nota sujeta con una piedra: «El cuervo no se rinde. Yo tampoco. Daos prisa».",
+    "osamayor": "La estrella Polar marcó el camino, fija y paciente como siempre. Al seguirla, Pompón se miró las patas: ya casi no se veía la hierba a través de ellas. Estaba volviendo a ser él.",
+    "giro": "Mientras el cielo giraba despacio, una sombra pequeña saltaba de estrella en estrella como quien cruza un río por las piedras. Llevaba algo que brillaba entre los brazos, y lo protegía con todo el cuerpo.",
+    "pleyades": "Entre mil estrellas hubo una que tintineó distinto. «¡Tilín!», gritó Pompón. La lucecita se volvió, parpadeó dos veces como diciendo «estoy aquí»… y se apagó de golpe, como si alguien la hubiera tapado.",
+    "sirio": "La estrella más brillante del cielo habló con voz cansada: «Un cuervo me pidió que le prestara mi brillo. Le dije que no y se enfadó muchísimo. Dijo que nadie le hacía caso nunca. Parecía más triste que malo».",
+    "ventana": "Al mirar el cielo de verdad, el de tu ventana, el Sombrero dijo en voz baja: «Desde aquí también se ve la Liebre. Esta noche, búscala. Si ves que le falta una estrella en la oreja, ya sabes por qué».",
+    "astronauta": "Dentro de la nave flotaba un frasco que giraba despacio en el aire. Al abrirlo, la cabina se llenó con el ronroneo de un gato, y Pompón se rió solo en mitad del espacio. Ya eran cinco.",
+    "planetas": "Entre los planetas apareció Don Cuervo, con las plumas erizadas: «¡Cra! ¿Buscáis esto?». Agitó un frasco brillante delante de vosotros y salió disparado hacia la Luna, dejando una estela de purpurina.",
+    "pesoluna": "En la Luna solo quedaba una pluma… y un sombrero idéntico al Sombrero, pero vacío y polvoriento. «Mi hermano», susurró el Sombrero, con la voz rota. «El cuervo lo ha usado para escapar al pasado».",
+    "semaforo": "De vuelta en la ciudad, las luces parpadeaban como si quisieran contar algo que no se atrevían a decir. La Abuela Tortuga escuchaba con los ojos cerrados. «Esta ciudad recuerda cosas», dijo. «Y nosotros también».",
+    "piano": "Aquella melodía le hizo cosquillas a Pompón en la memoria: su madre se la tarareaba cuando era muy pequeño, antes de dormir. Por un momento olvidó la estrella, el cuervo y la sombra, y solo escuchó.",
+    "cafe": "«El cuervo tiene prisa por todo», dijo la Abuela Tortuga, soplando su taza. «Quiere cantar bien ya, tener amigos ya, brillar ya. Y por eso se equivoca tanto. Las cosas buenas, pequeño, se enfrían despacio».",
+    "manana": "La bola de cristal se aclaró y mostró a la sombra interponiéndose entre Tilín y el pico del cuervo. Pompón abrió mucho los ojos y, casi sin voz, dijo: «Mi sombra… está protegiéndola».",
+    "agujero": "Al otro lado de la mirilla, alguien había dibujado en la pared un mapa con cuatro lugares muy antiguos: una pirámide, un templo, un acueducto y un laberinto. En una esquina, la huella negra de siempre.",
+    "32": "Bajo el mensaje del emperador, la sombra había añadido unas palabras con letra apresurada: «El cuervo ha huido al pasado. Seguidle. Yo os esperaré donde la luz se esconde a mediodía».",
+    "faro": "La luz del faro barría el mar de un lado a otro, contando números que no terminan nunca. «Así es el tiempo sin una sombra que lo mida», dijo el Sombrero. «Infinito… y un poco solitario».",
+    "pi": "En cuanto el círculo se cerró, el Sombrero empezó a girar sobre sí mismo cada vez más deprisa. «¡Agarraos fuerte!», gritó. «¡Nos vamos muy, muy atrás!». Y el mundo se volvió un remolino de arena dorada.",
+    "jeroglificos": "En una pared de Egipto, entre escribas y faraones, había un conejo dibujado hace miles de años. Y a su lado, un cuervo con un saco a la espalda. «Ha estado aquí», dijo Pompón. «Y no hace tanto».",
+    "anubis": "Cuando el corazón quedó tan ligero como la pluma, la balanza dejó caer un frasco antiguo. Dentro sonaba el arpa de un músico egipcio, dulce como el agua del Nilo. Ya eran seis sonidos.",
+    "escarabajo": "Al ponerse el Sol, la sombra de Pompón se dibujó un instante sobre la arena, larga y delgada. Levantó una pata y le saludó. Luego el Sol se hundió en el horizonte y la sombra se fue con él.",
+    "piramide": "A la salida de la pirámide, Don Cuervo os esperaba posado en una palmera: «¡Cra! ¡Nunca me alcanzaréis!». Y antes de que pudierais acercaros, se zambulló de cabeza en el sombrero hermano.",
+    "pitagoras": "En Grecia, la cuerda vibró y, entre sus notas, Pompón oyó una voz conocida: «Estoy bien, Pompón. Tu sombra me cuida. Pero tengo frío… y cada vez brillo menos».",
+    "eureka": "En el fondo de la bañera de Arquímedes, bajo el agua tibia, había un frasco con el rumor de las olas. Al abrirlo, olió a sal y a verano. Ya eran siete sonidos rescatados.",
+    "ariadna": "En el centro del laberinto no había ningún monstruo, solo una pluma de cuervo prendida al suelo. Y el hilo, en vez de terminar, seguía desenrollándose… en dirección a Roma.",
+    "acueducto": "El agua corrió por fin hasta la ciudad y trajo flotando un frasco que se mecía como un barquito. Dentro sonaba una fuente, fresca y alegre. Ya eran ocho.",
+    "mosaico": "Cuando la última pieza encajó, el mosaico mostró a un conejo y a su sombra bailando juntos bajo una estrella. Pompón se quedó mirándolo mucho rato, con una sensación extraña en la barriga.",
+    "romano": "Un soldado romano, todavía pálido, juró haber visto «un pájaro negro con sombrero» volar hacia el sol en pleno día. «Iba hacia el sitio donde la luz se esconde», dijo el Sombrero. «Hacia el eclipse».",
+    "laberinto": "Al salir del laberinto, la sombra estaba esperando, sentada sobre una piedra. Esta vez no huyó. Se levantó despacio, miró a Pompón a los ojos y dijo: «Ven. Ya es hora de que te lo cuente todo».",
+    "eclipse": "En el silencio del eclipse, la sombra habló por fin: «Nunca te robé la estrella, Pompón. La salvé. El cuervo quería encerrarla para siempre y yo era el único lo bastante oscuro para esconderla. Ahora necesito tu ayuda».",
+    "melodia": "La sombra os guió hasta la guarida de Don Cuervo: un nido gigantesco hecho de ramas, cintas y cucharillas, lleno de cosas brillantes y frascos que zumbaban como colmenas. Por dentro, sonaba una melodía.",
+    "beethoven": "Sobre una balanza del nido había una nota del cuervo, escrita con mucho cuidado: «Cuando tenga todos los sonidos bonitos del mundo, cantaré mejor que nadie. Y entonces me escucharán».",
+    "6": "Las bombillas iluminaron un rincón con un frasco muy especial, envuelto en un pañuelo: la risa de los niños. Al abrirlo, el nido entero pareció más pequeño y menos triste. Ya eran nueve.",
+    "42": "Junto a una foto de la Luna había un dibujo hecho por el cuervo: él mismo, cantando sobre una rama, rodeado de amigos que aplaudían. Era el único dibujo del nido en el que sonreía.",
+    "1969": "«El cuervo no es malo», dijo la Abuela Tortuga, que acababa de llegar, sin que nadie supiera cómo. «De pequeño se reían de su graznido. Solo quiere que alguien lo escuche hasta el final».",
+    "bach": "En un cuaderno gastado, el cuervo había apuntado todas las veces que saludó y nadie le contestó. Las páginas estaban llenas de palitos. Pompón cerró el cuaderno con cuidado, como quien tapa a alguien dormido.",
+    "13": "Detrás de un corazón pintado en la pared había una puerta pequeña. Desde dentro llegaba un tintineo débil, casi un suspiro: «Tilín… tilín…». Pompón apoyó la oreja y sintió que la luz se apagaba al otro lado.",
+    "roma": "La puerta tenía un mensaje en relieve, para leer con los dedos: «Aquí guardo lo más bonito que he encontrado nunca. No lo toquéis». Debajo, más pequeño: «Por favor».",
+    "radio": "La radio del nido se encendió sola. Era el cuervo, ensayando una canción para nadie. Desafinaba muchísimo, pero cantaba con tantas ganas que Pompón no pudo evitar mover una oreja al compás.",
+    "mozart": "Detrás de un cuadro torcido había un frasco que olía a algas. Al abrirlo, el nido se llenó con el rumor del mar, enorme y tranquilo. Ya eran diez sonidos de vuelta en el mundo.",
+    "14": "La nota del diapasón hizo vibrar todos los frascos a la vez, como un coro diminuto. «Los sonidos quieren volver a casa», dijo la sombra. «Igual que Tilín. Igual que yo».",
+    "la": "La Abuela Tortuga se sentó, por fin, después de un largo camino. «Paso a paso», dijo sonriendo. «Así se llega a todas partes. Y vosotros ya casi habéis llegado».",
+    "cuba": "Al terminar la cuenta atrás, el suelo del nido crujió y se abrió una trampilla secreta. Unas escaleras de ramas bajaban hacia una luz dorada que latía despacio, como un corazón cansado.",
+    "10": "En un móvil antiguo había un mensaje del cuervo que nunca llegó a enviar. Solo decía: «¿Queréis ser mis amigos?». Pompón lo leyó dos veces y se quedó callado.",
+    "taxi": "Justo a tiempo, la sombra apartó a Pompón de una trampa del cuervo: una red llena de purpurina que habría tardado semanas en sacudirse de las orejas. «Te debo una», dijo Pompón. «Me debes varias», contestó la sombra.",
+    "pulso": "El corazón de Pompón latía muy deprisa. Ya se veía entero otra vez: las orejas, la cola, cada bigote. Solo le faltaba una cosa, y caminaba a su lado, en silencio, sin atreverse a volver.",
+    "dado": "Bajo los dados encontrasteis un plano del nido dibujado a carboncillo. Una gran X marcaba el lugar, y al lado, con la letra presumida del cuervo: «Mi tesoro. Mi caja de música».",
+    "16": "La luz del prisma iluminó la caja de música, pequeña y labrada en plata. Dentro, apagándose como una brasa, estaba Tilín. Al veros, intentó tintinear… pero solo le salió un susurro.",
+    "prisma": "«Solo se abre con música», dijo la sombra, acariciando la tapa. «El cuervo la cerró con una canción que solo él conoce. Pero las canciones dejan pistas, igual que las sombras».",
+    "verde": "En la tapa, el cuervo había escrito una serie de números que se describe a sí misma. Debajo, con letra pequeña y triste: «Como yo: solo sé hablar de mí, porque nadie me pregunta nada».",
+    "312211": "La caja tocó una melodía al revés y, de repente, Pompón lo entendió todo: era una canción de cumpleaños. El cumpleaños del cuervo. Y estaba escondida al revés porque nadie se la había cantado nunca del derecho.",
+    "cumpleanos": "«Hoy es su cumpleaños y nadie se ha acordado», dijo la Abuela Tortuga. Pompón miró la tarta que habían encontrado en el nido, sin velas, sin nadie alrededor, y tuvo una idea.",
+    "23": "La caja fuerte se abrió con un clic. Dentro estaba la llave de la caja de música… y una vela de cumpleaños sin estrenar, guardada con mimo, como quien guarda una esperanza.",
+    "647": "Al sonar la melodía, la tapa de la caja de música se abrió despacio. Tilín salió flotando, débil y pálida, pero sonriendo. «Sabía que vendríais», tintineó. «Lo sabía».",
+    "oido": "Entonces se oyó un aleteo. Don Cuervo aterrizó en el borde del nido. No venía a pelear: traía la cabeza gacha, las plumas caídas y, en el pico, la veleta dorada de Pompón.",
+    "relojero": "«Solo quería cantar bonito para que alguien me escuchara», graznó el cuervo, y por primera vez su voz no sonó fea, sino triste. Pompón se acercó despacio y le tendió la pata.",
+    "75": "«Te escucharemos», dijo Pompón. «Todo lo que quieras contar. Pero los sonidos tienen que volver a su sitio, y Tilín también». El cuervo lo miró un largo rato… y asintió.",
+    "violin": "Uno a uno, el cuervo destapó los frascos. Los sonidos salieron volando como pájaros liberados: la lluvia, el viento, las olas, la risa de los niños… y el mundo, poco a poco, volvió a sonar.",
+    "octava": "Solo quedaba devolver a Tilín al cielo. «Para llegar tan alto hace falta el sonido más grande de todos», dijo el Sombrero, mirando a cada uno. «Uno que solo podemos hacer juntos».",
+    "theremin": "Todos se reunieron para un concierto bajo las estrellas: Pompón, la sombra, el Sombrero, la Abuela Tortuga, el gato, el pez… y Don Cuervo, nervioso, en primera fila, ensayando por lo bajo.",
+    "copas": "Con cada nota, Tilín brillaba un poco más, como una brasa que alguien sopla con cariño. La sombra, sin decir nada, dio un paso hacia Pompón. Luego otro.",
+    "cantar": "Cantaste, y Don Cuervo, muerto de vergüenza, se animó a cantar contigo. Desafinaba como siempre… y a nadie le importó lo más mínimo. Por primera vez en su vida, alguien le aplaudía.",
+    "director": "La música subió y subió hasta rozar las estrellas. Tilín empezó a elevarse, despacio, y la sombra la acompañó un trecho para despedirse, como se acompaña a un amigo hasta la puerta.",
+    "bravo": "Con el último aplauso, Tilín volvió a su sitio en la oreja de la Liebre, y el cielo quedó completo. La sombra regresó a los pies de Pompón y se quedó allí, tranquila. Y desde entonces, si miras bien, dentro de ella brilla una estrellita."
   };
+
   // Capítulos: empiezan en estos niveles
   const CAPITULOS = {
     "arbol": ["Capítulo 1", "La estrella caída"],
@@ -393,6 +394,9 @@ const Comun = (() => {
   })();
   const leer = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
   const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+  // Listas guardadas (niveles superados y saltados)
+  const leerLista = k => { const v = leer(k, ""); if (!v) return []; try { const x = JSON.parse(v); return Array.isArray(x) ? x : []; } catch (e) { return String(v).split(",").filter(Boolean); } };
+  const guardarLista = (k, l) => guardar(k, JSON.stringify(l));
   const idioma = leer("idioma", "es");
   const archivo = (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "");
   const indice = NIVELES.indexOf(archivo);
@@ -493,6 +497,10 @@ const Comun = (() => {
   let pasando = false;
   function superado(url, saltado = false) {
     if (pasando) return; pasando = true;
+    if (indice >= 0) {
+      const clave = saltado ? "saltados" : "superados", lista = leerLista(clave);
+      if (!lista.includes(archivo)) { lista.push(archivo); guardarLista(clave, lista); }
+    }
     document.querySelectorAll(".panel-pista, .panel-menu, .rendirse").forEach(p => p.classList.remove("abierto"));
     const siguiente = url.replace(/\.html$/, "");
     const nSig = NIVELES.indexOf(siguiente);
@@ -503,10 +511,10 @@ const Comun = (() => {
         <span class="sup-nivel">Nivel ${indice + 1} ${saltado ? "saltado" : "superado"}</span>
         ${HISTORIA[archivo] ? `<p class="relato">${HISTORIA[archivo]}</p>` : ""}
         ${saltado ? "" : `<p class="elogio">${frase}</p>`}
-        ${CURIOSIDADES[archivo] ? `<div class="curiosidad"><span class="cur-titulo">¿Sabías que…?</span><p class="cur-texto">${CURIOSIDADES[archivo]}</p></div>` : ""}
         ${(() => { const luz = Math.round((indice + 1) / NIVELES.length * 100); return `<div class="luz-tilin"><span class="lt-txt">Luz de Tilín</span><div class="lt-barra"><span style="width:${luz}%"></span></div><span class="lt-num">${luz} %</span></div>`; })()}
         ${codigo}
         <button class="sup-seguir">Continuar</button>
+        ${CURIOSIDADES[archivo] ? `<div class="curiosidad"><span class="cur-titulo">¿Sabías que…?</span><p class="cur-texto">${CURIOSIDADES[archivo]}</p></div>` : ""}
       </div>`);
     const el = document.querySelector(".superado");
     el.querySelector(".sup-seguir").addEventListener("click", () => { location.href = url; });
@@ -541,6 +549,7 @@ const Comun = (() => {
             <button class="accion corta" data-a="codigo">Ir</button>
           </div>
           <button class="accion" data-a="idioma">🌐 ${otro}</button>
+          <button class="accion" data-a="mapa">🗺️ Mapa</button>
           <button class="accion" data-a="portada">🏠 Portada</button>
           <button class="cerrar">Volver al juego</button>
         </div>
@@ -559,6 +568,7 @@ const Comun = (() => {
       if (a === "rendirse") rendirse();
       if (a === "idioma") { guardar("idioma", idioma === "es" ? "en" : "es"); if (marco && marco.aplicarIdioma) marco.aplicarIdioma(); location.reload(); }
       if (a === "portada") (marco || window).location.href = "index.html";
+      if (a === "mapa") location.href = "mapa.html?desde=" + encodeURIComponent(archivo);
       if (a === "codigo") {
         const n = irACodigo(input.value);
         if (n) location.href = n + ".html";
@@ -579,7 +589,7 @@ const Comun = (() => {
       const cap = document.querySelector(".capitulo");
       requestAnimationFrame(() => requestAnimationFrame(() => cap.classList.add("visible")));
       const quitar = () => { cap.classList.remove("visible"); setTimeout(() => cap.remove(), 900); };
-      const t = setTimeout(quitar, 2800);
+      const t = setTimeout(quitar, 1700);
       cap.addEventListener("pointerdown", e => { e.stopPropagation(); clearTimeout(t); quitar(); });
     }
     if (indice >= 0) {
@@ -634,6 +644,7 @@ const Comun = (() => {
 
   // Pantalla inicial: desbloquea el audio y pide permisos con un toque
   function inicio(texto, boton, alEmpezar = async () => {}) {
+    if (marco) { audio(); setTimeout(async () => { try { await alEmpezar(); } catch (e) {} }, 50); return; }
     document.body.insertAdjacentHTML("beforeend",
       `<section class="inicio"><p>${texto}</p><button>${boton}</button></section>`);
     const s = document.querySelector(".inicio");
@@ -647,12 +658,33 @@ const Comun = (() => {
 
   // ---------- Personajes ----------
   const FIGURAS = {
-    sombra: `<svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#05080F" transform="rotate(-12 48 28)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#05080F" transform="rotate(10 70 26)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#05080F"/><circle cx="56" cy="66" r="24" fill="#05080F"/><circle cx="47" cy="62" r="5" fill="#F2E9C9"/><circle cx="64" cy="62" r="5" fill="#F2E9C9"/><path d="M46 76 Q55 83 64 76" stroke="#F2E9C9" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
-    cuervo: `<svg viewBox="0 0 120 100"><path d="M20 60 Q40 30 75 38 Q100 40 108 55 L92 58 Q80 80 50 82 Q30 80 20 60Z" fill="#141414"/><path d="M40 55 Q55 20 85 30 Q60 45 40 55Z" fill="#222"/><path d="M106 50 L120 54 L106 58Z" fill="#E0A030"/><circle cx="96" cy="48" r="3.5" fill="#F2E9C9"/><path d="M45 82 L42 96 M58 82 L58 96" stroke="#E0A030" stroke-width="3"/></svg>`,
-    sombrero: `<svg viewBox="0 0 120 110"><ellipse cx="60" cy="96" rx="55" ry="10" fill="#1E1E2A"/><rect x="25" y="20" width="70" height="78" rx="6" fill="#262636"/><rect x="25" y="70" width="70" height="12" fill="#8E2433"/><circle cx="48" cy="45" r="7" fill="#F2E9C9"/><circle cx="72" cy="45" r="7" fill="#F2E9C9"/><circle cx="49" cy="46" r="3" fill="#0B1020"/><circle cx="73" cy="46" r="3" fill="#0B1020"/><path d="M50 58 Q60 64 70 58" stroke="#F2E9C9" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
-    tortuga: `<svg viewBox="0 0 130 90"><ellipse cx="62" cy="55" rx="45" ry="28" fill="#5D8A4E"/><path d="M30 50 Q62 15 94 50" fill="#7FAE68"/><path d="M45 40 L62 30 L79 40 L70 55 L54 55Z" fill="#5D8A4E" opacity=".6"/><circle cx="112" cy="55" r="13" fill="#A7C98F"/><circle cx="116" cy="51" r="2.5" fill="#0B1020"/><path d="M110 60 Q115 63 120 60" stroke="#0B1020" stroke-width="1.5" fill="none"/><ellipse cx="35" cy="80" rx="8" ry="6" fill="#A7C98F"/><ellipse cx="88" cy="80" rx="8" ry="6" fill="#A7C98F"/></svg>`,
-    tilin: `<svg viewBox="0 0 100 100"><path d="M50 4 L62 36 L96 38 L69 58 L79 92 L50 72 L21 92 L31 58 L4 38 L38 36Z" fill="#FFD54F" stroke="#FFF3C4" stroke-width="2"/><circle cx="41" cy="50" r="4" fill="#0B1020"/><circle cx="59" cy="50" r="4" fill="#0B1020"/><path d="M42 60 Q50 67 58 60" stroke="#0B1020" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`
+    // La sombra: un espectro oscuro con orejas de conejo
+    sombra: `<svg viewBox="0 0 120 150"><defs><linearGradient id="gSom" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070E" stop-opacity=".95"/><stop offset=".75" stop-color="#0B1020" stop-opacity=".8"/><stop offset="1" stop-color="#0B1020" stop-opacity="0"/></linearGradient></defs>
+      <path d="M44 8 C38 22 39 40 44 52 C30 58 24 72 24 88 C24 112 30 130 22 146 C34 140 40 148 48 140 C56 150 64 140 72 148 C80 140 88 148 98 144 C90 128 96 110 96 88 C96 72 90 58 76 52 C82 40 83 22 76 8 C70 20 68 34 66 48 C63 47 57 47 54 48 C52 34 50 20 44 8Z" fill="url(#gSom)"/>
+      <path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#E9A6B8"/><path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#FFF" opacity=".5"/></svg>`,
+    // Don Cuervo: silueta elegante con brillo azulado
+    cuervo: `<svg viewBox="0 0 140 110"><defs><linearGradient id="gCue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A3446"/><stop offset="1" stop-color="#07090D"/></linearGradient></defs>
+      <path d="M14 70 C28 52 46 44 70 44 C86 44 98 38 108 30 C116 26 124 28 128 34 L138 38 L127 42 C124 52 116 58 106 62 C102 78 88 88 66 90 L52 104 L54 90 C36 88 22 82 14 70Z" fill="url(#gCue)"/>
+      <path d="M40 60 C56 40 80 34 100 40 C84 46 68 56 54 70Z" fill="#3A4660" opacity=".7"/><path d="M30 72 C44 66 58 66 72 70" stroke="#4A5878" stroke-width="1.5" fill="none" opacity=".6"/>
+      <circle cx="116" cy="34" r="2.6" fill="#E9C46A"/><path d="M62 90 L58 106 M72 88 L72 104" stroke="#3A3A3A" stroke-width="2.5"/></svg>`,
+    // El Sombrero: chistera con cinta granate y mirada serena
+    sombrero: `<svg viewBox="0 0 130 120"><defs><linearGradient id="gSom2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14141C"/><stop offset=".45" stop-color="#2E2E3C"/><stop offset="1" stop-color="#101016"/></linearGradient></defs>
+      <ellipse cx="65" cy="104" rx="60" ry="12" fill="#101016"/><path d="M30 100 L34 18 Q65 8 96 18 L100 100 Q65 110 30 100Z" fill="url(#gSom2)"/>
+      <ellipse cx="65" cy="18" rx="31" ry="7" fill="#22222E"/><path d="M32 76 Q65 84 98 76 L99 90 Q65 98 31 90Z" fill="#6E1E2B"/><path d="M32 76 Q65 84 98 76" stroke="#9A3344" stroke-width="1.2" fill="none"/>
+      <path d="M50 52 Q56 48 62 52 M68 52 Q74 48 80 52" stroke="#E9DCC0" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="56" cy="55" r="2.2" fill="#E9DCC0"/><circle cx="74" cy="55" r="2.2" fill="#E9DCC0"/></svg>`,
+    // La Abuela Tortuga: caparazón con relieve y gafas redondas
+    tortuga: `<svg viewBox="0 0 150 100"><defs><radialGradient id="gTor" cx=".4" cy=".3"><stop offset="0" stop-color="#8FA86A"/><stop offset="1" stop-color="#4A5E36"/></radialGradient></defs>
+      <path d="M20 66 C22 34 48 18 76 18 C104 18 124 36 124 66 Z" fill="url(#gTor)"/>
+      <g fill="none" stroke="#33422A" stroke-width="2"><path d="M58 30 L72 24 L86 30 L86 46 L72 52 L58 46Z"/><path d="M58 46 L44 54 L40 66 M86 46 L100 54 L106 66 M72 52 L72 66 M58 30 L42 36 M86 30 L102 36"/></g>
+      <path d="M16 66 L128 66 Q124 74 112 74 L32 74 Q20 74 16 66Z" fill="#B9A77E"/>
+      <path d="M122 60 C130 48 146 50 146 62 C146 72 136 76 126 72Z" fill="#9AAF7C"/><circle cx="136" cy="59" r="5" fill="none" stroke="#3A3A3A" stroke-width="1.5"/><circle cx="136" cy="59" r="1.6" fill="#1A1A1A"/>
+      <path d="M30 74 L26 90 L40 90 L42 74 M98 74 L100 90 L114 90 L110 74" fill="#9AAF7C"/></svg>`,
+    // Tilín: un destello de cuatro puntas con un brillo suave
+    tilin: `<svg viewBox="0 0 100 100"><defs><radialGradient id="gTil"><stop offset="0" stop-color="#FFF8DC"/><stop offset=".5" stop-color="#FFD54F" stop-opacity=".55"/><stop offset="1" stop-color="#FFD54F" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="50" cy="50" r="46" fill="url(#gTil)"/><path d="M50 8 C53 38 62 47 92 50 C62 53 53 62 50 92 C47 62 38 53 8 50 C38 47 47 38 50 8Z" fill="#FFE9A0"/>
+      <circle cx="44" cy="50" r="2.4" fill="#5A4410"/><circle cx="56" cy="50" r="2.4" fill="#5A4410"/></svg>`
   };
+
   function vozPersonaje(quien) {
     if (quien === "sombra") [660, 784, 880].forEach((f, i) => tono(f, i * .09, .12, .06, "sine"));
     if (quien === "cuervo") { const c = audio(); if (!c) return; const t = c.currentTime, o = c.createOscillator(), g = c.createGain(); o.type = "sawtooth"; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(300, t + .25);
@@ -835,6 +867,6 @@ const Comun = (() => {
   }
 
   return { sombra, audio, tono, vibrar, normalizar, ir, avisar, nivel, inicio, superado, pistas, t, idioma, gravedad, pedirAnalizador, frecuencia,
-           NIVELES, CODIGOS, irACodigo, leer, guardar,
+           NIVELES, CODIGOS, irACodigo, leer, guardar, leerLista,
            pedirOrientacion, pedirMovimiento, pedirMicro };
 })();

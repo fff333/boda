@@ -280,3 +280,11 @@ button:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
 .sombra-trav .figura { width: 100%; }
 .sombra-trav .figura svg { width: 100%; display: block; filter: drop-shadow(0 0 6px rgba(242,233,201,.35)); }
 .sombra-trav .bocadillo-ap { margin-bottom: 4px; }
+
+/* Curiosidad: pequeña, al final */
+.superado .curiosidad { margin-top: 16px; padding: 10px 14px; max-width: 340px; background: none; border: none; border-top: 1px solid rgba(242,233,201,.15); border-radius: 0; }
+.superado .curiosidad .cur-titulo { font-size: 10px; margin-bottom: 3px; }
+.superado .curiosidad .cur-texto { font-size: 13px !important; opacity: .65; }
+.superado .relato { font-size: clamp(18px, 5vw, 23px) !important; line-height: 1.45 !important; max-width: 30ch !important; text-align: left; }
+.superado { justify-content: flex-start; padding-top: calc(env(safe-area-inset-top) + 9vh); }
+.aparicion { width: 110px; } .aparicion .figura { width: 110px; }
