@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Canta</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .afinador { position: absolute; left: 50%; top: 52%; width: min(80vw, 340px); transform: translate(-50%, -50%); }
+  .afinador svg { width: 100%; display: block; overflow: visible; }
+  #aguja { transition: transform .1s; transform-origin: 150px 150px; }
+  .lectura { position: absolute; left: 0; right: 0; top: 66%; text-align: center; font-size: 24px; font-style: normal; font-family: "Courier New", monospace; }
+  .ref-c { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 96px); transform: translateX(-50%); }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="afinador"><svg viewBox="0 0 300 170"><path d="M30 150 A120 120 0 0 1 270 150" fill="none" stroke="rgba(242,233,201,.25)" stroke-width="10"/>
+    <path d="M140 31 A120 120 0 0 1 160 31" fill="none" stroke="#43A047" stroke-width="10"/>
+    <g id="aguja"><line x1="150" y1="150" x2="150" y2="40" stroke="#E9A6B8" stroke-width="4" stroke-linecap="round"/></g><circle cx="150" cy="150" r="7" fill="#E9A6B8"/>
+    <text x="150" y="22" text-anchor="middle" fill="#F2E9C9" font-family="Georgia" font-style="italic" font-size="18">la</text></svg></div>
+  <div class="lectura" id="lectura">—</div>
+  <button class="boton-texto ref-c" id="ref">♪ Escuchar el «la»</button>
+</main>
+<p class="pista">Canta o silba un «la» bien afinado</p>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 160px)"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Escucha la nota de referencia y trata de imitarla con la voz o silbando.", "Si la aguja se va a la izquierda, sube un poco; si se va a la derecha, baja.", "Mantén la nota con la aguja en verde durante un segundo. Vale cualquier «la», grave o agudo."]);
+  Comun.nivel("", null);
+  const aguja = document.getElementById("aguja"), lectura = document.getElementById("lectura"), sub = document.getElementById("sub");
+  let an = null, tiempo = 0, hecho = false, ultimo = performance.now();
+  document.getElementById("ref").addEventListener("click", () => Comun.tono(440, 0, 1.5, .18, "triangle"));
+  Comun.inicio("Un afinador de voces", "Encenderlo", async () => {
+    an = await Comun.pedirAnalizador();
+    if (!an) { sub.textContent = "Este nivel necesita el micrófono"; return; }
+    setInterval(() => {
+      if (hecho) return; const ahora = performance.now(), dt = ahora - ultimo; ultimo = ahora;
+      const f = Comun.frecuencia(an);
+      if (!f) { lectura.textContent = "—"; tiempo = Math.max(0, tiempo - dt); return; }
+      const semis = 12 * Math.log2(f / 440), cents = (semis - Math.round(semis / 12) * 12) * 100;
+      const c = Math.max(-50, Math.min(50, cents)); aguja.style.transform = `rotate(${c * 1.2}deg)`;
+      lectura.textContent = Math.round(f) + " Hz";
+      tiempo = Math.abs(cents) < 30 ? tiempo + dt : Math.max(0, tiempo - dt);
+      if (tiempo > 1000) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("director.html"), 1600); }
+    }, 100);
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>El vuelo</title>
+<style>
+  .crono { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); font-family: "Courier New", monospace; font-style: normal; font-size: clamp(56px, 18vw, 96px); }
+  .boton-crono { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 110px); transform: translateX(-50%); width: 140px; height: 140px; border-radius: 50%; border: none; background: #FB8C00; color: #fff; font: inherit; font-size: 18px; cursor: pointer; touch-action: none; }
+  .boton-crono.pulsado { background: #E65100; transform: translateX(-50%) scale(.95); }
+  .resultado { position: absolute; left: 0; right: 0; top: 54%; text-align: center; font-size: 20px; opacity: .85; }
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="crono" id="crono">0.0</div>
+  <div class="resultado" id="res"></div>
+  <button class="boton-crono" id="boton">Mantén pulsado</button>
+</main>
+<p class="pista">Mantén pulsado lo que duró el vuelo más largo de una gallina</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+
+  Comun.pistas(["Hay un récord oficial de vuelo de una gallina.", "Duró 13 segundos.", "Mantén pulsado y suelta a los 13 segundos. El contador se esconde a los 3: tendrás que contar tú (margen de medio segundo)."]);
+  Comun.nivel("", null);
+  const crono = document.getElementById("crono"), boton = document.getElementById("boton"), res = document.getElementById("res");
+  let inicio = null, hecho = false;
+  function bucle() { if (inicio === null) return; const s = (performance.now() - inicio) / 1000; crono.textContent = s < 3 ? s.toFixed(1) : "?.?"; requestAnimationFrame(bucle); }
+  boton.addEventListener("pointerdown", e => { if (hecho) return; boton.setPointerCapture(e.pointerId); inicio = performance.now(); boton.classList.add("pulsado"); res.textContent = ""; Comun.tono(440, 0, .1, .1, "sine"); bucle(); });
+  const soltar = () => {
+    if (inicio === null || hecho) return; const s = (performance.now() - inicio) / 1000; inicio = null; boton.classList.remove("pulsado"); crono.textContent = s.toFixed(1);
+    if (Math.abs(s - 13) <= .5) { hecho = true; res.textContent = "¡Récord igualado!"; Plantilla.exito(); }
+    else { res.textContent = s < 13 ? "Ha aterrizado demasiado pronto" : "Esa gallina vuela demasiado"; Plantilla.fallo(null); }
+  };
+  boton.addEventListener("pointerup", soltar); boton.addEventListener("pointercancel", soltar);
+
+</script>
+</body>
+</html>

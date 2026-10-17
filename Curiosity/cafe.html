@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Paciencia</title>
+<style>
+  .mesa { background: linear-gradient(#141B36 0%, #1B2546 62%, #3E2A1A 63%, #2A1C10 100%); }
+  .taza { position: absolute; left: 50%; top: 56%; width: min(56vw, 260px); transform: translate(-50%, -50%); transition: opacity 1.2s; }
+  .taza svg { width: 100%; display: block; overflow: visible; }
+  .vapor path { animation: vapor 3s ease-in-out infinite; }
+  .vapor path:nth-child(2) { animation-delay: 1s; } .vapor path:nth-child(3) { animation-delay: 2s; }
+  @keyframes vapor { 0% { opacity: 0; transform: translateY(10px); } 40% { opacity: .7; } 100% { opacity: 0; transform: translateY(-30px); } }
+  .temperatura { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; font-size: 22px; opacity: .7; }
+  .poso { position: absolute; left: 50%; top: 52%; width: min(70vw, 320px); transform: translate(-50%, -50%); opacity: 0; transition: opacity 2s 1s; pointer-events: none; }
+  .poso svg { width: 100%; display: block; }
+  .frio .taza { opacity: 0; } .frio .poso { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="escena mesa entrada" id="escena">
+  <div class="taza">
+    <svg viewBox="0 0 200 200">
+      <g class="vapor" id="vapor" stroke="#F2E9C9" stroke-width="4" fill="none" stroke-linecap="round">
+        <path d="M70 60 Q60 40 72 25 Q82 12 72 0"/><path d="M100 60 Q90 40 102 25 Q112 12 102 0"/><path d="M130 60 Q120 40 132 25 Q142 12 132 0"/>
+      </g>
+      <path d="M40 75 L160 75 L148 170 Q146 185 130 185 L70 185 Q54 185 52 170Z" fill="#F2E9C9"/>
+      <path d="M160 95 Q190 95 188 125 Q186 152 152 150" stroke="#F2E9C9" stroke-width="10" fill="none"/>
+      <ellipse cx="100" cy="76" rx="60" ry="10" fill="#4A2C17"/>
+      <ellipse cx="100" cy="192" rx="80" ry="8" fill="#E2D6B0"/>
+    </svg>
+  </div>
+  <div class="poso">
+    <svg viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="140" fill="#F2E9C9"/>
+      <circle cx="150" cy="150" r="112" fill="#D9C79C"/>
+      <text x="150" y="162" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="44" fill="#5A3A1E" opacity=".75" letter-spacing="3">FUTURO</text>
+      <circle cx="95" cy="110" r="5" fill="#5A3A1E" opacity=".5"/><circle cx="205" cy="200" r="7" fill="#5A3A1E" opacity=".4"/><circle cx="190" cy="100" r="3" fill="#5A3A1E" opacity=".5"/>
+    </svg>
+  </div>
+  <div class="temperatura" id="temp">90 °C</div>
+</main>
+<p class="pista">Las prisas queman</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Recién hecho, el café está demasiado caliente.", "No toques nada. Solo espera.", "En el poso pone FUTURO. Pero ¿cuándo llega el futuro? Empieza por M."]);
+  Comun.nivel("", { futuro: "El futuro será…",  poso: "¿Y qué dicen que se lee en el poso?", destino: "Casi. Lo que está por venir", cafe: "Ya estás en él" });
+  const TIEMPO = 40000;
+  const escena = document.getElementById("escena"), temp = document.getElementById("temp"), vapor = document.getElementById("vapor");
+  let inicio = null, frio = false;
+  addEventListener("pointerdown", () => {
+    if (frio || inicio === null) return;
+    inicio = performance.now();
+    Comun.avisar("¡Quema! Mejor esperar…"); Comun.tono(200, 0, .2, .12, "sine"); Comun.vibrar(30);
+  });
+  Comun.inicio("Un café recién hecho", "Sentarse", async () => {
+    inicio = performance.now();
+    (function bucle(ahora) {
+      if (frio) return;
+      const p = Math.min(1, ((ahora || performance.now()) - inicio) / TIEMPO);
+      temp.textContent = Math.round(90 - p * 50) + " °C";
+      vapor.style.opacity = 1 - p;
+      if (p >= 1) { frio = true; temp.textContent = ""; escena.classList.add("frio"); Comun.tono(523.25, 0, 1, .12, "sine"); }
+      else requestAnimationFrame(bucle);
+    })();
+  });
+</script>
+</body>
+</html>

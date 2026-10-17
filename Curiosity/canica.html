@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Equilibrio</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(242,233,201,.15); }
+  .barra-q span { display: block; height: 100%; width: 0; background: #F2E9C9; border-radius: 3px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><canvas class="lienzo" id="l"></canvas><div class="barra-q"><span id="barra"></span></div></main>
+<p class="pista">Mantén la canica en el centro del plato</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c = el.getContext("2d");
+    const aj = () => { el.width = innerWidth * dpr; el.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }; aj(); addEventListener("resize", aj); return c; }
+  Comun.pistas(["El plato se inclina con el móvil.", "Corrige con suavidad: si te pasas, la canica se va al otro lado.", "Mantenla dentro del círculo del centro durante cinco segundos seguidos."]);
+  Comun.nivel("", null);
+  const ctx = lienzoCompleto(document.getElementById("l")), barra = document.getElementById("barra"), sub = document.getElementById("sub");
+  let x = 0, y = 0, vx = 0, vy = 0, ax = 0, ay = 0, sensor = false, dedo = null, p = 0, hecho = false, ultimo = performance.now(), t0 = performance.now();
+  function alMover(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; ax = g.x; ay = g.y - (Math.abs(g.z) < 9.5 ? 0 : 0); }
+  let base = null;
+  function alMoverRel(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; if (!base) base = { x: g.x, y: g.y }; ax = g.x - base.x; ay = g.y - base.y; }
+  addEventListener("pointerdown", e => { if (sensor) base = null; else dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointermove", e => { if (dedo) dedo = [e.clientX, e.clientY]; });
+  addEventListener("pointerup", () => { dedo = null; if (!sensor) { ax = ay = 0; } });
+  Comun.inicio("Una canica en un plato", "Coger el plato", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMoverRel);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: mantén el dedo hacia donde quieras inclinar"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50) / 1000; ultimo = ahora;
+    const W = innerWidth, H = innerHeight, R = Math.min(W, H) * .38, r = R * .3, cx = W / 2, cy = H * .52;
+    if (!sensor && dedo) { ax = (dedo[0] - cx) / R * 4; ay = (dedo[1] - cy) / R * 4; }
+    const t = (ahora - t0) / 1000, viento = [Math.sin(t * .7) * 1.4, Math.cos(t * .5) * 1.4];
+    vx = (vx + (ax + viento[0]) * 60 * dt) * .985; vy = (vy + (ay + viento[1]) * 60 * dt) * .985;
+    x += vx * dt; y += vy * dt;
+    if (Math.hypot(x, y) > R) { x = y = vx = vy = 0; p = 0; Comun.tono(150, 0, .3, .12, "sine"); Comun.avisar("¡Se ha caído!"); }
+    if (!hecho) { p = Math.hypot(x, y) < r ? Math.min(1, p + dt / 5) : Math.max(0, p - dt / 1.5);
+      if (p >= 1) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("bocabajo.html"), 1500); } }
+    barra.style.width = (p * 100) + "%";
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#E9E2CF"; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#C9BE9C"; ctx.lineWidth = 6; ctx.stroke();
+    ctx.strokeStyle = "rgba(233,166,184,.8)"; ctx.lineWidth = 2; ctx.setLineDash([6, 6]); ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    const g = ctx.createRadialGradient(cx + x - 6, cy + y - 6, 2, cx + x, cy + y, 16); g.addColorStop(0, "#FFFFFF"); g.addColorStop(1, "#3949AB");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx + x, cy + y, 14, 0, 7); ctx.fill();
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

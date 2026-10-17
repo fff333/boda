@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La cuerda</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .instrumento { position: absolute; left: 6%; right: 6%; top: 50%; height: 110px; transform: translateY(-50%); touch-action: none; }
+  .tabla-p { position: absolute; inset: 20px 0; background: #8D6E4A; border-radius: 12px; }
+  .cuerda-p { position: absolute; left: 4%; right: 4%; top: 50%; height: 3px; background: #F2E9C9; }
+  .dedo { position: absolute; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: #E9A6B8; opacity: 0; }
+  .ref { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 100px); transform: translateX(-50%); }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="instrumento" id="inst"><div class="tabla-p"></div><div class="cuerda-p"></div><div class="dedo" id="dedo"></div></div>
+  <button class="boton-texto ref" id="ref">♪ Nota de Pitágoras</button>
+</main>
+<p class="pista">Pon el dedo en la cuerda para que suene la nota de Pitágoras</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Escucha la nota de Pitágoras y busca dónde suena igual en la cuerda.", "Cuanto más corta es la parte que vibra, más aguda suena.", "Pon el dedo justo en la mitad de la cuerda: suena la misma nota, una octava más aguda."]);
+  Comun.nivel("", null);
+  const inst = document.getElementById("inst"), dedo = document.getElementById("dedo"), BASE = 196;
+  let pos = null, osc = null, gan = null, quieto = null, hecho = false;
+  function sonar(f) { const c = Comun.audio(); if (!c) return; if (!osc) { osc = c.createOscillator(); gan = c.createGain(); osc.type = "triangle"; gan.gain.value = 0; osc.connect(gan).connect(c.destination); osc.start(); }
+    osc.frequency.setTargetAtTime(f, c.currentTime, .02); gan.gain.setTargetAtTime(.18, c.currentTime, .02); }
+  function callar() { if (gan) gan.gain.setTargetAtTime(0, Comun.audio().currentTime, .05); }
+  function mover(e) {
+    const r = inst.getBoundingClientRect(), x = Math.max(.08, Math.min(.96, (e.clientX - r.left) / r.width));
+    pos = (x - .04) / .92; dedo.style.left = (x * 100) + "%"; dedo.style.opacity = 1;
+    const vibra = 1 - pos, f = BASE / Math.max(.1, vibra); sonar(f);
+    if (!hecho) { if (Math.abs(pos - .5) < .025) { if (!quieto) quieto = setTimeout(() => { hecho = true; callar(); Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("eureka.html"), 1600); }, 900); }
+      else if (quieto) { clearTimeout(quieto); quieto = null; } }
+  }
+  inst.addEventListener("pointerdown", e => { inst.setPointerCapture(e.pointerId); mover(e); });
+  inst.addEventListener("pointermove", e => { if (e.buttons || e.pointerType === "touch") mover(e); });
+  inst.addEventListener("pointerup", () => { callar(); dedo.style.opacity = 0; if (quieto) { clearTimeout(quieto); quieto = null; } });
+  document.getElementById("ref").addEventListener("click", () => { Comun.tono(BASE * 2, 0, 1.2, .18, "triangle"); });
+
+</script>
+</body>
+</html>

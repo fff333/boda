@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Patrón</title>
+<style>
+
+  .lista { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: clamp(26px, 8vw, 40px); line-height: 1.5; font-style: normal; font-family: "Courier New", monospace; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="lista">1<br>11<br>21<br>1211<br>111221<br>?</div></main>
+<p class="pista">¿Qué viene después?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["No es una suma. Lee cada fila en voz alta… describiendo la anterior.", "«1» es «un uno» → 11. «11» es «dos unos» → 21.", "111221 se lee «tres unos, dos doses, un uno»."]);
+  Comun.nivel("", { "1112211": "Describe la fila, no la copies" });
+
+</script>
+</body>
+</html>

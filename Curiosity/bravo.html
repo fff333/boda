@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Bravo</title>
+<style>
+
+  .telon { position: absolute; inset: 0; background: linear-gradient(90deg, #7B1F2A 0 50%, #8E2433 50% 100%); background-size: 60px 100%; }
+  .escenario { position: absolute; left: 50%; top: 52%; width: min(40vw, 170px); transform: translate(-50%, -50%); }
+  .escenario svg { width: 100%; display: block; }
+  .medidor { position: absolute; left: 0; right: 0; top: 74%; display: flex; justify-content: center; gap: 10px; }
+  .medidor span { width: 18px; height: 18px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .medidor span.on { background: #FFE082; box-shadow: 0 0 10px #FFE082; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" id="escena">
+  <div class="telon"></div>
+  <div class="escenario"><svg viewBox="0 0 120 130">
+    <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/>
+    <ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/>
+    <path d="M30 40 L18 28 M90 40 L102 28" stroke="#FFE082" stroke-width="3"/>
+  </svg></div>
+  <div class="medidor" id="medidor"></div>
+</main>
+<p class="pista" style="text-shadow:0 2px 10px #000">Has llegado al final. ¿No merece un aplauso?</p>
+<p class="subpista" id="sub" style="text-shadow:0 2px 10px #000"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["El escenario espera algo del público… que eres tú.", "Aplaude cerca del móvil.", "Da cinco palmadas fuertes, una detrás de otra."]);
+  Comun.nivel("", null);
+  const medidor = document.getElementById("medidor"), sub = document.getElementById("sub");
+  const luces = Array.from({ length: 5 }, () => { const s = document.createElement("span"); medidor.appendChild(s); return s; });
+  let palmas = 0, ultima = 0, medir = null, hecho = false;
+  function palma() {
+    const ahora = performance.now(); if (hecho || ahora - ultima < 180) return; ultima = ahora;
+    luces[palmas].classList.add("on"); palmas++; Comun.tono(300 + palmas * 80, 0, .1, .1, "square");
+    if (palmas === 5) {
+      hecho = true;
+      const c = Comun.audio();
+      if (c) for (let k = 0; k < 40; k++) {
+        const t = c.currentTime + Math.random() * 2.5, buf = c.createBuffer(1, c.sampleRate * .05, c.sampleRate), d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+        const s = c.createBufferSource(), g = c.createGain(); g.gain.value = .25; s.buffer = buf; s.connect(g).connect(c.destination); s.start(t);
+      }
+      Comun.vibrar([50, 50, 50, 50, 200]);
+      setTimeout(() => Comun.superado("fin.html"), 2800);
+    }
+  }
+  addEventListener("pointerdown", e => { if (!medir && !e.target.closest("button")) palma(); });
+  Comun.inicio("Se levanta el telón", "Entrar", async () => {
+    medir = await Comun.pedirMicro();
+    if (!medir) sub.textContent = "Sin micrófono: toca la pantalla para aplaudir";
+    let antes = 0;
+    (function bucle() { if (medir) { const v = medir(); if (v > .25 && antes <= .25) palma(); antes = v; } if (!hecho) requestAnimationFrame(bucle); })();
+  });
+
+</script>
+</body>
+</html>

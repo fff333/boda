@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Silba</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .hoyo { position: absolute; left: 50%; top: 62%; width: min(60vw, 260px); height: min(26vw, 110px); transform: translate(-50%, -50%); overflow: hidden; }
+  .hoyo .boca { position: absolute; left: 0; right: 0; bottom: 0; height: 50%; border-radius: 50%; background: #000; }
+  .hoyo .conejo-c { position: absolute; left: 50%; bottom: -10%; width: 50%; transform: translate(-50%, 160%); transition: transform .5s cubic-bezier(.3,1.5,.6,1); }
+  .hoyo .conejo-c svg { width: 100%; display: block; }
+  .fuera .hoyo .conejo-c { transform: translate(-50%, 0); }
+  .tierra { position: absolute; left: 0; right: 0; top: 62%; bottom: 0; background: #2A2218; }
+  .ondas { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); font-size: 40px; opacity: 0; transition: opacity .2s; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" id="escena"><div class="tierra"></div><div class="hoyo"><div class="boca"></div><div class="conejo-c"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div></div><div class="ondas" id="ondas">♪</div></main>
+<p class="pista">Solo sale si le llamas… a su manera</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["No le gusta que le griten.", "Responde a los sonidos agudos y suaves.", "Silba cerca del móvil durante un segundo."]);
+  Comun.nivel("", null);
+  const escena = document.getElementById("escena"), ondas = document.getElementById("ondas"), sub = document.getElementById("sub");
+  let an = null, buf = null, tiempo = 0, hecho = false, ultimo = performance.now();
+  addEventListener("pointerdown", () => { if (!an && !hecho) salir(); });
+  function salir() { hecho = true; escena.classList.add("fuera"); Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("toctoc.html"), 1800); }
+  Comun.inicio("Una madriguera silenciosa", "Acercarse", async () => {
+    an = await Comun.pedirAnalizador();
+    if (!an) { sub.textContent = "Sin micrófono: toca la pantalla"; return; }
+    buf = new Float32Array(an.frequencyBinCount);
+    (function bucle(ahora) {
+      const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+      an.getFloatFrequencyData(buf);
+      const hz = an.context.sampleRate / an.fftSize, i0 = Math.floor(800 / hz), i1 = Math.floor(4000 / hz);
+      let max = -200, im = 0, suma = 0;
+      for (let i = i0; i < i1; i++) { suma += buf[i]; if (buf[i] > max) { max = buf[i]; im = i; } }
+      const media = suma / (i1 - i0), silbido = max > -55 && max - media > 28;
+      tiempo = silbido ? tiempo + dt : Math.max(0, tiempo - dt);
+      ondas.style.opacity = silbido ? 1 : 0;
+      if (!hecho && tiempo > 700) salir();
+      if (!hecho) requestAnimationFrame(bucle);
+    })(performance.now());
+  });
+
+</script>
+</body>
+</html>

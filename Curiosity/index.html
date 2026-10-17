@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<title>Curiosity</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0B1020; }
+  #juego { position: fixed; inset: 0; width: 100vw; height: 100dvh; border: 0; display: block; }
+  .portada {
+    position: fixed; inset: 0; z-index: 10; background: radial-gradient(ellipse at 50% 30%, #1E2A4A 0%, #0B1020 75%); color: #F2E9C9;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3vh; padding: 8vw; text-align: center; overflow-y: auto;
+    font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500;
+    transition: opacity .8s ease;
+  }
+  .portada.oculta { opacity: 0; pointer-events: none; }
+  .portada h1 { font-weight: 500; font-size: clamp(32px, 10vw, 56px); line-height: 1.1; }
+  .portada .gancho { font-size: 18px; line-height: 1.4; max-width: 26ch; opacity: .85; }
+  .portada .nota { font-size: 15px; opacity: .55; max-width: 28ch; line-height: 1.4; }
+  .conejo { width: 90px; }
+  .nombre {
+    font: inherit; font-size: 19px; text-align: center; color: #F2E9C9; width: min(74vw, 300px);
+    background: rgba(242,233,201,.07); border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 12px 18px; outline: none;
+  }
+  .nombre::placeholder { color: rgba(242,233,201,.4); }
+  .principal {
+    font: inherit; font-size: 21px; color: #0B1020; background: #F2E9C9;
+    border: none; border-radius: 40px; padding: 14px 44px; cursor: pointer;
+  }
+  .secundarios { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .secundarios button, .secundarios a {
+    font: inherit; font-size: 15px; color: #F2E9C9; background: none; text-decoration: none;
+    border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 9px 16px; cursor: pointer;
+  }
+  button:focus-visible, input:focus-visible { outline: 3px solid #E9A6B8; outline-offset: 3px; }
+</style>
+</head>
+<body>
+<section class="portada" id="portada">
+  <svg class="conejo" viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28" fill="none" stroke="#F2E9C9" stroke-width="6"/><path d="M62 62 L88 88" stroke="#F2E9C9" stroke-width="9" stroke-linecap="round"/><text x="42" y="54" text-anchor="middle" font-family="Georgia" font-size="34" fill="#FFD54F">?</text></svg>
+  <h1>Curiosity</h1>
+  <p class="gancho">72 retos, de fácil a difícil. Detrás de cada uno se esconde algo que probablemente no sabías.</p>
+  <button class="principal" id="empezar">Empezar</button>
+  <p class="nota">Este juego usa el micrófono, la cámara y el movimiento del móvil. Te pedirá permiso.</p>
+  <div class="secundarios">
+    <button id="reiniciar" hidden>Empezar de cero</button>
+  </div>
+</section>
+<iframe id="juego" title="Juego" allow="microphone; camera; geolocation; autoplay; accelerometer; gyroscope; magnetometer"></iframe>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  // Este archivo es el marco del juego: pide los permisos una sola vez
+  // y carga cada nivel dentro, compartiendo micrófono, audio y movimiento.
+  window.ES_MARCO = true;
+  window.AUDIO = null;
+  window.MICRO = null;
+  window.ANALIZADOR = null;
+  window.MOVIMIENTO_OK = false;
+
+  const PRIMERO = "arcoiris.html";
+  const juego = document.getElementById("juego"), portada = document.getElementById("portada");
+  const boton = document.getElementById("empezar");
+
+
+  // Continuar donde se quedó
+  const actual = Comun.leer("actual", "");
+  let inicial = Comun.NIVELES.includes(actual) ? actual + ".html" : PRIMERO;
+  if (inicial !== PRIMERO) {
+    boton.textContent = Comun.t("Continuar") ;
+    const r = document.getElementById("reiniciar"); r.hidden = false;
+    r.addEventListener("click", () => { inicial = PRIMERO; r.hidden = true; boton.textContent = Comun.t("Empezar"); });
+  }
+
+  boton.addEventListener("click", async () => {
+
+    // 1. Audio (se desbloquea con este toque y sirve para todos los niveles)
+    try { window.AUDIO = new (window.AudioContext || window.webkitAudioContext)(); window.AUDIO.resume(); } catch (e) {}
+
+    // 2. Movimiento: en iPhone hay que pedirlo en el mismo toque, sin esperas antes
+    const peticiones = [];
+    if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function")
+      peticiones.push(DeviceOrientationEvent.requestPermission().catch(() => "denied"));
+    if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function")
+      peticiones.push(DeviceMotionEvent.requestPermission().catch(() => "denied"));
+
+    // 3. Micrófono
+    const micro = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+      ? navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }).catch(() => null)
+      : Promise.resolve(null);
+
+    const respuestas = await Promise.all(peticiones);
+    window.MOVIMIENTO_OK = peticiones.length ? respuestas.includes("granted") : true;
+    const flujo = await micro;
+    if (flujo && window.AUDIO) {
+      const an = window.AUDIO.createAnalyser(); an.fftSize = 2048; window.ANALIZADOR = an;
+      window.AUDIO.createMediaStreamSource(flujo).connect(an);
+      const buf = new Float32Array(an.fftSize);
+      window.MICRO = () => { an.getFloatTimeDomainData(buf); let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); };
+    }
+    escucharMovimiento();
+    juego.src = inicial;
+    portada.classList.add("oculta");
+  }, { once: true });
+
+  // Reenviar los sensores al nivel que está dentro del marco
+  function reenviar(tipo, datos) {
+    const w = juego.contentWindow; if (!w) return;
+    try { const ev = new w.Event(tipo); Object.assign(ev, datos); w.dispatchEvent(ev); } catch (e) {}
+  }
+  function escucharMovimiento() {
+    const orientacion = tipo => e => reenviar(tipo, { alpha: e.alpha, beta: e.beta, gamma: e.gamma, absolute: e.absolute, webkitCompassHeading: e.webkitCompassHeading });
+    addEventListener("deviceorientation", orientacion("deviceorientation"));
+    addEventListener("deviceorientationabsolute", orientacion("deviceorientationabsolute"));
+    addEventListener("devicemotion", e => reenviar("devicemotion", { acceleration: e.acceleration, accelerationIncludingGravity: e.accelerationIncludingGravity }));
+  }
+
+  // Copiar el título del nivel a la pestaña
+  juego.addEventListener("load", () => { try { document.title = juego.contentDocument.title || document.title; } catch (e) {} });
+</script>
+</body>
+</html>

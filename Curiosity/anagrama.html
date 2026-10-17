@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Letras</title>
+<style>
+
+  .fichas { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 2vw; }
+  .ficha { width: 13vw; max-width: 60px; aspect-ratio: .85; border-radius: 10px; border: none; background: #F2E9C9; color: #0B1020; font-family: inherit; font-size: clamp(24px, 7vw, 34px); font-style: normal; cursor: pointer; transition: transform .15s; }
+  .ficha.elegida { transform: translateY(-12px); background: #E9A6B8; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="fichas" id="fichas"></div></main>
+<p class="pista">Un instrumento se ha desordenado</p>
+<p class="subpista">Toca dos letras para cambiarlas de sitio</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Las letras forman el nombre de un instrumento musical.", "Es un instrumento de cuerda que se toca con arco.", "Empieza por V y termina por N."]);
+  Comun.nivel("", null);
+  const OBJ = "VIOLIN";
+  let letras = ["L", "I", "N", "O", "V", "I"], elegida = null, hecho = false;
+  const cont = document.getElementById("fichas");
+  function pintar() {
+    cont.innerHTML = "";
+    letras.forEach((l, i) => {
+      const b = document.createElement("button"); b.className = "ficha" + (elegida === i ? " elegida" : ""); b.textContent = l;
+      b.addEventListener("click", () => {
+        if (hecho) return;
+        if (elegida === null) { elegida = i; Comun.tono(600, 0, .08, .08, "sine"); }
+        else { [letras[i], letras[elegida]] = [letras[elegida], letras[i]]; elegida = null; Comun.tono(800, 0, .08, .08, "sine"); }
+        pintar();
+        if (letras.join("") === OBJ) { hecho = true; Motor.exito(() => Comun.superado("violin.html")); }
+      });
+      cont.appendChild(b);
+    });
+  }
+  pintar();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Salta</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .conejo-c { position: absolute; left: 50%; top: 58%; width: min(36vw, 160px); transform: translate(-50%, -50%); transition: transform .35s cubic-bezier(.3,1.6,.6,1); }
+  .conejo-c svg { width: 100%; display: block; }
+  .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 10px; }
+  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .marcas span.on { background: #F2E9C9; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="conejo-c" id="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div><div class="marcas" id="marcas"><span></span><span></span><span></span></div></main>
+<p class="pista">Salta como un conejo</p>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 130px)"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Hay que saltar de verdad.", "Salta de verdad, con el móvil bien sujeto en la mano.", "Tres saltos seguidos. El móvil nota el momento en que estás en el aire."]);
+  Comun.nivel("", null);
+  const conejo = document.getElementById("conejo"), marcas = document.querySelectorAll(".marcas span"), sub = document.getElementById("sub");
+  let saltos = 0, enAire = null, ultimoSalto = 0, sensor = false, hecho = false;
+  function saltar() {
+    if (hecho) return; const ahora = performance.now(); if (ahora - ultimoSalto < 500) return; ultimoSalto = ahora;
+    marcas[saltos].classList.add("on"); saltos++;
+    conejo.style.transform = "translate(-50%, -110%)"; setTimeout(() => conejo.style.transform = "translate(-50%, -50%)", 300);
+    Comun.tono(300 + saltos * 150, 0, .2, .12, "sine"); Comun.vibrar(30);
+    if (saltos === 3) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("silbido.html"), 1500); }
+  }
+  function alMover(e) {
+    const g = Comun.gravedad(e); if (!g) return; sensor = true;
+    if (g.m < 3.5) { if (enAire === null) enAire = performance.now(); }
+    else { if (enAire !== null && performance.now() - enAire > 90) saltar(); enAire = null; }
+  }
+  addEventListener("pointerdown", () => { if (!sensor) saltar(); });
+  Comun.inicio("Hay que saltar", "¡Vamos!", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: toca la pantalla para saltar"; }, 2000);
+  });
+
+</script>
+</body>
+</html>

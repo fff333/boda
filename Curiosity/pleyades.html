@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Las siete hermanas</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .contador-est { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; font-size: 20px; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas><div class="contador-est" id="cuenta"></div></main>
+<p class="pista">Las Pléyades: ¿cuántas estrellas tienen de verdad?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["A simple vista parecen seis o siete estrellas… ¿seguro que son solo esas?", "Acércate pellizcando la pantalla con dos dedos, como en una foto.", "Sigue haciendo zoom hasta el máximo."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo), cuenta = document.getElementById("cuenta");
+  let W, H, pos, zoom = 1, hecho = false;
+  const MAX = 6, dedos = new Map();
+  let s = 7; const azar = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const debiles = Array.from({ length: 420 }, () => { const r = Math.sqrt(-2 * Math.log(azar() + 1e-9)) * .55, a = azar() * 6.283; return [Math.cos(a) * r, Math.sin(a) * r, 1 + azar() * (MAX - 1.2)]; });
+  function colocar() { W = innerWidth; H = innerHeight; pos = Cielo.disponer(Cielo.C.pleyades.estrellas, 3.77, 24.2, 0, 0, Math.min(W, H) / 2.2); }
+  colocar(); addEventListener("resize", colocar);
+  function pintar() {
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 120, 4);
+    ctx.save(); ctx.translate(W / 2, H * .5);
+    let visibles = 0;
+    const esc = Math.min(W, H) / 2.2 * zoom * .45;
+    debiles.forEach(([x, y, umbral]) => { const a = Math.max(0, Math.min(1, zoom - umbral)); if (a > 0) { visibles++; ctx.fillStyle = `rgba(207,224,255,${a * .8})`; ctx.beginPath(); ctx.arc(x * esc, y * esc, .9 + a * .6, 0, 7); ctx.fill(); } });
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0] * zoom * .45, pos[n][1] * zoom * .45, Cielo.E[n][2] - 1, Cielo.E[n][3], 1 + zoom * .1);
+    ctx.restore();
+    cuenta.textContent = (6 + visibles) + " ★";
+    if (!hecho && zoom >= MAX - .05) { hecho = true; cuenta.textContent = "¡Más de mil!"; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("sirio.html"), 2000); }
+    requestAnimationFrame(pintar);
+  }
+  pintar();
+  let dist0 = null, zoom0 = 1;
+  lienzo.addEventListener("pointerdown", e => { dedos.set(e.pointerId, [e.clientX, e.clientY]); lienzo.setPointerCapture(e.pointerId); });
+  lienzo.addEventListener("pointermove", e => {
+    if (!dedos.has(e.pointerId)) return; dedos.set(e.pointerId, [e.clientX, e.clientY]);
+    if (dedos.size === 2) { const [a, b] = [...dedos.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (dist0 === null) { dist0 = d; zoom0 = zoom; } zoom = Math.max(1, Math.min(MAX, zoom0 * d / dist0)); }
+  });
+  const soltar = e => { dedos.delete(e.pointerId); if (dedos.size < 2) dist0 = null; };
+  lienzo.addEventListener("pointerup", soltar); lienzo.addEventListener("pointercancel", soltar);
+  lienzo.addEventListener("wheel", e => { e.preventDefault(); zoom = Math.max(1, Math.min(MAX, zoom * (e.deltaY < 0 ? 1.1 : .9))); }, { passive: false });
+
+</script>
+</body>
+</html>

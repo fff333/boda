@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Ventana al cielo</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .mira { position: absolute; left: 50%; top: 50%; width: 36vmin; height: 36vmin; transform: translate(-50%, -50%); border: 2px dashed rgba(242,233,201,.35); border-radius: 50%; pointer-events: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas><div class="mira"></div></main>
+<p class="pista" id="pista">Apunta con el móvil al cielo de verdad</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Este es el cielo real de esta noche, en tu lugar. Levanta el móvil y gira con él como si fuera una ventana.", "Sigue la flecha rosa: te indica hacia dónde está la constelación.", "Cuando la constelación quede dentro del círculo, mantén el móvil quieto un momento."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo), pista = document.getElementById("pista"), sub = document.getElementById("sub");
+  let lat = 40.4, lon = -3.7, rumbo = null, alturaVista = 25, az0 = 180, alt0 = 25, tieneBrujula = false, arr = null, quieto = 0, hecho = false, ultimo = performance.now();
+  let objetivo = "osamayor", posiciones = {}, debiles = [];
+  let s = 17; const azar = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const fondoRD = Array.from({ length: 450 }, () => [azar() * 24, Math.asin(azar() * 2 - 1) * 180 / Math.PI]);
+  const NOMBRES = { osamayor: "Busca la Osa Mayor", casiopea: "Busca Casiopea", orion: "Busca a Orión", cruz: "Busca la Cruz del Sur" };
+  function calcular() {
+    const ahora = new Date();
+    for (const n in Cielo.E) posiciones[n] = Cielo.altaz(Cielo.E[n][0], Cielo.E[n][1], lat, lon, ahora);
+    debiles = fondoRD.map(([ra, de]) => Cielo.altaz(ra, de, lat, lon, ahora));
+    const media = c => Cielo.C[c].estrellas.reduce((t, n) => t + posiciones[n][0], 0) / Cielo.C[c].estrellas.length;
+    const opciones = lat >= 0 ? ["osamayor", "casiopea", "orion"] : ["cruz", "orion"];
+    objetivo = opciones.find(c => media(c) > 15) || opciones.reduce((a, b) => media(a) > media(b) ? a : b);
+    pista.textContent = NOMBRES[objetivo];
+  }
+  const envolver = d => ((d + 540) % 360) - 180;
+  function alOrientar(e) {
+    if (typeof e.webkitCompassHeading === "number") { rumbo = e.webkitCompassHeading; tieneBrujula = true; }
+    else if (e.absolute && e.alpha != null) { rumbo = (360 - e.alpha) % 360; tieneBrujula = true; }
+    if (e.beta != null && tieneBrujula) alturaVista = Math.max(-10, Math.min(88, e.beta - 90));
+  }
+  lienzo.addEventListener("pointerdown", e => { if (!tieneBrujula) { arr = [e.clientX, e.clientY, az0, alt0]; lienzo.setPointerCapture(e.pointerId); } });
+  lienzo.addEventListener("pointermove", e => { if (!arr) return; const k = innerHeight / 50; rumbo = (arr[2] - (e.clientX - arr[0]) / k + 360) % 360; alturaVista = Math.max(-10, Math.min(88, arr[3] + (e.clientY - arr[1]) / k)); });
+  lienzo.addEventListener("pointerup", () => arr = null);
+  Comun.inicio("El cielo de verdad, esta noche", "Mirar el cielo", async () => {
+    if (await Comun.pedirOrientacion()) { addEventListener("deviceorientationabsolute", alOrientar); addEventListener("deviceorientation", alOrientar); }
+    calcular();
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(p => { lat = p.coords.latitude; lon = p.coords.longitude; calcular(); }, () => {}, { timeout: 8000, maximumAge: 600000 });
+    setInterval(calcular, 30000);
+    setTimeout(() => { if (!tieneBrujula) { rumbo = rumbo ?? 0; sub.textContent = "Sin brújula: arrastra para mirar alrededor"; } }, 2500);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    const W = innerWidth, H = innerHeight, k = H / 50;
+    if (rumbo != null) az0 = (az0 + envolver(rumbo - az0) * .15 + 360) % 360;
+    alt0 += (alturaVista - alt0) * .15;
+    const pantalla = ([alt, az]) => [W / 2 + envolver(az - az0) * Math.cos(alt * Math.PI / 180) * k, H / 2 - (alt - alt0) * k];
+    ctx.clearRect(0, 0, W, H);
+    debiles.forEach(p => { if (p[0] < 0) return; const [x, y] = pantalla(p); if (x < -10 || x > W + 10 || y < -10 || y > H + 10) return; ctx.fillStyle = "rgba(242,233,201,.45)"; ctx.beginPath(); ctx.arc(x, y, .9, 0, 7); ctx.fill(); });
+    const pos = {};
+    for (const n in posiciones) { if (posiciones[n][0] < -2) continue; pos[n] = pantalla(posiciones[n]); }
+    if (hecho) Cielo.dibujarLineas(ctx, pos, Cielo.C[objetivo].lineas, "rgba(233,166,184,1)", 2);
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2], Cielo.E[n][3] || "#FFFFFF");
+    // horizonte y puntos cardinales
+    const yH = H / 2 + alt0 * k;
+    if (yH < H) { ctx.fillStyle = "#0E1A12"; ctx.fillRect(0, yH, W, H - yH); }
+    ctx.fillStyle = "rgba(242,233,201,.7)"; ctx.font = "italic 18px Georgia"; ctx.textAlign = "center";
+    [["N", 0], ["E", 90], ["S", 180], ["O", 270]].forEach(([l, a]) => { const x = W / 2 + envolver(a - az0) * k; if (x > -20 && x < W + 20) ctx.fillText(l, x, yH - 8); });
+    ctx.textAlign = "start";
+    // dónde está la constelación
+    if (Object.keys(posiciones).length) {
+      const est = Cielo.C[objetivo].estrellas, alt = est.reduce((t, n) => t + posiciones[n][0], 0) / est.length;
+      const az = est.reduce((t, n) => t + envolver(posiciones[n][1] - posiciones[est[0]][1]), 0) / est.length + posiciones[est[0]][1];
+      const [cx, cy] = pantalla([alt, az]), dx = cx - W / 2, dy = cy - H / 2, d = Math.hypot(dx, dy);
+      if (!hecho) {
+        if (d > Math.min(W, H) * .3) {
+          const a = Math.atan2(dy, dx), r = Math.min(W, H) * .32;
+          ctx.save(); ctx.translate(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r); ctx.rotate(a);
+          ctx.fillStyle = "rgba(233,166,184,.9)"; ctx.beginPath(); ctx.moveTo(16, 0); ctx.lineTo(-8, -10); ctx.lineTo(-8, 10); ctx.fill(); ctx.restore();
+        }
+        quieto = d < Math.min(W, H) * .18 ? quieto + dt : 0;
+        if (quieto > 1500) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); sub.textContent = "Esta noche puedes verla ahí mismo"; setTimeout(() => Comun.superado("astronauta.html"), 2500); }
+      }
+    }
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

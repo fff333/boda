@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Escondite</title>
+<style>
+  .jardin { background: linear-gradient(#1B2546 0%, #2A3966 60%, #22301F 61%, #18220F 100%); }
+  .conejo { position: absolute; left: 50%; top: 55%; width: 26vw; max-width: 120px; transform: translate(-50%, -50%); transition: opacity .3s; }
+  .conejo svg { width: 100%; display: block; }
+  .escondido .conejo { opacity: 0; }
+  .arbusto { position: absolute; width: 32vw; max-width: 150px; transform: translate(-50%, -50%); border: none; background: none; cursor: pointer; padding: 0; }
+  .arbusto svg { width: 100%; display: block; overflow: visible; }
+  .orejas { opacity: 0; transition: opacity .5s; }
+  .arbusto.aqui .orejas { opacity: 1; }
+  .arbusto.no svg { animation: mover .4s; }
+  @keyframes mover { 30% { transform: rotate(-4deg); } 60% { transform: rotate(3deg); } }
+  .contar { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 96px); transform: translateX(-50%); font: inherit; font-size: 16px;
+    color: var(--crema); background: none; border: 1px solid rgba(242,233,201,.3); border-radius: 30px; padding: 10px 20px; opacity: 0; pointer-events: none; transition: opacity 1s; }
+  .contar.visible { opacity: .7; pointer-events: auto; }
+  .tapa { position: fixed; inset: 0; z-index: 25; background: #05080F; display: none; align-items: center; justify-content: center; font-size: 80px; }
+  .tapa.visible { display: flex; }
+</style>
+</head>
+<body>
+<main class="escena jardin entrada" id="escena">
+  <div class="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div>
+  <div id="arbustos"></div>
+  <button class="contar" id="contar">Taparme los ojos y contar</button>
+</main>
+<div class="tapa" id="tapa"></div>
+<p class="pista" id="pista">¿Jugamos al escondite?</p>
+<p class="subpista" id="sub">Pero no se esconde si le miras</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Para jugar al escondite, alguien tiene que dejar de mirar.", "Sal un momento de la app (ve a la pantalla de inicio) y vuelve.", "Cuando vuelvas, busca unas orejas que asoman detrás de un arbusto y tócalas."]);
+  Comun.nivel("XXX", null);
+  const escena = document.getElementById("escena"), pista = document.getElementById("pista"), sub = document.getElementById("sub");
+  const cont = document.getElementById("arbustos"), tapa = document.getElementById("tapa"), contar = document.getElementById("contar");
+  const SITIOS = [[20, 70], [52, 78], [82, 68]];
+  let escondido = false, hecho = false, sitio = -1;
+  const arbustos = SITIOS.map(([x, y], i) => {
+    const b = document.createElement("button");
+    b.className = "arbusto"; b.style.left = x + "%"; b.style.top = y + "%"; b.setAttribute("aria-label", "Arbusto");
+    b.innerHTML = `<svg viewBox="0 0 150 100"><g class="orejas"><ellipse cx="65" cy="12" rx="7" ry="20" fill="#FBFAF4" transform="rotate(-10 65 12)"/><ellipse cx="85" cy="12" rx="7" ry="20" fill="#FBFAF4" transform="rotate(10 85 12)"/></g>
+      <circle cx="45" cy="60" r="38" fill="#2E5A33"/><circle cx="100" cy="58" r="40" fill="#346B3A"/><circle cx="75" cy="40" r="38" fill="#3A7A40"/></svg>`;
+    b.addEventListener("click", () => {
+      if (!escondido || hecho) return;
+      if (i === sitio) {
+        hecho = true; escena.classList.remove("escondido"); pista.textContent = "¡Te encontré!";
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => Comun.tono(f, k * .12, .5, .12)); Comun.vibrar(40);
+        setTimeout(() => Comun.superado("vaso.html", "XXX"), 1500);
+      } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(180, 0, .15, .1, "sine"); }
+    });
+    cont.appendChild(b); return b;
+  });
+  function esconder() {
+    if (escondido) return; escondido = true;
+    sitio = Math.floor(Math.random() * 3);
+    escena.classList.add("escondido"); arbustos[sitio].classList.add("aqui");
+    pista.textContent = "¿Dónde se habrá metido?"; sub.textContent = ""; contar.classList.remove("visible");
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") esconder(); });
+  // Alternativa: taparse los ojos y contar hasta diez
+  setTimeout(() => { if (!escondido) contar.classList.add("visible"); }, 25000);
+  contar.addEventListener("click", () => {
+    let n = 1; tapa.classList.add("visible"); tapa.textContent = n;
+    const i = setInterval(() => { n++; tapa.textContent = n; Comun.tono(300, 0, .05, .05, "sine");
+      if (n > 10) { clearInterval(i); tapa.classList.remove("visible"); esconder(); } }, 600);
+  });
+</script>
+</body>
+</html>

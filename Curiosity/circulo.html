@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Circunferencia</title>
+<style>
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+  .nota { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; font-size: 26px; pointer-events: none; }
+</style>
+</head>
+<body>
+<main class="escena entrada">
+  <canvas id="lienzo"></canvas>
+  <div class="nota" id="nota"></div>
+</main>
+<p class="pista">Pi vive dentro de cada círculo perfecto</p>
+<p class="subpista" style="bottom: calc(env(safe-area-inset-bottom) + 60px)">Dibuja uno sin levantar el dedo</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Hay que dibujar algo con el dedo.", "Dibuja un círculo de una sola vez, sin levantar el dedo.", "Ve despacio, hazlo grande y ciérralo bien. Necesitas al menos un 85 %."]);
+  Comun.nivel("XL", null);
+  const lienzo = document.getElementById("lienzo"), c = lienzo.getContext("2d"), nota = document.getElementById("nota");
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  let puntos = [], dibujando = false, hecho = false;
+  function ajustar() { lienzo.width = innerWidth * dpr; lienzo.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  ajustar(); addEventListener("resize", ajustar);
+  function pintar(color) {
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    c.strokeStyle = color; c.lineWidth = 5; c.lineCap = "round"; c.lineJoin = "round";
+    c.beginPath(); puntos.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.stroke();
+  }
+  lienzo.addEventListener("pointerdown", e => { if (hecho) return; dibujando = true; puntos = [{ x: e.clientX, y: e.clientY }]; nota.textContent = ""; lienzo.setPointerCapture(e.pointerId); });
+  lienzo.addEventListener("pointermove", e => { if (!dibujando) return; puntos.push({ x: e.clientX, y: e.clientY }); pintar("#F2E9C9"); });
+  lienzo.addEventListener("pointerup", () => { if (!dibujando) return; dibujando = false; evaluar(); });
+  function evaluar() {
+    if (puntos.length < 20) return;
+    const cx = puntos.reduce((s, p) => s + p.x, 0) / puntos.length, cy = puntos.reduce((s, p) => s + p.y, 0) / puntos.length;
+    const radios = puntos.map(p => Math.hypot(p.x - cx, p.y - cy));
+    const media = radios.reduce((s, r) => s + r, 0) / radios.length;
+    const desv = Math.sqrt(radios.reduce((s, r) => s + (r - media) ** 2, 0) / radios.length);
+    let vuelta = 0;
+    for (let i = 1; i < puntos.length; i++) {
+      const a1 = Math.atan2(puntos[i - 1].y - cy, puntos[i - 1].x - cx), a2 = Math.atan2(puntos[i].y - cy, puntos[i].x - cx);
+      let d = a2 - a1; if (d > Math.PI) d -= 2 * Math.PI; if (d < -Math.PI) d += 2 * Math.PI; vuelta += d;
+    }
+    const cierre = Math.hypot(puntos[0].x - puntos.at(-1).x, puntos[0].y - puntos.at(-1).y) / media;
+    let nota100 = Math.round(Math.max(0, 1 - (desv / media) * 4) * 100);
+    if (Math.abs(vuelta) < Math.PI * 1.75 || cierre > .5) nota100 = Math.min(nota100, 40);
+    if (media < 60) nota100 = Math.min(nota100, 50);
+    nota.textContent = nota100 + " %";
+    if (nota100 >= 85) {
+      hecho = true; pintar("#FDD835");
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => Comun.tono(f, i * .12, .9, .14, "sine")); Comun.vibrar([30, 50, 30]);
+      setTimeout(() => Comun.superado("jeroglificos.html", "XL"), 1400);
+    } else {
+      pintar("rgba(233,166,184,.6)"); Comun.tono(180, 0, .3, .1, "sine");
+      if (nota100 < 40) Comun.avisar("Tiene que ser redondo y bien cerrado");
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Mismo día, distinto día</title>
+<style></style>
+</head>
+<body>
+<main class="escena entrada"><div class="reto" id="reto"></div></main>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+Comun.pistas(["Las dos fechas no se cuentan con el mismo calendario.", "En 1616, el calendario juliano iba 10 días por detrás del gregoriano.", "El 23 de abril juliano fue el 3 de mayo gregoriano."]);
+Comun.nivel('', {"1": "Fíjate en los calendarios", "0": "Fíjate en los calendarios", "10": "Casi. Suma también el día de diferencia"});
+Plantilla.serie({"texto": "¿Cuántos días después de Cervantes murió Shakespeare?", "lineas": ["Cervantes: 22 de abril de 1616 (calendario gregoriano)", "Shakespeare: 23 de abril de 1616 (calendario juliano)"]});
+</script>
+</body>
+</html>

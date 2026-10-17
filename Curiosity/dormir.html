@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Buenas noches</title>
+<style>
+  .cuarto { background: #1B2546; }
+  .luz-calida { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 78% 52%, rgba(255,214,140,.55), rgba(255,190,110,.15) 40%, rgba(0,0,0,0) 70%); transition: opacity .2s; }
+  .oscuro { position: absolute; inset: 0; background: #05080F; opacity: 0; transition: opacity 1.5s; pointer-events: none; }
+  .dormido .oscuro { opacity: .7; }
+  .escena-svg { position: absolute; left: 50%; top: 58%; width: min(94vw, 440px); transform: translate(-50%, -50%); }
+  .escena-svg svg { width: 100%; display: block; overflow: visible; }
+  .zzz { opacity: 0; transition: opacity 1s 1s; font-size: 30px; }
+  .dormido .zzz { opacity: 1; animation: zeta 2.5s ease-in-out infinite 1.5s; }
+  @keyframes zeta { 0% { transform: translate(0,0); opacity: 0; } 40% { opacity: 1; } 100% { transform: translate(20px,-30px); opacity: 0; } }
+  video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  #lampara { cursor: pointer; }
+</style>
+</head>
+<body>
+<main class="escena cuarto entrada" id="escena">
+  <div class="luz-calida" id="luz"></div>
+  <div class="escena-svg">
+    <svg viewBox="0 0 400 260">
+      <rect x="250" y="20" width="90" height="80" rx="6" fill="#0B1020" stroke="#3B4A7A" stroke-width="6"/>
+      <circle cx="275" cy="45" r="2" fill="#F2E9C9"/><circle cx="315" cy="70" r="1.6" fill="#F2E9C9"/><circle cx="300" cy="40" r="1.2" fill="#F2E9C9"/>
+      <rect x="20" y="150" width="230" height="70" rx="10" fill="#6D4C33"/>
+      <rect x="30" y="130" width="210" height="50" rx="16" fill="#E9A6B8"/>
+      <ellipse cx="70" cy="132" rx="38" ry="18" fill="#F7F0DC"/>
+      <g transform="translate(40 66) scale(.55)">
+        <ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-40 48 60)"/>
+        <ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-20 70 60)"/>
+        <circle cx="56" cy="66" r="24" fill="#FBFAF4"/>
+        <path d="M40 66 Q45 70 50 66" stroke="#0B1020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="36" cy="74" rx="3" ry="2.2" fill="#E9A6B8"/>
+      </g>
+      <text class="zzz" x="110" y="80" fill="#F2E9C9" font-family="Georgia" font-style="italic">z z</text>
+      <rect x="270" y="170" width="70" height="60" rx="4" fill="#5A3D28"/>
+      <g id="lampara">
+        <rect x="300" y="130" width="10" height="40" fill="#C9A86A"/>
+        <path d="M280 135 L330 135 L318 100 L292 100Z" fill="#FFE9A0" id="pantalla"/>
+      </g>
+    </svg>
+  </div>
+  <div class="oscuro"></div>
+  <video id="video" playsinline muted autoplay></video>
+</main>
+<p class="pista">Demasiada luz para dormir</p>
+<p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Hay demasiada luz para dormir.", "La cámara del móvil ve la luz. ¿Y si no viera nada?", "Tapa con el dedo la cámara de atrás del móvil unos segundos."]);
+  Comun.nivel("XXIV", null);
+  const escena = document.getElementById("escena"), luz = document.getElementById("luz"), video = document.getElementById("video");
+  const pantalla = document.getElementById("pantalla"), sub = document.getElementById("sub");
+  const lienzo = document.createElement("canvas"); lienzo.width = 32; lienzo.height = 24;
+  const c = lienzo.getContext("2d", { willReadFrequently: true });
+  let flujo = null, oscuroDesde = null, hecho = false;
+  function dormir() {
+    if (hecho) return; hecho = true;
+    escena.classList.add("dormido"); luz.style.opacity = 0; pantalla.setAttribute("fill", "#6B6046");
+    if (flujo) flujo.getTracks().forEach(t => t.stop());
+    [523.25, 440, 392, 329.63, 392, 261.63].forEach((f, i) => Comun.tono(f, .3 + i * .45, .8, .1, "sine"));
+    setTimeout(() => Comun.superado("zanahoria.html", "XXIV"), 3800);
+  }
+  document.getElementById("lampara").addEventListener("pointerdown", () => { if (!flujo) dormir(); });
+  Comun.inicio("Es hora de dormir", "Apagar", async () => {
+    try {
+      flujo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 320 }, height: { ideal: 240 } }, audio: false });
+      video.srcObject = flujo; await video.play();
+    } catch (e) { flujo = null; sub.textContent = "Sin cámara: toca la lámpara para apagarla"; return; }
+    (function medir() {
+      if (hecho) return;
+      if (video.readyState >= 2) {
+        c.drawImage(video, 0, 0, 32, 24);
+        const d = c.getImageData(0, 0, 32, 24).data; let s = 0;
+        for (let i = 0; i < d.length; i += 4) s += d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11;
+        const brillo = s / (d.length / 4);
+        luz.style.opacity = Math.min(1, .25 + brillo / 110);
+        if (brillo < 22) { oscuroDesde = oscuroDesde || performance.now(); if (performance.now() - oscuroDesde > 1500) dormir(); }
+        else oscuroDesde = null;
+      }
+      setTimeout(medir, 150);
+    })();
+  });
+</script>
+</body>
+</html>

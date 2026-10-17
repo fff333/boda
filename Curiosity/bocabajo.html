@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Buenas noches</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .cielo-d { position: absolute; inset: 0; background: linear-gradient(#64B5F6, #BBDEFB); transition: background 2s; }
+  .noche .cielo-d { background: linear-gradient(#05080F, #141B36); }
+  .astro-d { position: absolute; left: 50%; top: 22%; width: 90px; height: 90px; margin-left: -45px; border-radius: 50%; background: #FFD54F; box-shadow: 0 0 50px #FFD54F; transition: all 2s; }
+  .noche .astro-d { background: #F2E9C9; box-shadow: 0 0 30px rgba(242,233,201,.6); }
+  .conejo-c { position: absolute; left: 50%; top: 66%; width: min(36vw, 160px); transform: translate(-50%, -50%); }
+  .conejo-c svg { width: 100%; display: block; }
+  .zz { position: absolute; left: 62%; top: 52%; font-size: 30px; opacity: 0; transition: opacity 1s 1s; }
+  .noche .zz { opacity: 1; }
+  .pista { color: #0B1020; } .noche .pista { color: #F2E9C9; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" id="escena"><div class="cielo-d"></div><div class="astro-d"></div><div class="conejo-c"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div><div class="zz">z z z</div></main>
+<p class="pista">Todavía es de día</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Hay que apagar el día.", "¿Cómo se queda a oscuras la pantalla de un móvil sin apagarlo?", "Pon el móvil boca abajo sobre la mesa unos segundos y luego vuelve a mirarlo."]);
+  Comun.nivel("", null);
+  const escena = document.getElementById("escena"), sub = document.getElementById("sub");
+  let desde = null, noche = false, sensor = false, hecho = false;
+  function anochecer() {
+    if (noche) return; noche = true; escena.classList.add("noche");
+    [523.25, 440, 392, 329.63, 392, 261.63].forEach((f, i) => Comun.tono(f, i * .45, .8, .1, "sine"));
+  }
+  function alMover(e) {
+    const g = Comun.gravedad(e); if (!g) return; sensor = true;
+    const bocaAbajo = g.z < -8;
+    if (bocaAbajo) { desde = desde || performance.now(); if (performance.now() - desde > 2000) anochecer(); }
+    else { desde = null; if (noche && !hecho && g.z > 3) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("vuelta.html"), 2500); } }
+  }
+  addEventListener("pointerdown", () => { if (!sensor && !noche) { anochecer(); setTimeout(() => { hecho = true; Comun.superado("vuelta.html"); }, 3000); } });
+  Comun.inicio("Ya es tarde", "Entrar", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: toca la pantalla para que anochezca"; }, 2000);
+  });
+
+</script>
+</body>
+</html>

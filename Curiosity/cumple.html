@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La fiesta</title>
+<style>
+
+  .tarta { position: absolute; left: 50%; top: 58%; width: min(60vw, 260px); transform: translate(-50%, -50%); }
+  .tarta svg { width: 100%; display: block; overflow: visible; }
+  .llama { animation: llama .3s infinite alternate; transform-origin: center bottom; transform-box: fill-box; }
+  @keyframes llama { to { transform: scale(.85, 1.1); } }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="tarta"><svg viewBox="0 0 200 170">
+    <g id="velas"></g>
+    <rect x="20" y="70" width="160" height="80" rx="10" fill="#E9A6B8"/><rect x="20" y="70" width="160" height="22" rx="10" fill="#F7F0DC"/>
+    <ellipse cx="100" cy="155" rx="96" ry="10" fill="#C9A86A"/>
+  </svg></div>
+</main>
+<p class="pista" style="font-size:clamp(17px,4.6vw,24px)">¿Cuántas personas tiene que haber en una fiesta para que sea más probable que no que dos cumplan años el mismo día?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Son muchas menos de las que parece.", "Se conoce como «la paradoja del cumpleaños».", "Con 23 personas, la probabilidad ya pasa del 50 %."]);
+  Comun.nivel("", { "366": "Con 366 sería seguro al 100 %. Hacen falta muchas menos", "183": "Muchas menos", "365": "Muchas menos", veintitres: "Escríbelo con números" });
+  const g = document.getElementById("velas");
+  for (let i = 0; i < 7; i++) { const x = 38 + i * 21; g.insertAdjacentHTML("beforeend", `<rect x="${x - 3}" y="40" width="6" height="32" fill="${["#64B5F6", "#FDD835", "#43A047"][i % 3]}"/><path class="llama" d="M${x} 24 Q${x + 6} 34 ${x} 40 Q${x - 6} 34 ${x} 24Z" fill="#FFB74D"/>`); }
+
+</script>
+</body>
+</html>

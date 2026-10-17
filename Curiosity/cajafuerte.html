@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Caja fuerte</title>
+<style>
+
+  .pistas-caja { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(92vw, 420px); display: flex; flex-direction: column; gap: 10px; }
+  .linea { display: flex; align-items: center; gap: 12px; }
+  .digitos { display: flex; gap: 6px; }
+  .digitos span { width: 38px; height: 44px; border-radius: 8px; background: #F2E9C9; color: #0B1020; font-size: 24px; font-style: normal; font-family: "Courier New", monospace; display: grid; place-items: center; }
+  .linea p { font-size: 15px; line-height: 1.25; flex: 1; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="pistas-caja" id="caja"></div></main>
+<p class="pista">La combinación tiene tres cifras</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Empieza por la pista que dice que nada es correcto: descarta esas cifras.", "Compara la primera y la última pista: cada una tiene una cifra en su sitio.", "La combinación empieza por 6 y termina por 7."]);
+  Comun.nivel("", { "692": "Solo una de esas cifras está bien", "746": "Casi. Revisa el orden", "476": "Casi. Revisa el orden" });
+  const L = [["692", "Una cifra es correcta y está en su sitio"], ["164", "Dos cifras son correctas, pero están mal colocadas"], ["538", "Ninguna cifra es correcta"], ["713", "Una cifra es correcta, pero está mal colocada"], ["240", "Una cifra es correcta y está en su sitio"]];
+  const caja = document.getElementById("caja");
+  L.forEach(([d, t]) => caja.insertAdjacentHTML("beforeend", `<div class="linea"><div class="digitos">${[...d].map(x => `<span>${x}</span>`).join("")}</div><p>${t}</p></div>`));
+
+</script>
+</body>
+</html>

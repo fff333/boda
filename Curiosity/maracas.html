@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Maracas</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .conejo-c { position: absolute; left: 50%; top: 58%; width: min(36vw, 160px); transform: translate(-50%, -50%); transition: transform .35s cubic-bezier(.3,1.6,.6,1); }
+  .conejo-c svg { width: 100%; display: block; }
+  .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 10px; }
+  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .marcas span.on { background: #F2E9C9; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <button class="boton-musica" id="escuchar" style="top:18%" aria-label="Escuchar">♪</button>
+  <div class="conejo-c" id="conejo" style="width:min(30vw,130px)"><svg viewBox="0 0 100 160"><ellipse cx="50" cy="45" rx="38" ry="42" fill="#E53935"/><path d="M20 35 Q50 20 80 35 M16 55 Q50 40 84 55" stroke="#FDD835" stroke-width="5" fill="none"/><rect x="44" y="85" width="12" height="70" rx="5" fill="#8D6E4A"/></svg></div>
+  <div class="marcas"><span></span><span></span><span></span><span></span><span></span></div>
+</main>
+<p class="pista" style="top:calc(env(safe-area-inset-top) + 32%)">Toca las maracas al mismo ritmo</p>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 130px)"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function mismoRitmo(a, b) { if (a.length !== b.length) return false; const da = a.slice(1).map((t, i) => t - a[i]), db = b.slice(1).map((t, i) => t - b[i]);
+    const sa = da.reduce((x, y) => x + y, 0), sb = db.reduce((x, y) => x + y, 0); return da.every((d, i) => Math.abs(d / sa - db[i] / sb) < .09); }
+  Comun.pistas(["Escucha el ritmo de las maracas.", "Agita el móvil como si fuera una maraca, siguiendo ese ritmo.", "Es «chas, chas, chas-chas-chas»: dos lentos y tres rápidos."]);
+  Comun.nivel("", null);
+  const RITMO = [0, 500, 1000, 1250, 1500];
+  const marcas = document.querySelectorAll(".marcas span"), sub = document.getElementById("sub"), conejo = document.getElementById("conejo");
+  let golpes = [], sensor = false, ultimo = 0, hecho = false, sonando = false, prev = null;
+  function chas(cuando = 0) {
+    const c = Comun.audio(); if (!c) return; const t = c.currentTime + cuando;
+    const b = c.createBuffer(1, c.sampleRate * .08, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); f.type = "highpass"; f.frequency.value = 3000; g.gain.value = .5;
+    s.buffer = b; s.connect(f).connect(g).connect(c.destination); s.start(t);
+  }
+  document.getElementById("escuchar").addEventListener("click", () => {
+    if (sonando) return; sonando = true; RITMO.forEach(t => chas(t / 1000));
+    setTimeout(() => { sonando = false; golpes = []; marcas.forEach(m => m.classList.remove("on")); }, 1900);
+  });
+  function agitar() {
+    const ahora = performance.now(); if (hecho || sonando || ahora - ultimo < 160) return; ultimo = ahora; chas();
+    conejo.style.transform = "translate(-50%, -50%) rotate(" + (golpes.length % 2 ? 15 : -15) + "deg)";
+    if (golpes.length && ahora - golpes[golpes.length - 1] > 2000) golpes = [];
+    golpes.push(ahora); marcas.forEach((m, i) => m.classList.toggle("on", i < golpes.length));
+    if (golpes.length === 5) {
+      if (mismoRitmo(golpes, RITMO)) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("cueva.html"), 1500); }
+      else { Comun.avisar("Casi. Escucha otra vez el ritmo"); setTimeout(() => { golpes = []; marcas.forEach(m => m.classList.remove("on")); }, 600); }
+    }
+  }
+  function alMover(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; if (prev && Math.hypot(g.x - prev.x, g.y - prev.y, g.z - prev.z) > 14) agitar(); prev = g; }
+  addEventListener("pointerdown", e => { if (!sensor && !e.target.closest("button")) agitar(); });
+  Comun.inicio("Ritmo", "Entrar", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: toca la pantalla al ritmo"; }, 2000);
+  });
+
+</script>
+</body>
+</html>

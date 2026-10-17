@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La Polar</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas></main>
+<p class="pista">Encuentra la estrella Polar</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  let guia = false;
+  Comun.pistas(["Las dos estrellas del extremo del «cazo» de la Osa Mayor señalan hacia algo.", "Ahora ves una línea: prolóngala unas cinco veces más.", "La Polar está siguiendo esa línea, sola y con poca luz. Tócala."], n => { if (n >= 2) guia = true; });
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo);
+  const NOMBRES = [...Cielo.C.osamayor.estrellas, "polar"];
+  let W, H, pos, hecho = false, fallos = [];
+  function colocar() {
+    W = innerWidth; H = innerHeight;
+    const crudo = Cielo.disponer(NOMBRES, 9.5, 72, 0, 0, 1);
+    const xs = NOMBRES.map(n => crudo[n][0]), ys = NOMBRES.map(n => crudo[n][1]);
+    const k = Math.min(W * .8 / (Math.max(...xs) - Math.min(...xs)), H * .6 / (Math.max(...ys) - Math.min(...ys)));
+    const cx = W / 2 - k * (Math.max(...xs) + Math.min(...xs)) / 2, cy = H * .56 - k * (Math.max(...ys) + Math.min(...ys)) / 2;
+    pos = {}; NOMBRES.forEach(n => pos[n] = [cx + crudo[n][0] * k, cy + crudo[n][1] * k]);
+  }
+  colocar(); addEventListener("resize", colocar);
+  (function pintar() {
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 260, 21);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.osamayor.lineas, "rgba(242,233,201,.3)", 1.2);
+    if (guia || hecho) {
+      const [ax, ay] = pos.merak, [bx, by] = pos.dubhe, f = hecho ? 5.2 : 1.6;
+      ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(233,166,184,.8)"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + (bx - ax) * f, ay + (by - ay) * f); ctx.stroke(); ctx.setLineDash([]);
+    }
+    for (const n of Cielo.C.osamayor.estrellas) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2], Cielo.E[n][3] || "#FFFFFF");
+    Cielo.estrella(ctx, pos.polar[0], pos.polar[1], hecho ? 0 : 3.4, "#FFF4D6", hecho ? 1.4 : 1);
+    if (hecho) { ctx.fillStyle = "#FFF4D6"; ctx.font = "italic 18px Georgia"; ctx.fillText("Polar", pos.polar[0] + 14, pos.polar[1] + 6); }
+    ctx.fillStyle = "rgba(233,166,184,.6)"; fallos.forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill(); });
+    requestAnimationFrame(pintar);
+  })();
+  lienzo.addEventListener("pointerdown", e => {
+    if (hecho) return;
+    if (Math.hypot(e.clientX - pos.polar[0], e.clientY - pos.polar[1]) < 30) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("giro.html"), 2000); }
+    else { fallos.push([e.clientX, e.clientY]); fallos = fallos.slice(-6); Comun.tono(180, 0, .15, .08, "sine"); }
+  });
+
+</script>
+</body>
+</html>

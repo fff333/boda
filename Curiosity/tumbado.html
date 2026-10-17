@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Tumbado</title>
+<style>
+  .prado { background: linear-gradient(#1B2546 0%, #2A3966 62%, #22301F 63%, #18220F 100%); }
+  .conejo { position: absolute; left: 50%; top: 56%; width: min(30vh, 34vw); transform: translate(-50%, -50%) rotate(90deg); transition: transform .8s cubic-bezier(.3,1.5,.6,1); }
+  .conejo svg { width: 100%; display: block; }
+  .derecho .conejo { transform: translate(-50%, -50%) rotate(0deg); }
+  .feliz .conejo svg { animation: salto .5s ease 3; }
+  @keyframes salto { 50% { transform: translateY(-25%); } }
+</style>
+</head>
+<body>
+<main class="escena prado entrada" id="escena">
+  <div class="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div>
+</main>
+<p class="pista" id="pista"></p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Fíjate en cómo está tumbado.", "Gira el móvil.", "Pon el móvil en horizontal. Si la pantalla no gira, quita el bloqueo de rotación del móvil."]);
+  Comun.nivel("XXVII", null);
+  const escena = document.getElementById("escena"), pista = document.getElementById("pista");
+  let hecho = false;
+  function revisar() {
+    if (hecho) return;
+    if (innerWidth > innerHeight) {
+      hecho = true; escena.classList.add("derecho"); pista.textContent = "¡Así sí!";
+      setTimeout(() => { escena.classList.add("feliz"); [523.25, 659.25, 783.99].forEach((f, i) => Comun.tono(f, i * .15, .4, .12)); Comun.vibrar(30); }, 700);
+      setTimeout(() => Comun.superado("susurro.html", "XXVII"), 2600);
+    }
+  }
+  addEventListener("resize", revisar);
+  setTimeout(revisar, 1500);
+</script>
+</body>
+</html>

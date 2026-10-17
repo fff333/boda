@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Viernes 13</title>
+<style></style>
+</head>
+<body>
+<main class="escena entrada"><div class="reto" id="reto"></div></main>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+Comun.pistas(["El 1 es domingo.", "El 8 también es domingo.", "El 13 es cinco días después del 8."]);
+Comun.nivel('', {"sabado": "Cuenta otra vez desde el domingo 1", "jueves": "Cuenta otra vez desde el domingo 1"});
+Plantilla.serie({"texto": "Este mes empieza en domingo. ¿Qué día de la semana cae el 13?", "lineas": ["D  L  M  X  J  V  S", "1  2  3  4  5  6  7", "8  9 10 11 12  ?"]});
+</script>
+</body>
+</html>

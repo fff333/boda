@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Pulso</title>
+<style>
+
+  .tambor { position: absolute; left: 50%; top: 52%; width: min(56vw, 240px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: none; cursor: pointer;
+    background: radial-gradient(circle, #F7F0DC 0%, #E2D6B0 60%, #8D6E4A 61%, #6D4C33 100%); }
+  .tambor.golpe { animation: golpe .15s; }
+  @keyframes golpe { 50% { transform: translate(-50%, -50%) scale(.95); } }
+  .marcas { position: absolute; left: 0; right: 0; top: 76%; display: flex; justify-content: center; gap: 8px; }
+  .marcas span { width: 12px; height: 12px; border-radius: 50%; background: rgba(242,233,201,.2); }
+  .marcas span.on { background: #F2E9C9; }
+  .marcas span.mal { background: #E53935; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <button class="tambor" id="tambor" aria-label="Tambor"></button>
+  <div class="marcas" id="marcas"></div>
+</main>
+<p class="pista">Toca el tambor a 60 pulsos por minuto, ni más rápido ni más lento</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["60 pulsos por minuto es exactamente uno por segundo.", "Piensa en el segundero de un reloj.", "Toca 8 veces seguidas, cada una justo un segundo después de la anterior."]);
+  Comun.nivel("", null);
+  const tambor = document.getElementById("tambor"), marcas = document.getElementById("marcas");
+  const ms = Array.from({ length: 8 }, () => { const s = document.createElement("span"); marcas.appendChild(s); return s; });
+  let golpes = [], hecho = false;
+  tambor.addEventListener("pointerdown", () => {
+    if (hecho) return;
+    tambor.classList.remove("golpe"); void tambor.offsetWidth; tambor.classList.add("golpe");
+    Comun.tono(90, 0, .25, .3, "sine"); Comun.vibrar(15);
+    const ahora = performance.now();
+    if (golpes.length && (ahora - golpes[golpes.length - 1] > 1600)) golpes = [];
+    golpes.push(ahora);
+    if (golpes.length > 1) { const d = ahora - golpes[golpes.length - 2]; if (Math.abs(d - 1000) > 170) { ms.forEach(m => m.className = ""); ms[0].className = "mal"; golpes = [ahora]; Comun.avisar(d < 1000 ? "Demasiado rápido" : "Demasiado lento"); } }
+    ms.forEach((m, i) => { if (m.className !== "mal" || golpes.length > 1) m.className = i < golpes.length ? "on" : ""; });
+    if (golpes.length === 8) {
+      const media = (golpes[7] - golpes[0]) / 7;
+      if (Math.abs(media - 1000) < 70) { hecho = true; Motor.exito(() => Comun.superado("dado.html")); }
+      else { Comun.avisar("Casi. Más regular"); golpes = []; ms.forEach(m => m.className = ""); }
+    }
+  });
+
+</script>
+</body>
+</html>

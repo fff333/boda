@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Punto ciego</title>
+<style>
+  .lamina { position: absolute; left: 0; right: 0; top: 40%; display: flex; justify-content: space-between; align-items: center; padding: 0 12vw; }
+  .cruz { font-size: 44px; font-style: normal; } .punto { width: 26px; height: 26px; border-radius: 50%; background: #E53935; }
+  .instr { position: absolute; left: 0; right: 0; top: 54%; text-align: center; font-size: 17px; line-height: 1.45; padding: 0 9vw; opacity: .85; }
+  .listo { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 110px); transform: translateX(-50%); font: inherit; font-size: 18px; color: #0B1020; background: #F2E9C9; border: none; border-radius: 30px; padding: 13px 26px; cursor: pointer; opacity: .35; }
+  .listo.activo { opacity: 1; }
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:#F7F0DC;color:#0B1020">
+  <div class="lamina"><span class="cruz">+</span><span class="punto"></span></div>
+  <p class="instr">Tapa tu ojo izquierdo. Mira fijamente la cruz con el derecho y acerca o aleja despacio el móvil de tu cara.</p>
+  <button class="listo" id="listo">¡El punto ha desaparecido!</button>
+</main>
+<p class="pista" style="color:#0B1020">Haz desaparecer el punto rojo sin tocarlo</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+
+  Comun.pistas(["No hace falta tocar la pantalla: el truco está en tu ojo.", "Con el ojo izquierdo tapado, mira solo la cruz, sin mover la vista.", "Prueba a unos 25-30 cm de la cara: el punto caerá en tu punto ciego."]);
+  Comun.nivel("", null);
+  const listo = document.getElementById("listo"); let activo = false, hecho = false;
+  setTimeout(() => { activo = true; listo.classList.add("activo"); }, 5000);
+  listo.addEventListener("click", () => { if (!activo || hecho) return; hecho = true; Plantilla.exito(); });
+
+</script>
+</body>
+</html>

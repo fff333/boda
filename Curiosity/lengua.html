@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Lenguas azules</title>
+<style></style>
+</head>
+<body>
+<main class="escena entrada"><div class="reto" id="reto"></div></main>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+Comun.pistas(["Hay más de tres.", "Dos de ellos son parientes con cuello largo… y uno con el cuello corto.", "Jirafa, okapi, chow chow y eslizón."]);
+Comun.nivel('', null);
+Plantilla.multi({"pregunta": "¿Cuáles tienen la lengua azul o morada?", "opciones": ["Jirafa", "Caballo", "Chow chow", "Gato", "Okapi", "Cerdo", "Eslizón"], "oks": [0, 2, 4, 6]});
+</script>
+</body>
+</html>

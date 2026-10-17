@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Cronómetro</title>
+<style>
+
+  .crono { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); font-family: "Courier New", monospace; font-style: normal; font-size: clamp(56px, 18vw, 96px); }
+  .boton-crono { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 110px); transform: translateX(-50%); width: 120px; height: 120px; border-radius: 50%; border: none; background: #E53935; color: #fff; font: inherit; font-size: 20px; cursor: pointer; }
+  .resultado { position: absolute; left: 0; right: 0; top: 60%; text-align: center; font-size: 20px; opacity: .8; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="crono" id="crono">0.00</div>
+  <div class="resultado" id="resultado"></div>
+  <button class="boton-crono" id="boton">Empezar</button>
+</main>
+<p class="pista">Para el cronómetro justo en 5,00 segundos</p>
+<p class="subpista" style="bottom:calc(env(safe-area-inset-bottom) + 240px)">Los números se esconden a mitad de camino</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["El cronómetro se oculta a los 2 segundos: tendrás que contar mentalmente.", "Cuenta «mil uno, mil dos…» con calma.", "Tienes un margen de cinco centésimas por arriba o por abajo."]);
+  Comun.nivel("", null);
+  const crono = document.getElementById("crono"), boton = document.getElementById("boton"), res = document.getElementById("resultado");
+  let inicio = null, hecho = false;
+  function bucle() { if (inicio === null) return; const s = (performance.now() - inicio) / 1000; crono.textContent = s < 2 ? s.toFixed(2) : "?.??"; requestAnimationFrame(bucle); }
+  boton.addEventListener("click", () => {
+    if (hecho) return;
+    if (inicio === null) { inicio = performance.now(); boton.textContent = "Parar"; res.textContent = ""; Comun.tono(660, 0, .1, .12, "sine"); bucle(); return; }
+    const s = (performance.now() - inicio) / 1000; inicio = null; crono.textContent = s.toFixed(2); boton.textContent = "Otra vez";
+    if (Math.abs(s - 5) <= .05) { hecho = true; res.textContent = "¡Perfecto!"; Motor.exito(() => Comun.superado("pulso.html")); }
+    else { res.textContent = s < 5 ? "Te has adelantado" : "Te has pasado"; Comun.tono(180, 0, .3, .12, "sine"); }
+  });
+
+</script>
+</body>
+</html>

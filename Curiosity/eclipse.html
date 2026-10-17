@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>A la vez</title>
+<style>
+  .cielo { background: linear-gradient(#2A3966 0%, #5C6BC0 100%); transition: background 1s; }
+  .cielo.oscuro { background: linear-gradient(#05080F 0%, #141B36 100%); }
+  .astro { position: absolute; width: 34vw; max-width: 160px; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
+    border: none; cursor: pointer; transition: left 1s ease, top 1s ease, box-shadow .3s; touch-action: none; }
+  .astro svg { width: 100%; height: 100%; display: block; overflow: visible; pointer-events: none; }
+  .sol { left: 28%; top: 30%; background: none; }
+  .sol .rayos { transform-origin: 50px 50px; animation: girar 20s linear infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  .luna { left: 72%; top: 62%; background: none; filter: drop-shadow(0 0 18px rgba(242,233,201,.35)); }
+  .astro.pulsado { outline: 3px solid rgba(255,255,255,.6); outline-offset: 6px; }
+  .juntos .sol, .juntos .luna { left: 50%; top: 45%; }
+  .juntos .luna { z-index: 2; filter: none; }
+  .juntos .luna .cara { fill: #0B1020; transition: fill 1s; }
+  .juntos .luna .crater { opacity: 0; transition: opacity 1s; }
+  .juntos .sol .nucleo { filter: drop-shadow(0 0 30px #FFFFFF); }
+  .conejo { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 90px); width: 22vw; max-width: 100px; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+<main class="escena cielo entrada" id="cielo">
+  <button class="astro sol" id="sol" aria-label="Sol">
+    <svg viewBox="0 0 100 100">
+      <defs><radialGradient id="gSol"><stop offset="0" stop-color="#FFFBE6"/><stop offset=".55" stop-color="#FFD54F"/><stop offset="1" stop-color="#FFA726"/></radialGradient></defs>
+      <g class="rayos" fill="#FFC94A">
+        <path d="M50 -12 L56 14 L44 14Z"/><path d="M50 112 L56 86 L44 86Z"/><path d="M-12 50 L14 44 L14 56Z"/><path d="M112 50 L86 44 L86 56Z"/>
+        <path d="M6 6 L27 22 L22 27Z"/><path d="M94 94 L73 78 L78 73Z"/><path d="M94 6 L78 27 L73 22Z"/><path d="M6 94 L22 73 L27 78Z"/>
+      </g>
+      <circle class="nucleo" cx="50" cy="50" r="33" fill="url(#gSol)"/>
+    </svg>
+  </button>
+  <button class="astro luna" id="luna" aria-label="Luna">
+    <svg viewBox="0 0 100 100">
+      <defs><radialGradient id="gLuna" cx=".38" cy=".35"><stop offset="0" stop-color="#FAF6EA"/><stop offset=".7" stop-color="#D9D2BE"/><stop offset="1" stop-color="#A9A28E"/></radialGradient></defs>
+      <circle class="cara" cx="50" cy="50" r="40" fill="url(#gLuna)"/>
+      <g class="crater" fill="#B8B09A">
+        <circle cx="36" cy="34" r="8"/><circle cx="62" cy="58" r="11"/><circle cx="64" cy="28" r="4.5"/><circle cx="34" cy="64" r="5.5"/><circle cx="50" cy="78" r="3.5"/>
+      </g>
+      <g class="crater" fill="#C9C1AB"><circle cx="38" cy="32" r="5"/><circle cx="64" cy="55" r="7"/></g>
+    </svg>
+  </button>
+  <svg class="conejo" viewBox="0 0 120 130" aria-hidden="true"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg>
+</main>
+<p class="pista">Provoca un eclipse</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["En un eclipse, el sol y la luna se juntan.", "Hay que tocarlos los dos… a la vez.", "Pon un dedo en el sol y otro en la luna al mismo tiempo, y no los sueltes."]);
+  Comun.nivel("XVII", null);
+  const cielo = document.getElementById("cielo"), sol = document.getElementById("sol"), luna = document.getElementById("luna");
+  const dedos = { sol: null, luna: null };
+  let temporizador = null, hecho = false;
+  function revisar() {
+    sol.classList.toggle("pulsado", dedos.sol !== null);
+    luna.classList.toggle("pulsado", dedos.luna !== null);
+    if (hecho) return;
+    if (dedos.sol !== null && dedos.luna !== null) {
+      if (!temporizador) {
+        cielo.classList.add("juntos");
+        Comun.tono(392, 0, 1.2, .12, "sine");
+        temporizador = setTimeout(() => {
+          hecho = true; cielo.classList.add("oscuro");
+          [261.63, 392, 523.25, 783.99].forEach((f, i) => Comun.tono(f, i * .2, 1.4, .12, "sine")); Comun.vibrar([60, 40, 120]);
+          setTimeout(() => Comun.superado("fases.html", "XVII"), 1800);
+        }, 1300);
+      }
+    } else if (temporizador) {
+      clearTimeout(temporizador); temporizador = null; cielo.classList.remove("juntos");
+    }
+  }
+  [["sol", sol], ["luna", luna]].forEach(([n, el]) => {
+    el.addEventListener("pointerdown", e => {
+      e.preventDefault(); dedos[n] = e.pointerId;
+      Comun.tono(n === "sol" ? 523.25 : 329.63, 0, .2, .1, "sine"); revisar();
+      if (dedos.sol === null || dedos.luna === null) setTimeout(() => {
+        if (!hecho && (dedos.sol === null || dedos.luna === null)) Comun.avisar("Solos no pueden…");
+      }, 900);
+    });
+  });
+  const soltar = e => { for (const n in dedos) if (dedos[n] === e.pointerId) dedos[n] = null; revisar(); };
+  addEventListener("pointerup", soltar); addEventListener("pointercancel", soltar);
+</script>
+</body>
+</html>

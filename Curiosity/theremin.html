@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Theremín</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .escala-t { position: absolute; right: 8%; top: 18%; bottom: 22%; width: 60px; }
+  .escala-t div { position: absolute; left: 0; right: 0; border-top: 1px solid rgba(242,233,201,.25); font-size: 13px; font-style: normal; text-align: right; padding-right: 4px; }
+  .escala-t div.obj { border-top: 3px solid #E9A6B8; color: #E9A6B8; }
+  .bola-t { position: absolute; right: calc(8% + 70px); width: 26px; height: 26px; margin-top: -13px; border-radius: 50%; background: #F2E9C9; box-shadow: 0 0 16px #F2E9C9; }
+  .notas-t { position: absolute; left: 8%; top: 40%; font-size: 26px; line-height: 1.6; font-style: normal; }
+  .notas-t span.ok { color: #E9A6B8; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><div class="escala-t" id="escala"></div><div class="bola-t" id="bola"></div><div class="notas-t" id="notas"></div></main>
+<p class="pista">Toca la melodía sin tocar nada: solo inclinando el móvil</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["El sonido sube cuando inclinas el móvil hacia ti y baja al revés.", "Mantén cada nota sobre la línea rosa un momento hasta que se marque.", "Es el principio de «Martinillo»: do, re, mi, do."]);
+  Comun.nivel("", null);
+  const NOTAS = [60, 62, 64, 60], NOMBRES = ["do", "re", "mi", "fa", "sol"], MIDI = [60, 62, 64, 65, 67];
+  const escala = document.getElementById("escala"), bola = document.getElementById("bola"), notas = document.getElementById("notas"), sub = document.getElementById("sub");
+  notas.innerHTML = NOTAS.map(n => `<span>${NOMBRES[MIDI.indexOf(n)]}</span>`).join(" ");
+  MIDI.forEach((m, i) => escala.insertAdjacentHTML("beforeend", `<div style="top:${100 - i * 25}%">${NOMBRES[i]}</div>`));
+  let v = .5, tv = .5, osc = null, gan = null, paso = 0, tiempo = 0, base = null, sensor = false, hecho = false, ultimo = performance.now();
+  const midi = () => 58 + v * 11, freq = m => 440 * Math.pow(2, (m - 69) / 12);
+  function alOrientar(e) { if (e.beta == null) return; sensor = true; if (base === null) base = e.beta; tv = Math.max(0, Math.min(1, .5 + (e.beta - base) / 50)); }
+  addEventListener("pointermove", e => { if (!sensor && (e.buttons || e.pointerType === "touch")) tv = 1 - e.clientY / innerHeight; });
+  addEventListener("pointerdown", e => { if (sensor) base = null; else tv = 1 - e.clientY / innerHeight; });
+  Comun.inicio("Un instrumento que no se toca", "Probarlo", async () => {
+    const c = Comun.audio(); osc = c.createOscillator(); gan = c.createGain(); osc.type = "sine"; gan.gain.value = .15; osc.connect(gan).connect(c.destination); osc.start();
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: arrastra el dedo arriba y abajo"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
+    v += (tv - v) * .2; const m = midi(); osc.frequency.setTargetAtTime(freq(m), osc.context.currentTime, .03);
+    const r = escala.getBoundingClientRect(); bola.style.top = (r.top + r.height * (1 - (m - 60) / 8)) + "px";
+    escala.querySelectorAll("div").forEach((d, i) => d.classList.toggle("obj", !hecho && MIDI[i] === NOTAS[paso]));
+    if (!hecho) {
+      tiempo = Math.abs(m - NOTAS[paso]) < .45 ? tiempo + dt : 0;
+      if (tiempo > 500) { notas.children[paso].classList.add("ok"); paso++; tiempo = 0; Comun.vibrar(20);
+        if (paso === NOTAS.length) { hecho = true; gan.gain.setTargetAtTime(0, osc.context.currentTime + .3, .1); Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("copas.html"), 1800); } }
+    }
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

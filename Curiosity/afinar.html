@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Afinación</title>
+<style>
+
+  .deslizador { position: absolute; left: 10%; right: 10%; top: 58%; height: 60px; touch-action: none; }
+  .carril { position: absolute; left: 0; right: 0; top: 28px; height: 4px; background: rgba(242,233,201,.25); border-radius: 2px; }
+  .tirador { position: absolute; top: 10px; width: 40px; height: 40px; margin-left: -20px; border-radius: 50%; background: #F2E9C9; }
+  .cuerdas { position: absolute; left: 0; right: 0; top: 34%; text-align: center; }
+  .cuerda { height: 3px; margin: 18px 14%; background: #C9A86A; border-radius: 2px; }
+  .cuerda.tiembla { animation: tiembla .06s infinite; }
+  @keyframes tiembla { 50% { transform: translateY(2px); } }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="cuerdas"><div class="cuerda tiembla"></div><div class="cuerda tiembla" id="mia"></div></div>
+  <div class="deslizador" id="desl"><div class="carril"></div><div class="tirador" id="tirador"></div></div>
+</main>
+<p class="pista">Afina tu cuerda con la de arriba</p>
+<p class="subpista" id="sub">Mueve el tirador hasta que dejen de «temblar»</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Suenan dos notas: una fija y otra que mueves tú.", "Cuando estén cerca oirás un «uaua-uaua». Cuanto más lento, más cerca.", "Mueve muy despacio hasta que el temblor desaparezca del todo y espera un momento."]);
+  Comun.nivel("", null);
+  const desl = document.getElementById("desl"), tirador = document.getElementById("tirador");
+  let v = Math.random() < .5 ? .15 : .85, o1, o2, hecho = false, quieto = null;
+  const f = () => 392 + v * 100;
+  function pintar() { tirador.style.left = (v * 100) + "%"; if (o2) o2.frequency.setTargetAtTime(f(), Comun.audio().currentTime, .03); comprobar(); }
+  function comprobar() {
+    if (hecho) return;
+    const ok = Math.abs(f() - 440) < 1.2;
+    if (ok && !quieto) quieto = setTimeout(() => { hecho = true; [o1, o2].forEach(o => o.stop()); Motor.exito(() => Comun.superado("relojero.html")); }, 1500);
+    if (!ok && quieto) { clearTimeout(quieto); quieto = null; }
+  }
+  const mover = e => { const r = desl.getBoundingClientRect(); v = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); pintar(); };
+  desl.addEventListener("pointerdown", e => { desl.setPointerCapture(e.pointerId); mover(e); });
+  desl.addEventListener("pointermove", e => { if (e.buttons || e.pointerType === "touch") mover(e); });
+  Comun.inicio("Dos cuerdas desafinadas", "Escuchar", async () => {
+    const c = Comun.audio(); if (!c) return;
+    const g = c.createGain(); g.gain.value = .08; g.connect(c.destination);
+    o1 = c.createOscillator(); o1.frequency.value = 440; o2 = c.createOscillator(); o2.frequency.value = f();
+    o1.connect(g); o2.connect(g); o1.start(); o2.start(); pintar();
+  });
+
+</script>
+</body>
+</html>

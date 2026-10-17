@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Sube el sonido</title>
+<style>
+  .altavoz { position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%); width: 120px; height: 120px; border-radius: 50%;
+    border: 1px solid rgba(242,233,201,.35); background: rgba(242,233,201,.06); cursor: pointer; display: grid; place-items: center; color: var(--crema); }
+  .altavoz svg { width: 56px; }
+  .altavoz.sonando { box-shadow: 0 0 40px rgba(242,233,201,.35); }
+  .morse { position: absolute; left: 0; right: 0; top: 62%; display: flex; justify-content: center; gap: 22px; opacity: 0; transition: opacity 1s; font-style: normal; }
+  .morse.visible { opacity: 1; }
+  .grupo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .simbolos { font-family: "Courier New", monospace; font-weight: bold; font-size: 34px; letter-spacing: 2px; line-height: 1; transition: color .1s; }
+  .grupo.activo .simbolos { color: #E9A6B8; }
+  .letra { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 28px; opacity: 0; transition: opacity 1s; }
+  .con-letras .letra { opacity: 1; }
+  .titulo { position: absolute; left: 0; right: 0; top: 18%; text-align: center; font-size: clamp(34px, 10vw, 54px); }
+</style>
+</head>
+<body>
+<main class="escena entrada" id="escena">
+  <h1 class="titulo">Sube el sonido</h1>
+  <button class="altavoz" id="altavoz" aria-label="Escuchar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+  </button>
+  <div class="morse" id="morse"></div>
+</main>
+<p class="subpista">Toca el altavoz</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  const ALFABETO = "A ·−      B −···    C −·−·\nD −··     E ·          F ··−·\nG −−·    H ····      I ··\nJ ·−−−   K −·−      L ·−··\nM −−     N −·        O −−−\nP ·−−·   Q −−·−    R ·−·\nS ···      T −          U ··−\nV ···−    W ·−−     X −··−\nY −·−−    Z −−··";
+  const escena = document.getElementById("escena"), morse = document.getElementById("morse");
+  Comun.pistas([
+    "El mensaje está en morse. Este es el abecedario:\n\n" + ALFABETO,
+    "Ahora el mensaje también aparece en la pantalla. Escúchalo otra vez y compáralo con el abecedario.",
+    "Es una señal de socorro famosa: tres letras."
+  ], n => {
+    if (n >= 2) morse.classList.add("visible");
+    if (n >= 3) escena.classList.add("con-letras");
+  });
+  Comun.nivel("XXXI", { morse: "Eso es el idioma, no el mensaje", sonido: "Ya lo has subido. ¿Qué dice?" });
+  const PALABRA = "SOS", CODIGO = { S: "...", O: "---" };
+  const grupos = [...PALABRA].map(l => {
+    const g = document.createElement("div"); g.className = "grupo";
+    g.innerHTML = `<span class="simbolos">${CODIGO[l].replace(/\./g, "·").replace(/-/g, "−")}</span><span class="letra">${l}</span>`;
+    morse.appendChild(g); return g;
+  });
+  const U = 200; let sonando = false;
+  function pitido(inicio, dur) {
+    const c = Comun.audio(); if (!c) return;
+    const t = c.currentTime + inicio / 1000, d = dur / 1000, o = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.value = 650;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.3, t + .01); g.gain.setValueAtTime(.3, t + d - .01); g.gain.linearRampToValueAtTime(0, t + d);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + d + .02);
+  }
+  const altavoz = document.getElementById("altavoz");
+  altavoz.addEventListener("click", () => {
+    if (sonando) return; sonando = true; altavoz.classList.add("sonando");
+    let t = 300;
+    [...PALABRA].forEach((l, i) => {
+      const ini = t;
+      for (const s of CODIGO[l]) { const d = s === "." ? U : 3 * U; pitido(t, d); t += d + U; }
+      setTimeout(() => grupos[i].classList.add("activo"), ini);
+      setTimeout(() => grupos[i].classList.remove("activo"), t);
+      t += 2 * U;
+    });
+    setTimeout(() => { sonando = false; altavoz.classList.remove("sonando"); }, t);
+  });
+</script>
+</body>
+</html>
