@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Huerto</title>
+<style>
+  .huerto { background: linear-gradient(#213B3C 0%, #2F5654 60%, #22301F 61%, #18220F 100%); }
+  .arbol { position: absolute; left: 50%; top: 44%; width: min(80vw, 380px); transform: translate(-50%, -50%); cursor: pointer; }
+  .arbol svg { width: 100%; display: block; overflow: visible; }
+  .arbol.agitado svg { animation: agitar .5s ease; }
+  @keyframes agitar { 20% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } 80% { transform: rotate(-1deg); } }
+  .pera { transition: transform 1s cubic-bezier(.5,0,.9,.6); }
+  .cesta { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 110px); transform: translateX(-50%); width: 150px; }
+</style>
+</head>
+<body>
+<main class="escena huerto entrada">
+  <div class="arbol" id="arbol">
+    <svg viewBox="0 0 300 300">
+      <path d="M135 300 L140 180 L160 180 L165 300Z" fill="#3E2A1A"/>
+      <circle cx="150" cy="120" r="95" fill="#1F4A2A"/><circle cx="90" cy="150" r="55" fill="#245432"/><circle cx="210" cy="150" r="55" fill="#245432"/>
+      <g id="peras"></g>
+    </svg>
+  </div>
+  <svg class="cesta" viewBox="0 0 150 70" aria-hidden="true">
+    <path d="M10 15 L140 15 L125 68 L25 68Z" fill="#8D6E4A"/>
+    <path d="M10 15 L140 15" stroke="#6D5236" stroke-width="6"/>
+    <path d="M30 35 L120 35 M35 52 L115 52" stroke="#6D5236" stroke-width="3"/>
+  </svg>
+</main>
+<p class="pista">Las peras ya están maduras</p>
+<p class="subpista">Sacude el árbol para llenar la cesta</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Las peras no van a caer solas.", "Agita el móvil con fuerza, como si sacudieras el árbol.", "Hacen falta tres peras en la cesta."]);
+  Comun.nivel("XXI", null);
+  const arbol = document.getElementById("arbol"), grupo = document.getElementById("peras");
+  const SITIOS = [[100, 110], [190, 90], [150, 170]];
+  const peras = SITIOS.map(([x, y]) => {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", "pera");
+    g.innerHTML = `<path d="M${x} ${y - 16} Q${x + 10} ${y - 4} ${x + 12} ${y + 8} Q${x + 12} ${y + 22} ${x} ${y + 22} Q${x - 12} ${y + 22} ${x - 12} ${y + 8} Q${x - 10} ${y - 4} ${x} ${y - 16}Z" fill="#C0CA33"/>
+      <path d="M${x} ${y - 16} L${x + 2} ${y - 24}" stroke="#3E2A1A" stroke-width="2"/>`;
+    grupo.appendChild(g); return g;
+  });
+  let caidas = 0, ultimo = 0, prev = null;
+  function sacudir() {
+    const ahora = performance.now();
+    if (ahora - ultimo < 450 || caidas >= peras.length) return;
+    ultimo = ahora;
+    arbol.classList.remove("agitado"); void arbol.offsetWidth; arbol.classList.add("agitado");
+    Comun.tono(160, 0, .2, .08, "sine"); Comun.vibrar(30);
+    const p = peras[caidas++];
+    setTimeout(() => {
+      p.style.transform = `translateY(${330 - SITIOS[caidas - 1][1]}px)`;
+      setTimeout(() => { Comun.tono(420, 0, .12, .15); }, 900);
+    }, 250);
+    if (caidas === peras.length) setTimeout(() => Comun.superado("llave.html", "XXI"), 1900);
+  }
+  let conSensor = true;
+  // Tocar el árbol solo funciona si el móvil no tiene sensor de movimiento
+  arbol.addEventListener("pointerdown", () => {
+    if (!conSensor) sacudir();
+    else { arbol.classList.remove("agitado"); void arbol.offsetWidth; arbol.classList.add("agitado"); Comun.avisar("Así no caen. Prueba a agitar el móvil"); }
+  });
+  function alMover(e) {
+    const a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
+    const m = Math.hypot(a.x, a.y, a.z);
+    if (prev != null && Math.abs(m - prev) > 12) sacudir();
+    prev = m;
+  }
+  Comun.inicio("Un huerto al atardecer", "Entrar", async () => {
+    conSensor = await Comun.pedirMovimiento();
+    if (conSensor) addEventListener("devicemotion", alMover);
+  });
+</script>
+</body>
+</html>

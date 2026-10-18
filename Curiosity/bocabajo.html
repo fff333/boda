@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Buenas noches</title>
@@ -13,20 +13,20 @@
   canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 
   .cielo-d { position: absolute; inset: 0; background: linear-gradient(#64B5F6, #BBDEFB); transition: background 2s; }
-  .noche .cielo-d { background: linear-gradient(#05080F, #141B36); }
+  .noche .cielo-d { background: linear-gradient(#0E1B1C, #1E3638); }
   .astro-d { position: absolute; left: 50%; top: 22%; width: 90px; height: 90px; margin-left: -45px; border-radius: 50%; background: #FFD54F; box-shadow: 0 0 50px #FFD54F; transition: all 2s; }
-  .noche .astro-d { background: #F2E9C9; box-shadow: 0 0 30px rgba(242,233,201,.6); }
+  .noche .astro-d { background: #F3EBDD; box-shadow: 0 0 30px rgba(243,235,221,.6); }
   .conejo-c { position: absolute; left: 50%; top: 66%; width: min(36vw, 160px); transform: translate(-50%, -50%); }
   .conejo-c svg { width: 100%; display: block; }
   .zz { position: absolute; left: 62%; top: 52%; font-size: 30px; opacity: 0; transition: opacity 1s 1s; }
   .noche .zz { opacity: 1; }
-  .pista { color: #0B1020; } .noche .pista { color: #F2E9C9; }
+  .pista { color: #16292B; } .noche .pista { color: #F3EBDD; }
 
 </style>
 </head>
 <body>
 
-<main class="escena entrada" id="escena"><div class="cielo-d"></div><div class="astro-d"></div><div class="conejo-c"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div><div class="zz">z z z</div></main>
+<main class="escena entrada" id="escena"><div class="cielo-d"></div><div class="astro-d"></div><div class="conejo-c"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#D9A441" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#D9A441" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#16292B"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#D9A441"/></svg></div><div class="zz">z z z</div></main>
 <p class="pista">Todavía es de día</p>
 <p class="subpista" id="sub"></p>
 

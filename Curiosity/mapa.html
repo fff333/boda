@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <title>Mapa</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #0B1020; color: #F2E9C9; font-family: "Fraunces", Georgia, serif; font-style: italic; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #16292B; color: #F3EBDD; font-family: "Fraunces", Georgia, serif; font-style: italic; }
   .barra { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 10px;
-    padding: calc(env(safe-area-inset-top) + 10px) 14px 10px; background: linear-gradient(#0B1020 70%, rgba(11,16,32,0)); }
-  .barra button { font: inherit; font-size: 16px; color: #F2E9C9; background: rgba(11,16,32,.7); border: 1px solid rgba(242,233,201,.35); border-radius: 30px; padding: 8px 14px; cursor: pointer; }
+    padding: calc(env(safe-area-inset-top) + 10px) 14px 10px; background: linear-gradient(#16292B 70%, rgba(22,41,43,0)); }
+  .barra button { font: inherit; font-size: 16px; color: #F3EBDD; background: rgba(22,41,43,.7); border: 1px solid rgba(243,235,221,.35); border-radius: 30px; padding: 8px 14px; cursor: pointer; }
   .barra h1 { flex: 1; font-weight: 500; font-size: 18px; text-align: center; }
   .barra .cuenta { font-size: 14px; font-style: normal; color: #FFD54F; white-space: nowrap; }
   .lienzo { position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
   .lienzo svg { display: block; margin: 0 auto; }
   .nodo { cursor: pointer; }
   .nodo text { font-family: Georgia, serif; font-style: normal; pointer-events: none; }
-  .etq { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 12px; fill: rgba(242,233,201,.85); pointer-events: none; }
-  .region-t { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 20px; fill: #F2E9C9; }
+  .etq { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 12px; fill: rgba(243,235,221,.85); pointer-events: none; }
+  .region-t { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 20px; fill: #F3EBDD; }
   .actual .anillo { animation: latido 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
   @keyframes latido { 50% { transform: scale(1.25); opacity: .4; } }
 </style>
@@ -32,20 +32,21 @@
 <script>
   const EN = Comun.idioma === "en";
   // Nombre corto de cada nivel [español, inglés]
-  const NOMBRES = {"arcoiris": ["La luz ordenada", "La luz ordenada"], "cronometro": ["A ciegas", "A ciegas"], "eclipse": ["Eclipse a dos manos", "Eclipse a dos manos"], "pleyades": ["Las siete hermanas", "Las siete hermanas"], "vela": ["La vela", "La vela"], "avestruz": ["El avestruz", "El avestruz"], "dormir": ["Apaga la luz", "Apaga la luz"], "cuentaatras": ["Cuenta atrás", "Cuenta atrás"], "betelgeuse": ["La estrella fría", "La estrella fría"], "globo": ["El globo", "El globo"], "puntociego": ["Punto ciego", "Punto ciego"], "tumbado": ["Girar", "Girar"], "hora": ["La hora real", "La hora real"], "brujula": ["El norte", "El norte"], "eco": ["El eco", "El eco"], "jirafa": ["La jirafa", "La jirafa"], "cementerio": ["Cementerio", "Cementerio"], "montyhall": ["Tres puertas", "Tres puertas"], "stroop": ["Colores", "Colores"], "cueva": ["La cueva", "La cueva"], "viernes13": ["Viernes 13", "Viernes 13"], "saturno": ["Los anillos", "Los anillos"], "silencio": ["Silencio absoluto", "Silencio absoluto"], "escondite": ["El escondite", "El escondite"], "ambulancia": ["El espejo", "El espejo"], "vuelta": ["La vuelta", "La vuelta"], "gigantes": ["Tierra firme", "Tierra firme"], "estatua": ["Quieto", "Quieto"], "yensid": ["El hechicero", "El hechicero"], "bocabajo": ["Boca abajo", "Boca abajo"], "sol": ["Un segundo de Sol", "Un segundo de Sol"], "salto": ["El salto", "El salto"], "hal": ["HAL 9000", "HAL 9000"], "cafe": ["Paciencia", "Paciencia"], "anagrama": ["Letras", "Letras"], "segundo": ["El segundo extra", "El segundo extra"], "polar": ["La Polar", "La Polar"], "diapason": ["La nota", "La nota"], "gallina": ["El vuelo", "El vuelo"], "kamelos": ["El camello", "El camello"], "dados": ["Los dados", "Los dados"], "laberinto": ["Laberinto", "Laberinto"], "bisiesto": ["Febrero de 1900", "Febrero de 1900"], "ventana": ["Ventana al cielo", "Ventana al cielo"], "maracas": ["Maracas", "Maracas"], "lengua": ["Lenguas azules", "Lenguas azules"], "unos": ["Unos", "Unos"], "canica": ["Equilibrio", "Equilibrio"], "berlin": ["Hora de Berlín", "Hora de Berlín"], "pitagoras": ["La cuerda", "La cuerda"], "silbido": ["El silbido", "El silbido"], "circulo": ["El círculo", "El círculo"], "pulso": ["Sesenta", "Sesenta"], "memoria": ["Memoria", "Memoria"], "reyes": ["La baraja", "La baraja"], "cuadrados": ["Cuadrados", "Cuadrados"], "gregoriano": ["Los diez días perdidos", "Los diez días perdidos"], "escape": ["Velocidad de escape", "Velocidad de escape"], "sos": ["SOS", "SOS"], "cesar": ["Cifrado", "Cifrado"], "bombillas": ["Binario", "Binario"], "afinar": ["Afinar", "Afinar"], "braille": ["Puntos", "Puntos"], "agujas": ["Las agujas", "Las agujas"], "cantar": ["Canta", "Canta"], "t9": ["Mensaje", "Mensaje"], "theremin": ["Theremín", "Theremín"], "shakespeare": ["Mismo día, distinto día", "Mismo día, distinto día"], "cumple": ["La fiesta", "La fiesta"], "mirasidi": ["La serie", "La serie"], "cajafuerte": ["La combinación", "La combinación"], "bravo": ["El aplauso", "El aplauso"]};
+  const NOMBRES = {"arcoiris": ["La luz ordenada", "La luz ordenada"], "cronometro": ["A ciegas", "A ciegas"], "stroop": ["Colores", "Colores"], "cremallera": ["La cremallera", "La cremallera"], "globo": ["El globo", "El globo"], "eclipse": ["Eclipse a dos manos", "Eclipse a dos manos"], "calendario": ["Hoy", "Hoy"], "ambulancia": ["El espejo", "El espejo"], "escape": ["Velocidad de escape", "Velocidad de escape"], "estatua": ["Quieto", "Quieto"], "segundo": ["El segundo extra", "El segundo extra"], "laberinto": ["Laberinto", "Laberinto"], "maracas": ["Maracas", "Maracas"], "silbido": ["El silbido", "El silbido"], "circulo": ["El círculo", "El círculo"], "pulso": ["Sesenta", "Sesenta"], "gregoriano": ["Los diez días perdidos", "Los diez días perdidos"], "t9": ["Mensaje", "Mensaje"], "braille": ["Puntos", "Puntos"], "cajafuerte": ["La combinación", "La combinación"], "cuentaatras": ["Cuenta atrás", "Cuenta atrás"], "pleyades": ["Las siete hermanas", "Las siete hermanas"], "vela": ["La vela", "La vela"], "dormir": ["Apaga la luz", "Apaga la luz"], "vaso": ["El vaso", "El vaso"], "betelgeuse": ["La estrella fría", "La estrella fría"], "arena": ["Reloj de arena", "Reloj de arena"], "tumbado": ["Girar", "Girar"], "diente": ["Diente de león", "Diente de león"], "planetas": ["Planetas", "Planetas"], "liebre": ["La Liebre", "La Liebre"], "jeroglificos": ["Jeroglíficos", "Jeroglíficos"], "anubis": ["La pluma", "La pluma"], "pez": ["La pecera", "La pecera"], "pera": ["El peral", "El peral"], "llave": ["La llave", "La llave"], "zanahoria": ["Algo naranja", "Algo naranja"], "trebol": ["El trébol", "El trébol"], "hora": ["La hora real", "La hora real"], "brujula": ["El norte", "El norte"], "eco": ["El eco", "El eco"], "jirafa": ["La jirafa", "La jirafa"], "cementerio": ["Cementerio", "Cementerio"], "montyhall": ["Tres puertas", "Tres puertas"], "vuelta": ["La vuelta", "La vuelta"], "iman": ["El imán", "El imán"], "saturno": ["Los anillos", "Los anillos"], "silencio": ["Silencio absoluto", "Silencio absoluto"], "escondite": ["El escondite", "El escondite"], "bocabajo": ["Boca abajo", "Boca abajo"], "astronauta": ["Gravedad cero", "Gravedad cero"], "gigantes": ["Tierra firme", "Tierra firme"], "yensid": ["El hechicero", "El hechicero"], "cafe": ["Paciencia", "Paciencia"], "fasesluna": ["La luna de hoy", "La luna de hoy"], "salto": ["El salto", "El salto"], "hal": ["HAL 9000", "HAL 9000"], "giro": ["El cielo gira", "El cielo gira"], "telescopio": ["Telescopio", "Telescopio"], "australia": ["Al otro lado", "Al otro lado"], "sirio": ["Brillo", "Brillo"], "escarabajo": ["El escarabajo", "El escarabajo"], "mosaico": ["Mosaico", "Mosaico"], "copas": ["Copas", "Copas"], "estrellita": ["Memoria musical", "Memoria musical"], "semana": ["Los días", "Los días"], "carbono": ["Diamante y grafito", "Diamante y grafito"], "polar": ["La Polar", "La Polar"], "diapason": ["La nota", "La nota"], "gallina": ["El vuelo", "El vuelo"], "dados": ["Los dados", "Los dados"], "toctoc": ["Toc, toc", "Toc, toc"], "ventana": ["Ventana al cielo", "Ventana al cielo"], "lengua": ["Lenguas azules", "Lenguas azules"], "unos": ["Unos", "Unos"], "canica": ["Equilibrio", "Equilibrio"], "pesoluna": ["En la Luna", "En la Luna"], "berlin": ["Hora de Berlín", "Hora de Berlín"], "pitagoras": ["La cuerda", "La cuerda"], "piramide": ["La pirámide", "La pirámide"], "memoria": ["Memoria", "Memoria"], "eureka": ["¡Eureka!", "¡Eureka!"], "cuadrados": ["Cuadrados", "Cuadrados"], "ariadna": ["El hilo", "El hilo"], "acueducto": ["Acueducto", "Acueducto"], "romano": ["Hora romana", "Hora romana"], "director": ["El director", "El director"], "deoido": ["De oído", "De oído"], "balanzas": ["Balanzas", "Balanzas"], "alreves": ["Del revés", "Del revés"], "elementos": ["Elementos", "Elementos"], "prismaluz": ["La luz", "La luz"], "papel": ["Doblar un papel", "Doblar un papel"], "frutas": ["Frutas", "Frutas"], "tabla": ["La tabla", "La tabla"], "sos": ["SOS", "SOS"], "cesar": ["Cifrado", "Cifrado"], "bombillas": ["Binario", "Binario"], "sintonia": ["Sintonía", "Sintonía"], "agujas": ["Las agujas", "Las agujas"], "himno": ["El himno", "El himno"], "huellas": ["Huellas", "Huellas"], "theremin": ["Theremín", "Theremín"], "fibonacci": ["Conejos", "Conejos"], "notacolor": ["Nota de color", "Nota de color"], "cumplealreves": ["Al revés", "Al revés"], "mirilla": ["La mirilla", "La mirilla"], "shakespeare": ["Mismo día, distinto día", "Mismo día, distinto día"], "cumple": ["La fiesta", "La fiesta"], "firma": ["La firma", "La firma"], "mirasidi": ["La serie", "La serie"], "faro": ["Destellos", "Destellos"], "bravo": ["El aplauso", "El aplauso"]};
   // Regiones del mundo (empiezan en el nivel indicado)
   const REGIONES = [
     ["arcoiris", "Fácil", "Fácil", "#1F3A24", "#2E5233", "facil"],
-    ["stroop", "Intermedio", "Intermedio", "#2A2E44", "#3A3E5A", "medio"],
-    ["polar", "Difícil", "Difícil", "#0B1230", "#141E44", "dificil"],
-    ["reyes", "Experto", "Experto", "#05070F", "#22163A", "experto"]
+    ["diente", "Intermedio", "Intermedio", "#2A2E44", "#3A3E5A", "medio"],
+    ["hal", "Difícil", "Difícil", "#0B1230", "#141E44", "dificil"],
+    ["acueducto", "Experto", "Experto", "#05070F", "#22163A", "experto"]
   ];
   // Elementos del paisaje junto a algunos niveles
   const HITOS = {"hora": "reloj", "eclipse": "eclipse", "saturno": "saturno", "ventana": "ventana", "arcoiris": "arcoiris", "pleyades": "liebre", "escape": "cohete", "eco": "montana", "globo": "globo", "pitagoras": "templo", "theremin": "violin", "diapason": "piano", "jirafa": "arbol", "escondite": "puerta", "cesar": "coliseo", "cajafuerte": "cajafuerte", "cafe": "taza", "cueva": "cueva", "bravo": "escenario", "laberinto": "laberinto", "polar": "telescopio", "segundo": "reloj"};
 
   const NIV = Comun.NIVELES, superados = new Set(Comun.leerLista("superados")), saltados = new Set(Comun.leerLista("saltados"));
   const desde = new URLSearchParams(location.search).get("desde") || Comun.leer("actual", "arcoiris");
-  document.getElementById("cuenta").textContent = "★ " + superados.size + " / " + NIV.length;
+  const est = Comun.leerMapa("estrellas");
+  document.getElementById("cuenta").textContent = "★ " + Object.values(est).reduce((a, b) => a + b, 0) + " / " + NIV.length * 3;
   document.getElementById("volver").addEventListener("click", () => { if (history.length > 1) history.back(); else location.href = desde + ".html"; });
 
   let s = 9; const az = () => (s = (s * 16807) % 2147483647) / 2147483647;
@@ -57,7 +58,7 @@
   // ---------- Dibujos del paisaje ----------
   const D = {
     arbol: (x, y, k = 1) => `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-4" y="-6" width="8" height="26" fill="#4A3220"/><circle cx="0" cy="-20" r="20" fill="#2F6B3A"/><circle cx="-13" cy="-10" r="13" fill="#3A7D45"/><circle cx="13" cy="-12" r="14" fill="#357540"/></g>`,
-    flor: (x, y) => `<g transform="translate(${x} ${y})"><circle r="3" fill="#E9A6B8"/><circle cx="7" cy="2" r="3" fill="#FFE082"/><circle cx="-6" cy="3" r="2.5" fill="#F2E9C9"/></g>`,
+    flor: (x, y) => `<g transform="translate(${x} ${y})"><circle r="3" fill="#D9A441"/><circle cx="7" cy="2" r="3" fill="#FFE082"/><circle cx="-6" cy="3" r="2.5" fill="#F3EBDD"/></g>`,
     seta: (x, y) => `<g transform="translate(${x} ${y})"><rect x="-2" y="-2" width="4" height="9" fill="#E9DCC0"/><path d="M-9 -2 Q0 -14 9 -2Z" fill="#B24A3A"/><circle cx="-3" cy="-6" r="1.5" fill="#FFF"/></g>`,
     raiz: (x, y) => `<path d="M${x} ${y} q10 14 0 28 q-8 12 4 22" stroke="#5A4128" stroke-width="3" fill="none"/>`,
     piedra: (x, y) => `<ellipse cx="${x}" cy="${y}" rx="14" ry="8" fill="#5E5448"/>`,
@@ -65,7 +66,7 @@
     copo: (x, y) => `<g stroke="#E8F1FA" stroke-width="1.5" opacity=".7"><path d="M${x - 5} ${y} L${x + 5} ${y} M${x} ${y - 5} L${x} ${y + 5} M${x - 4} ${y - 4} L${x + 4} ${y + 4} M${x - 4} ${y + 4} L${x + 4} ${y - 4}"/></g>`,
     valla: (x, y) => `<g fill="#C9B48A">${[0, 12, 24, 36].map(d => `<rect x="${x - 18 + d}" y="${y - 16}" width="5" height="18"/>`).join("")}<rect x="${x - 20}" y="${y - 10}" width="46" height="3"/></g>`,
     zanahoria: (x, y) => `<g transform="translate(${x} ${y})"><path d="M-4 0 L4 0 L0 16Z" fill="#FB8C00"/><path d="M0 0 L-5 -8 M0 0 L0 -9 M0 0 L5 -8" stroke="#43A047" stroke-width="2"/></g>`,
-    estrella: (x, y, r = 1.4) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#F2E9C9" opacity="${.4 + az() * .6}"/>`,
+    estrella: (x, y, r = 1.4) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#F3EBDD" opacity="${.4 + az() * .6}"/>`,
     planeta: (x, y) => `<g transform="translate(${x} ${y})"><circle r="14" fill="#80DEEA" opacity=".85"/><ellipse rx="24" ry="5" fill="none" stroke="#E6D3A3" stroke-width="2" transform="rotate(-18)"/></g>`,
     edificio: (x, y) => { const h = 50 + az() * 50; let v = ""; for (let j = 8; j < h - 6; j += 12) v += `<rect x="${x - 10}" y="${y - h + j}" width="5" height="6" fill="#FFE082" opacity="${az() < .6 ? .8 : .15}"/><rect x="${x + 4}" y="${y - h + j}" width="5" height="6" fill="#FFE082" opacity="${az() < .6 ? .8 : .15}"/>`; return `<rect x="${x - 16}" y="${y - h}" width="32" height="${h}" fill="#1E2236"/>${v}`; },
     farola: (x, y) => `<g><rect x="${x - 1.5}" y="${y - 40}" width="3" height="40" fill="#555"/><circle cx="${x}" cy="${y - 42}" r="5" fill="#FFE082"/><circle cx="${x}" cy="${y - 42}" r="14" fill="#FFE082" opacity=".15"/></g>`,
@@ -79,12 +80,12 @@
     rama: (x, y) => `<path d="M${x - 30} ${y} L${x + 30} ${y - 10} M${x - 20} ${y - 12} L${x + 26} ${y + 4}" stroke="#5A4128" stroke-width="3"/>`,
     frasco: (x, y) => `<g><rect x="${x - 7}" y="${y - 18}" width="14" height="18" rx="3" fill="rgba(150,200,255,.3)" stroke="#CFE0FF"/><rect x="${x - 4}" y="${y - 22}" width="8" height="5" fill="#8D6E4A"/><circle cx="${x}" cy="${y - 9}" r="3" fill="#FFE082" opacity=".8"/></g>`,
     pluma: (x, y) => `<path d="M${x} ${y} Q${x + 10} ${y - 20} ${x + 4} ${y - 34} Q${x - 6} ${y - 18} ${x} ${y}Z" fill="#141414" stroke="#3A4660"/>`,
-    nota: (x, y) => `<text x="${x}" y="${y}" font-size="22" fill="#E9A6B8" opacity=".75" style="font-style:normal">${az() < .5 ? "♪" : "♫"}</text>`,
+    nota: (x, y) => `<text x="${x}" y="${y}" font-size="22" fill="#D9A441" opacity=".75" style="font-style:normal">${az() < .5 ? "♪" : "♫"}</text>`,
     cortina: (x, y) => `<path d="M${x - 30} ${y - 60} Q${x - 20} ${y - 30} ${x - 30} ${y} L${x} ${y} Q${x - 6} ${y - 30} ${x} ${y - 60}Z" fill="#7B1F2A"/>`,
     // hitos de niveles concretos
-    globo: (x, y) => `<g><path d="M${x} ${y - 10} q4 20 -2 34" stroke="#F2E9C9" fill="none"/><ellipse cx="${x}" cy="${y - 26}" rx="13" ry="17" fill="#E53935"/></g>`,
+    globo: (x, y) => `<g><path d="M${x} ${y - 10} q4 20 -2 34" stroke="#F3EBDD" fill="none"/><ellipse cx="${x}" cy="${y - 26}" rx="13" ry="17" fill="#E53935"/></g>`,
     arcoiris: (x, y) => ["#E53935", "#FB8C00", "#FDD835", "#43A047", "#1E88E5", "#3949AB", "#8E24AA"].map((c, i) => `<path d="M${x - 46 + i * 4} ${y} A${46 - i * 4} ${46 - i * 4} 0 0 1 ${x + 46 - i * 4} ${y}" stroke="${c}" stroke-width="4" fill="none" opacity=".85"/>`).join(""),
-    montana: (x, y) => `<path d="M${x - 50} ${y} L${x} ${y - 70} L${x + 50} ${y}Z" fill="#4A4038"/><path d="M${x - 14} ${y - 50} L${x} ${y - 70} L${x + 14} ${y - 50} L${x + 4} ${y - 54} L${x - 4} ${y - 48}Z" fill="#F2E9C9"/>`,
+    montana: (x, y) => `<path d="M${x - 50} ${y} L${x} ${y - 70} L${x + 50} ${y}Z" fill="#4A4038"/><path d="M${x - 14} ${y - 50} L${x} ${y - 70} L${x + 14} ${y - 50} L${x + 4} ${y - 54} L${x - 4} ${y - 48}Z" fill="#F3EBDD"/>`,
     reloj: (x, y) => `<g><circle cx="${x}" cy="${y - 20}" r="18" fill="#F7F0DC" stroke="#C9A86A" stroke-width="3"/><path d="M${x} ${y - 20} L${x} ${y - 32} M${x} ${y - 20} L${x + 8} ${y - 16}" stroke="#3E2A1A" stroke-width="2.5"/></g>`,
     nieve: (x, y) => [0, 1, 2, 3].map(k => D.copo(x - 20 + k * 14, y - 10 - (k % 2) * 14)).join(""),
     casa: (x, y) => `<g><rect x="${x - 26}" y="${y - 34}" width="52" height="34" fill="#2E3655"/><path d="M${x - 32} ${y - 32} L${x} ${y - 58} L${x + 32} ${y - 32}Z" fill="#5A3D52"/><rect x="${x - 6}" y="${y - 18}" width="12" height="18" fill="#6D4C33"/><rect x="${x + 12}" y="${y - 28}" width="9" height="9" fill="#FFD979"/><path d="M${x} ${y - 58} L${x} ${y - 68} M${x - 6} ${y - 66} L${x + 6} ${y - 66}" stroke="#C9A86A" stroke-width="2"/></g>`,
@@ -92,26 +93,26 @@
     peral: (x, y) => D.arbol(x, y, 1.1) + `<path d="M${x - 10} ${y - 30} q4 4 0 10 q-4 -6 0 -10Z M${x + 8} ${y - 18} q4 4 0 10 q-4 -6 0 -10Z" fill="#C0CA33"/>`,
     puerta: (x, y) => `<g><path d="M${x - 14} ${y} L${x - 14} ${y - 30} Q${x} ${y - 44} ${x + 14} ${y - 30} L${x + 14} ${y}Z" fill="#6D4C33"/><circle cx="${x + 8}" cy="${y - 14}" r="2" fill="#C9A86A"/></g>`,
     cueva: (x, y) => `<g><path d="M${x - 44} ${y} Q${x - 40} ${y - 50} ${x} ${y - 54} Q${x + 40} ${y - 50} ${x + 44} ${y}Z" fill="#4A4038"/><path d="M${x - 16} ${y} Q${x} ${y - 30} ${x + 16} ${y}Z" fill="#0B0B0B"/></g>`,
-    luna: (x, y) => `<circle cx="${x}" cy="${y - 24}" r="18" fill="#F2E9C9"/><circle cx="${x - 5}" cy="${y - 28}" r="3" fill="#D9CFB0"/>`,
+    luna: (x, y) => `<circle cx="${x}" cy="${y - 24}" r="18" fill="#F3EBDD"/><circle cx="${x - 5}" cy="${y - 28}" r="3" fill="#D9CFB0"/>`,
     telescopio: (x, y) => `<g><path d="M${x - 16} ${y - 20} L${x + 18} ${y - 34} L${x + 22} ${y - 26} L${x - 12} ${y - 12}Z" fill="#B0BEC5"/><path d="M${x} ${y - 20} L${x - 10} ${y} M${x} ${y - 20} L${x + 10} ${y}" stroke="#78909C" stroke-width="2"/></g>`,
     liebre: (x, y) => { const p = [[0, 0], [10, -6], [20, -2], [26, -14], [32, -24], [16, -12], [6, -16]]; return `<g transform="translate(${x - 16} ${y - 10})">${p.map(([a, b]) => `<circle cx="${a}" cy="${b}" r="2.4" fill="#FFF"/>`).join("")}<path d="M0 0 L10 -6 L20 -2 L26 -14 L32 -24 M20 -2 L16 -12 L6 -16" stroke="rgba(233,166,184,.6)" fill="none"/></g>`; },
     ventana: (x, y) => `<g><rect x="${x - 18}" y="${y - 40}" width="36" height="36" fill="#0B1230" stroke="#C9A86A" stroke-width="3"/><path d="M${x} ${y - 40} L${x} ${y - 4} M${x - 18} ${y - 22} L${x + 18} ${y - 22}" stroke="#C9A86A" stroke-width="2"/><circle cx="${x - 8}" cy="${y - 32}" r="1.5" fill="#FFF"/></g>`,
-    cohete: (x, y) => `<g><path d="M${x} ${y - 50} C${x + 12} ${y - 36} ${x + 10} ${y - 16} ${x + 8} ${y - 6} L${x - 8} ${y - 6} C${x - 10} ${y - 16} ${x - 12} ${y - 36} ${x} ${y - 50}Z" fill="#F2E9C9"/><circle cx="${x}" cy="${y - 30}" r="4" fill="#64B5F6"/><path d="M${x - 5} ${y - 6} L${x} ${y + 8} L${x + 5} ${y - 6}Z" fill="#FFB74D"/></g>`,
+    cohete: (x, y) => `<g><path d="M${x} ${y - 50} C${x + 12} ${y - 36} ${x + 10} ${y - 16} ${x + 8} ${y - 6} L${x - 8} ${y - 6} C${x - 10} ${y - 16} ${x - 12} ${y - 36} ${x} ${y - 50}Z" fill="#F3EBDD"/><circle cx="${x}" cy="${y - 30}" r="4" fill="#64B5F6"/><path d="M${x - 5} ${y - 6} L${x} ${y + 8} L${x + 5} ${y - 6}Z" fill="#FFB74D"/></g>`,
     saturno: (x, y) => D.planeta(x, y - 20),
-    faro: (x, y) => `<g><path d="M${x - 8} ${y} L${x - 5} ${y - 50} L${x + 5} ${y - 50} L${x + 8} ${y}Z" fill="#F2E9C9"/><rect x="${x - 7}" y="${y - 34}" width="14" height="6" fill="#E53935"/><rect x="${x - 6}" y="${y - 58}" width="12" height="8" fill="#FFE082"/><path d="M${x + 6} ${y - 54} L${x + 60} ${y - 70} L${x + 60} ${y - 40}Z" fill="#FFE082" opacity=".2"/></g>`,
+    faro: (x, y) => `<g><path d="M${x - 8} ${y} L${x - 5} ${y - 50} L${x + 5} ${y - 50} L${x + 8} ${y}Z" fill="#F3EBDD"/><rect x="${x - 7}" y="${y - 34}" width="14" height="6" fill="#E53935"/><rect x="${x - 6}" y="${y - 58}" width="12" height="8" fill="#FFE082"/><path d="M${x + 6} ${y - 54} L${x + 60} ${y - 70} L${x + 60} ${y - 40}Z" fill="#FFE082" opacity=".2"/></g>`,
     piramide2: (x, y) => D.piramide(x, y, 1.2),
     templo: (x, y) => `<g><path d="M${x - 34} ${y - 50} L${x} ${y - 66} L${x + 34} ${y - 50}Z" fill="#E8E2D4"/>${[-24, -8, 8, 24].map(d => `<rect x="${x + d - 4}" y="${y - 48}" width="8" height="44" fill="#E8E2D4"/>`).join("")}<rect x="${x - 36}" y="${y - 6}" width="72" height="6" fill="#D6CFC0"/></g>`,
     laberinto: (x, y) => `<g fill="none" stroke="#E6D3A3" stroke-width="3"><rect x="${x - 22}" y="${y - 44}" width="44" height="44"/><path d="M${x - 12} ${y - 44} L${x - 12} ${y - 14} L${x + 12} ${y - 14} M${x} ${y - 34} L${x + 22} ${y - 34} M${x} ${y} L${x} ${y - 24}"/></g>`,
     acueducto: (x, y) => [0, 1, 2].map(k => D.arco(x - 48 + k * 48, y)).join("") + `<rect x="${x - 74}" y="${y - 50}" width="148" height="7" fill="#C99A6A"/>`,
     coliseo: (x, y) => `<g><ellipse cx="${x}" cy="${y - 20}" rx="40" ry="22" fill="#C99A6A"/><ellipse cx="${x}" cy="${y - 24}" rx="28" ry="12" fill="#7A4A34"/>${[-30, -15, 0, 15, 30].map(d => `<rect x="${x + d - 3}" y="${y - 14}" width="6" height="9" fill="#7A4A34"/>`).join("")}</g>`,
-    eclipse: (x, y) => `<g><circle cx="${x}" cy="${y - 24}" r="20" fill="#FFD54F" opacity=".9"/><circle cx="${x + 4}" cy="${y - 24}" r="19" fill="#0B1020"/></g>`,
+    eclipse: (x, y) => `<g><circle cx="${x}" cy="${y - 24}" r="20" fill="#FFD54F" opacity=".9"/><circle cx="${x + 4}" cy="${y - 24}" r="19" fill="#16292B"/></g>`,
     nido: (x, y) => `<g><ellipse cx="${x}" cy="${y - 10}" rx="44" ry="18" fill="#5A4128"/>${[0, 1, 2, 3, 4].map(k => `<path d="M${x - 44 + k * 18} ${y - 4} L${x - 30 + k * 18} ${y - 24}" stroke="#7A5A38" stroke-width="3"/>`).join("")}${D.frasco(x - 12, y - 20)}${D.frasco(x + 10, y - 22)}</g>`,
     cajamusica: (x, y) => `<g><rect x="${x - 24}" y="${y - 26}" width="48" height="26" fill="#C0C0D0"/><path d="M${x - 24} ${y - 26} L${x - 18} ${y - 44} L${x + 30} ${y - 44} L${x + 24} ${y - 26}Z" fill="#E0E0EA"/><circle cx="${x + 2}" cy="${y - 48}" r="6" fill="#FFE082"/></g>`,
     violin: (x, y) => `<g transform="translate(${x} ${y - 30}) rotate(20)"><ellipse cx="0" cy="8" rx="12" ry="14" fill="#A0522D"/><ellipse cx="0" cy="-10" rx="9" ry="10" fill="#A0522D"/><rect x="-2" y="-40" width="4" height="30" fill="#3E2A1A"/></g>`,
     escenario: (x, y) => `<g><rect x="${x - 60}" y="${y - 10}" width="120" height="10" fill="#8D6E4A"/>${D.cortina(x - 30, y - 10)}<g transform="translate(${2 * x + 30} 0) scale(-1 1)">${D.cortina(x, y - 10)}</g></g>`,
     cajafuerte: (x, y) => `<g><rect x="${x - 18}" y="${y - 34}" width="36" height="34" rx="3" fill="#78909C"/><circle cx="${x}" cy="${y - 17}" r="9" fill="#B0BEC5"/><path d="M${x} ${y - 17} L${x + 6} ${y - 21}" stroke="#37474F" stroke-width="2"/></g>`,
-    piano: (x, y) => `<g><rect x="${x - 30}" y="${y - 20}" width="60" height="20" fill="#F2E9C9"/>${[0, 1, 2, 4, 5].map(k => `<rect x="${x - 26 + k * 10}" y="${y - 20}" width="5" height="12" fill="#141B36"/>`).join("")}</g>`,
-    taza: (x, y) => `<g><path d="M${x - 12} ${y - 20} L${x + 12} ${y - 20} L${x + 9} ${y} L${x - 9} ${y}Z" fill="#F2E9C9"/><path d="M${x + 12} ${y - 15} q8 2 0 10" stroke="#F2E9C9" stroke-width="3" fill="none"/><path d="M${x - 4} ${y - 26} q-4 -6 0 -12 M${x + 4} ${y - 26} q-4 -6 0 -12" stroke="#F2E9C9" opacity=".6" fill="none"/></g>`
+    piano: (x, y) => `<g><rect x="${x - 30}" y="${y - 20}" width="60" height="20" fill="#F3EBDD"/>${[0, 1, 2, 4, 5].map(k => `<rect x="${x - 26 + k * 10}" y="${y - 20}" width="5" height="12" fill="#1E3638"/>`).join("")}</g>`,
+    taza: (x, y) => `<g><path d="M${x - 12} ${y - 20} L${x + 12} ${y - 20} L${x + 9} ${y} L${x - 9} ${y}Z" fill="#F3EBDD"/><path d="M${x + 12} ${y - 15} q8 2 0 10" stroke="#F3EBDD" stroke-width="3" fill="none"/><path d="M${x - 4} ${y - 26} q-4 -6 0 -12 M${x + 4} ${y - 26} q-4 -6 0 -12" stroke="#F3EBDD" opacity=".6" fill="none"/></g>`
   };
   const DECOS = {"facil": ["arbol", "flor", "seta"], "medio": ["edificio", "farola", "edificio"], "dificil": ["estrella", "planeta", "estrella"], "experto": ["estrella", "nota", "estrella"]};
 
@@ -135,17 +136,17 @@
   NIV.forEach((n, i) => { const h = HITOS[n]; if (!h || !D[h]) return; const [x, y] = pos[i], lado = x > W / 2 ? -1 : 1; svg += D[h](x + lado * W * .28, y + 26); });
   // Camino
   const p = pos.map(([x, y], i) => { if (!i) return `M${x} ${y}`; const [x0, y0] = pos[i - 1]; return `C${x0} ${(y0 + y) / 2} ${x} ${(y0 + y) / 2} ${x} ${y}`; }).join(" ");
-  svg += `<path d="${p}" stroke="rgba(242,233,201,.12)" stroke-width="16" fill="none" stroke-linecap="round"/><path d="${p}" stroke="#E6D3A3" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/>`;
+  svg += `<path d="${p}" stroke="rgba(243,235,221,.12)" stroke-width="16" fill="none" stroke-linecap="round"/><path d="${p}" stroke="#E6D3A3" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" fill="none"/>`;
   // Niveles
   NIV.forEach((n, i) => {
     const [x, y] = pos[i], hecho = superados.has(n), salt = saltados.has(n), actual = n === desde;
-    const relleno = hecho ? "#FFD54F" : salt ? "#78808F" : "#141B36", txt = hecho ? "#0B1020" : "#F2E9C9";
+    const relleno = hecho ? "#FFD54F" : salt ? "#78808F" : "#1E3638", txt = hecho ? "#16292B" : "#F3EBDD";
     const lado = x > W / 2 ? -1 : 1, nombre = (NOMBRES[n] || [n, n])[EN ? 1 : 0];
     svg += `<g class="nodo${actual ? " actual" : ""}" data-n="${n}">
-      ${actual ? `<circle class="anillo" cx="${x}" cy="${y}" r="27" fill="none" stroke="#E9A6B8" stroke-width="3"/>` : ""}
-      <circle cx="${x}" cy="${y}" r="20" fill="${relleno}" stroke="${actual ? "#E9A6B8" : "#F2E9C9"}" stroke-opacity=".7" stroke-width="2"/>
+      ${actual ? `<circle class="anillo" cx="${x}" cy="${y}" r="27" fill="none" stroke="#D9A441" stroke-width="3"/>` : ""}
+      <circle cx="${x}" cy="${y}" r="20" fill="${relleno}" stroke="${actual ? "#D9A441" : "#F3EBDD"}" stroke-opacity=".7" stroke-width="2"/>
       <text x="${x}" y="${y + 5}" text-anchor="middle" font-size="14" fill="${txt}">${i + 1}</text>
-      ${hecho ? `<text x="${x + 15}" y="${y - 12}" font-size="16" fill="#FFE082" style="font-style:normal">★</text>` : ""}
+      ${hecho ? `<text x="${x}" y="${y - 25}" text-anchor="middle" font-size="12" fill="#FFE082" style="font-style:normal;letter-spacing:1px">${"★".repeat(est[n] || 1)}<tspan fill="rgba(243,235,221,.25)">${"★".repeat(3 - (est[n] || 1))}</tspan></text>` : ""}
       ${salt ? `<text x="${x + 15}" y="${y - 12}" font-size="13" fill="#B0B6C2" style="font-style:normal">↷</text>` : ""}
       <text class="etq" x="${x + lado * 28}" y="${y + 4}" text-anchor="${lado > 0 ? "start" : "end"}">${nombre}</text>
     </g>`;

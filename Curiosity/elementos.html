@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Elementos</title>
+<style>
+
+  .tabla { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 6vw; }
+  .elem { width: 30vw; max-width: 130px; aspect-ratio: 1; border: 2px solid #F3EBDD; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(243,235,221,.05); }
+  .elem small { font-size: 14px; opacity: .6; font-style: normal; align-self: flex-start; margin-left: 12px; }
+  .elem b { font-size: clamp(40px, 13vw, 60px); font-style: normal; font-weight: 500; }
+  .elem span { font-size: 14px; opacity: .7; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="tabla">
+    <div class="elem"><small>29</small><b>Cu</b><span>Cobre</span></div>
+    <div class="elem"><small>56</small><b>Ba</b><span>Bario</span></div>
+  </div>
+</main>
+<p class="pista">Dos elementos químicos forman una isla</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Fíjate en las letras grandes de cada casilla.", "Junta los dos símbolos: Cu + Ba.", "Es una isla del Caribe."]);
+  Comun.nivel("", { cobrebario: "Usa sus símbolos, no sus nombres", "85": "No hay que sumar" });
+
+</script>
+</body>
+</html>

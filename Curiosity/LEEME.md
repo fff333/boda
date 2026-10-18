@@ -1,6 +1,6 @@
 # Curiosity
 
-Juego de retos para móvil en HTML: 72 retos ordenados de fácil a difícil y, detrás de cada uno, una curiosidad.
+Juego de retos para móvil en HTML: 113 retos ordenados de fácil a difícil y, detrás de cada uno, una curiosidad.
 
 ## Publicarlo en GitHub Pages
 

@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Tres puertas</title>
 <style>
   .puertas { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); display: flex; gap: 4vw; }
-  .puerta { width: 26vw; max-width: 110px; aspect-ratio: .6; border-radius: 10px 10px 0 0; border: 3px solid #C9A86A; background: #6D4C33; color: #F2E9C9; font: inherit; font-size: 34px; font-style: normal; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .3s; }
-  .puerta.elegida { outline: 3px solid #E9A6B8; outline-offset: 4px; }
-  .puerta.abierta { background: #141B36; font-size: 46px; }
+  .puerta { width: 26vw; max-width: 110px; aspect-ratio: .6; border-radius: 10px 10px 0 0; border: 3px solid #C9A86A; background: #6D4C33; color: #F3EBDD; font: inherit; font-size: 34px; font-style: normal; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .3s; }
+  .puerta.elegida { outline: 3px solid #D9A441; outline-offset: 4px; }
+  .puerta.abierta { background: #1E3638; font-size: 46px; }
   .decision { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 110px); display: none; justify-content: center; gap: 12px; }
   .decision.visible { display: flex; }
-  .decision button { font: inherit; font-size: 18px; color: #0B1020; background: #F2E9C9; border: none; border-radius: 30px; padding: 12px 22px; cursor: pointer; }
+  .decision button { font: inherit; font-size: 18px; color: #16292B; background: #F3EBDD; border: none; border-radius: 30px; padding: 12px 22px; cursor: pointer; }
   .estado { position: absolute; left: 0; right: 0; top: 68%; text-align: center; font-size: 19px; padding: 0 8vw; }
 </style>
 </head>
-<body>
+<body class="tema-papel">
 
 <main class="escena entrada">
   <div class="puertas" id="puertas"></div>

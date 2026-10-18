@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Del revés</title>
+<style>
+
+  .corazon { position: absolute; left: 50%; top: 52%; width: min(70vw, 300px); transform: translate(-50%, -50%); }
+  .corazon svg { width: 100%; display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="corazon"><svg viewBox="0 0 200 180">
+    <path d="M100 170 C20 110 0 70 30 35 C55 8 90 20 100 45 C110 20 145 8 170 35 C200 70 180 110 100 170Z" fill="#E53935"/>
+    <text x="100" y="98" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="40" fill="#F3EBDD">AMOR</text>
+  </svg></div>
+</main>
+<p class="pista">Todos los caminos llevan a mí… si me lees del revés</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Lee la palabra del corazón… pero al revés.", "AMOR, letra a letra, de derecha a izquierda.", "Es la ciudad a la que llevan todos los caminos."]);
+  Comun.nivel("", { amor: "Léelo del revés", italia: "¿Qué ciudad?" });
+
+</script>
+</body>
+</html>

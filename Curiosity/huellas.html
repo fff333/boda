@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Huellas</title>
+<style>
+
+  .luna-suelo { background: radial-gradient(ellipse at 50% 30%, #2F5654 0%, #16292B 70%); }
+  .suelo { position: absolute; left: 50%; top: 55%; width: min(84vw, 380px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; overflow: hidden; background: #BDB7A6; }
+  .suelo svg { width: 100%; height: 100%; display: block; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena luna-suelo entrada">
+  <div class="suelo" id="suelo">
+    <svg viewBox="0 0 200 200">
+      <circle cx="40" cy="150" r="16" fill="#A9A392"/><circle cx="160" cy="50" r="10" fill="#A9A392"/>
+      <g fill="#6E6858" transform="rotate(-15 100 110)">
+        <ellipse cx="100" cy="110" rx="18" ry="34"/>
+        <g fill="#BDB7A6"><rect x="84" y="86" width="32" height="3"/><rect x="84" y="94" width="32" height="3"/><rect x="84" y="102" width="32" height="3"/><rect x="84" y="118" width="32" height="3"/><rect x="84" y="126" width="32" height="3"/></g>
+      </g>
+      <line x1="150" y1="170" x2="150" y2="120" stroke="#5A5A5A" stroke-width="2"/>
+      <rect x="150" y="120" width="30" height="18" fill="#F3EBDD"/><rect x="150" y="120" width="12" height="9" fill="#3949AB"/>
+    </svg>
+    <canvas id="polvo"></canvas>
+  </div>
+</main>
+<p class="pista">Alguien dejó su huella aquí. ¿En qué año?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Algo quedó marcado en la luna. Frota el polvo con el dedo.", "Es la huella del primer paso de una persona en la luna.", "Fue en julio de 1969."]);
+  Comun.nivel("", { "1970": "Un poco antes", "1968": "Un poco después", apolo: "¿En qué año?", apolo11: "¿En qué año?", armstrong: "¿En qué año?" });
+  const lienzo = document.getElementById("polvo"), c = lienzo.getContext("2d"), suelo = document.getElementById("suelo");
+  function ajustar() {
+    const r = suelo.getBoundingClientRect(); lienzo.width = r.width; lienzo.height = r.height;
+    c.fillStyle = "#9E9886"; c.fillRect(0, 0, r.width, r.height);
+    for (let i = 0; i < 1200; i++) { c.fillStyle = `rgba(${Math.random() < .5 ? "255,255,255" : "60,55,45"},${Math.random() * .25})`; c.fillRect(Math.random() * r.width, Math.random() * r.height, 2, 2); }
+  }
+  ajustar();
+  function frotar(e) {
+    const r = lienzo.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    c.globalCompositeOperation = "destination-out";
+    const g = c.createRadialGradient(x, y, 0, x, y, 30); g.addColorStop(0, "rgba(0,0,0,.8)"); g.addColorStop(1, "rgba(0,0,0,0)");
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, 30, 0, 7); c.fill(); c.globalCompositeOperation = "source-over";
+  }
+  lienzo.addEventListener("pointerdown", e => { Comun.audio(); frotar(e); });
+  lienzo.addEventListener("pointermove", e => { if (e.buttons || e.pointerType === "touch") frotar(e); });
+
+</script>
+</body>
+</html>

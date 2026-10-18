@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Himno</title>
+<style>
+
+  .puntos { position: absolute; left: 0; right: 0; top: 58%; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; padding: 0 10vw; }
+  .puntos span { width: 14px; height: 14px; border-radius: 50%; background: rgba(243,235,221,.15); transition: background .1s, transform .1s; }
+  .puntos span.on { background: #F3EBDD; transform: scale(1.4); }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <button class="boton-musica" id="tocar" style="top:38%" aria-label="Escuchar">♪</button>
+  <div class="puntos" id="puntos"></div>
+</main>
+<p class="pista">¿Quién escribió esta melodía?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Escucha: es una de las melodías más famosas del mundo.", "Es el himno de Europa. Su autor era alemán y acabó sordo.", "La compuso Beethoven para su Novena Sinfonía."]);
+  Comun.nivel("", { himnodelaalegria: "Esa es la obra. ¿Quién la compuso?", alegria: "Esa es la obra. ¿Quién la compuso?", himno: "¿Quién lo compuso?", mozart: "Frío, frío", bethoven: "Casi. Revisa cómo se escribe", betoven: "Casi. Revisa cómo se escribe" });
+  const M = [64, 64, 65, 67, 67, 65, 64, 62, 60, 60, 62, 64, { n: 64, d: 1.5 }, { n: 62, d: .5 }, { n: 62, d: 2 }];
+  const puntos = document.getElementById("puntos");
+  const ps = M.map(() => { const s = document.createElement("span"); puntos.appendChild(s); return s; });
+  let sonando = false;
+  document.getElementById("tocar").addEventListener("click", async () => {
+    if (sonando) return; sonando = true; let i = 0;
+    await Motor.melodia(M, { pulso: .45, alNota: (n, ms) => { const p = ps[i++]; p.classList.add("on"); setTimeout(() => p.classList.remove("on"), ms); } });
+    sonando = false;
+  });
+
+</script>
+</body>
+</html>

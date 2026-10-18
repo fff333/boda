@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Colores</title>
@@ -33,7 +33,7 @@
   colocar(); addEventListener("resize", colocar);
   (function pintar() {
     ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 200, 8);
-    Cielo.dibujarLineas(ctx, pos, Cielo.C.orion.lineas, "rgba(242,233,201,.18)", 1);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.orion.lineas, "rgba(243,235,221,.18)", 1);
     for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2] - .6, Cielo.E[n][3] || "#FFFFFF", 1.3);
     if (hecho) { ctx.fillStyle = "#FF8A5C"; ctx.font = "italic 18px Georgia"; ctx.fillText("Betelgeuse", pos.betelgeuse[0] + 16, pos.betelgeuse[1] - 10); }
     requestAnimationFrame(pintar);

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Hoy</title>
+<style>
+  .mes { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(92vw, 420px); display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .dia { aspect-ratio: 1; border-radius: 12px; border: 1px solid rgba(243,235,221,.18); background: rgba(243,235,221,.05); color: #F3EBDD; font-family: Georgia, serif; font-style: normal; font-size: clamp(15px, 4.5vw, 20px); cursor: pointer; }
+  .dia.vacio { visibility: hidden; }
+  .dia.finde { color: #D9A441; }
+  .dia.bien { background: #43A047; border-color: #43A047; color: #fff; }
+</style>
+</head>
+<body class="tema-papel">
+
+<main class="escena entrada"><div class="mes" id="mes"></div></main>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+
+  Comun.pistas(["Es el calendario de este mes.", "Busca un día muy concreto… el que estás viviendo.", "Toca el número del día de hoy."]);
+  Comun.nivel("", null);
+  const hoy = new Date(), anio = hoy.getFullYear(), mesN = hoy.getMonth();
+  const primero = (new Date(anio, mesN, 1).getDay() + 6) % 7, dias = new Date(anio, mesN + 1, 0).getDate();
+  const mes = document.getElementById("mes"); let hecho = false;
+  for (let i = 0; i < primero; i++) mes.insertAdjacentHTML("beforeend", '<button class="dia vacio" tabindex="-1" aria-hidden="true"></button>');
+  for (let d = 1; d <= dias; d++) {
+    const b = document.createElement("button"); b.className = "dia" + ((primero + d - 1) % 7 >= 5 ? " finde" : ""); b.textContent = d;
+    b.addEventListener("click", () => {
+      if (hecho) return;
+      if (d === new Date().getDate()) { hecho = true; b.classList.add("bien"); Plantilla.exito(); }
+      else Plantilla.fallo(b);
+    });
+    mes.appendChild(b);
+  }
+
+</script>
+</body>
+</html>

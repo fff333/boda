@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Narciso</title>
 <style>
-  .valle { background: linear-gradient(#141B36 0%, #2A3966 60%, #3B4A7A 100%); }
+  .valle { background: linear-gradient(#1E3638 0%, #2F5654 60%, #3B4A7A 100%); }
   .montes { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 55%; }
   .montes.sacudir { animation: sacudir .5s ease; }
   @keyframes sacudir { 30% { transform: translateY(3px); } 60% { transform: translateY(-2px); } }
@@ -38,18 +38,18 @@
   <svg class="montes" id="montes" viewBox="0 0 400 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
     <path d="M0 400 L0 210 L70 120 L120 180 L190 60 L260 170 L310 110 L400 220 L400 400Z" fill="#1E2747"/>
     <path d="M190 60 L170 92 L183 88 L192 100 L205 86 L214 92Z" fill="#C9CFE0" opacity=".8"/>
-    <path d="M0 400 L0 290 L90 220 L160 270 L240 200 L320 260 L400 230 L400 400Z" fill="#141B36"/>
-    <path d="M0 400 L0 340 L120 310 L230 335 L330 305 L400 320 L400 400Z" fill="#0B1020"/>
+    <path d="M0 400 L0 290 L90 220 L160 270 L240 200 L320 260 L400 230 L400 400Z" fill="#1E3638"/>
+    <path d="M0 400 L0 340 L120 310 L230 335 L330 305 L400 320 L400 400Z" fill="#16292B"/>
   </svg>
   <div class="onda" id="onda"></div>
   <div class="letras" id="letras" aria-live="polite"></div>
 </main>
-<p class="pista" id="pista">Grita a la montaña</p>
+<p class="pista" id="pista"></p>
 <p class="subpista" id="sub"></p>
 <script src="idiomas.js"></script>
 <script src="comun.js"></script>
 <script>
-  Comun.pistas(["La montaña solo responde si le hablas en voz alta.", "Grita varias veces hasta que deje de devolverte letras.", "Lee las letras de derecha a izquierda: es el sonido de un animal de granja."]);
+  Comun.pistas(["Grita a la montaña: solo responde si le hablas en voz alta.", "Grita varias veces hasta que deje de devolverte letras.", "Lee las letras de derecha a izquierda: es el sonido de un animal de granja."]);
   Comun.nivel("VIII", { joler: "El eco no se equivoca. Tú sí", eco: "Ya estás en él" });
 
   const RESPUESTA = "CAUC"; // la montaña lo devuelve al revés

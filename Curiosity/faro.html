@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Destellos</title>
+<style>
+  .mar { background: linear-gradient(#16292B 0%, #1E3638 60%, #0E1E3A 61%, #08142A 100%); }
+  .faro { position: absolute; left: 50%; bottom: 30%; width: min(30vw, 130px); transform: translateX(-50%); }
+  .faro svg { width: 100%; display: block; overflow: visible; }
+  .haz { position: absolute; left: 50%; bottom: calc(30% + min(30vw, 130px) * 2.2); width: 260vw; height: 260vw; transform: translate(-50%, 50%);
+    background: radial-gradient(circle, rgba(255,240,180,.9) 0%, rgba(255,240,180,.25) 6%, rgba(255,240,180,0) 22%); opacity: 0; pointer-events: none; transition: opacity .06s; }
+  .haz.on { opacity: 1; }
+  .ola { position: absolute; left: 0; right: 0; bottom: 0; height: 40%; background: repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 2px, transparent 2px 14px); }
+</style>
+</head>
+<body>
+<main class="escena mar entrada">
+  <div class="ola"></div>
+  <div class="faro">
+    <svg viewBox="0 0 60 130">
+      <path d="M18 130 L24 30 L36 30 L42 130Z" fill="#F3EBDD"/>
+      <path d="M20 100 L40 100 L41 112 L19 112Z M22 65 L38 65 L39 77 L21 77Z" fill="#E53935"/>
+      <rect x="20" y="16" width="20" height="14" fill="#FFE9A0" id="lampara"/>
+      <path d="M16 16 L30 4 L44 16Z" fill="#E53935"/>
+    </svg>
+  </div>
+  <div class="haz" id="haz"></div>
+</main>
+<p class="pista">El farero solo sabe contar</p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Cuenta los destellos de cada grupo, entre pausa y pausa.", "Los grupos son 3, 1, 4, 1, 5, 9… ¿te suena de clase de matemáticas?", "Es el número que relaciona una circunferencia con su diámetro. Se escribe con dos letras."]);
+  Comun.nivel("XXXIX", { "314159": "Esos son los destellos. ¿Qué número es?", "314": "¿Qué número empieza así?", "31415": "¿Qué número empieza así?", numero: "¿Cuál?", circulo: "Casi. El número del círculo" });
+  const GRUPOS = [3, 1, 4, 1, 5, 9];
+  const haz = document.getElementById("haz");
+  const espera = ms => new Promise(r => setTimeout(r, ms));
+  async function destellar() {
+    while (true) {
+      for (const n of GRUPOS) {
+        for (let k = 0; k < n; k++) {
+          haz.classList.add("on"); Comun.tono(880, 0, .12, .05, "sine");
+          await espera(220); haz.classList.remove("on"); await espera(330);
+        }
+        await espera(1300);
+      }
+      await espera(3500);
+    }
+  }
+  Comun.inicio("Noche cerrada en la costa", "Mirar al mar", async () => { destellar(); });
+</script>
+</body>
+</html>

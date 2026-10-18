@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Mosaico</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .mos { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(84vw, 360px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: #3E2A1A; padding: 3px; border-radius: 8px; }
+  .tesela { border: none; padding: 0; cursor: pointer; overflow: hidden; background: #E6D3A3; }
+  .tesela div { width: 300%; height: 300%; transition: transform .25s; }
+  .tesela svg { width: 100%; height: 100%; display: block; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:radial-gradient(ellipse at 50% 30%, #5A3D28, #1A140C 80%)"><div class="mos" id="mos"></div></main>
+<p class="pista">Un mosaico romano se ha descolocado. Gira cada pieza</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Toca una pieza para girarla un cuarto de vuelta.", "Fíjate en el borde: tiene que formar un marco continuo.", "En el centro aparece un animal: sus orejas apuntan hacia arriba."]);
+  Comun.nivel("", null);
+  let s = 5; const az = () => (s = (s * 16807) % 2147483647) / 2147483647, cols = ["#C9A86A", "#E6D3A3", "#B08D50", "#D9C79C"];
+  let teselas = ""; for (let y = 0; y < 30; y++) for (let x = 0; x < 30; x++) teselas += `<rect x="${x * 10}" y="${y * 10}" width="9.4" height="9.4" fill="${cols[Math.floor(az() * 4)]}"/>`;
+  const IMG = `<svg viewBox="0 0 300 300">${teselas}<rect x="10" y="10" width="280" height="280" fill="none" stroke="#8E2433" stroke-width="16"/>
+    <rect x="30" y="30" width="240" height="240" fill="none" stroke="#3949AB" stroke-width="6"/>
+    <ellipse cx="128" cy="95" rx="15" ry="45" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/><ellipse cx="172" cy="95" rx="15" ry="45" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/>
+    <circle cx="150" cy="160" r="40" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/><ellipse cx="150" cy="225" rx="55" ry="35" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/>
+    <circle cx="136" cy="152" r="5" fill="#3E2A1A"/><circle cx="164" cy="152" r="5" fill="#3E2A1A"/><path d="M144 172 L156 172 L150 179Z" fill="#8E2433"/></svg>`;
+  const mos = document.getElementById("mos"), giros = Array.from({ length: 9 }, () => 1 + Math.floor(Math.random() * 3));
+  let hecho = false;
+  giros.forEach((g, i) => {
+    const x = i % 3, y = Math.floor(i / 3), b = document.createElement("button"); b.className = "tesela";
+    b.innerHTML = `<div style="transform: translate(${-x * 33.333}%, ${-y * 33.333}%)">${IMG}</div>`;
+    b.style.transform = `rotate(${g * 90}deg)`; b.style.transition = "transform .25s";
+    b.addEventListener("click", () => {
+      if (hecho) return; giros[i] = (giros[i] + 1); b.style.transform = `rotate(${giros[i] * 90}deg)`; Comun.tono(600, 0, .05, .06, "square");
+      if (giros.every(g => g % 4 === 0)) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("romano.html"), 1800); }
+    });
+    mos.appendChild(b);
+  });
+
+</script>
+</body>
+</html>

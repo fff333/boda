@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Director</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .orquesta { position: absolute; left: 50%; top: 58%; transform: translate(-50%, -50%); display: flex; gap: 2vw; font-size: 42px; }
+  .orquesta span { transition: transform .15s; }
+  .batuta { position: absolute; left: 50%; top: 28%; font-size: 50px; transform: translateX(-50%) rotate(-30deg); transition: transform .15s; }
+  .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 8px; }
+  .marcas span { width: 14px; height: 14px; border-radius: 50%; background: rgba(243,235,221,.2); }
+  .marcas span.on { background: #F3EBDD; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="batuta" id="batuta" style="width:70px"><svg viewBox="0 0 20 100"><rect x="8" y="0" width="4" height="80" rx="2" fill="#F3EBDD"/><rect x="6" y="70" width="8" height="28" rx="3" fill="#8D6E4A"/></svg></div>
+  <div class="orquesta" id="orq"><span>🎻</span><span>🎺</span><span>🥁</span><span>🎷</span></div>
+  <div class="marcas" id="marcas"></div>
+</main>
+<p class="pista">Dirige la orquesta</p>
+<p class="subpista" id="sub" style="bottom:calc(env(safe-area-inset-bottom) + 130px)"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["La orquesta toca una nota cada vez que mueves la batuta.", "Mueve el móvil arriba y abajo como un director, con un ritmo constante.", "Ni muy rápido ni muy lento: un movimiento cada medio segundo, más o menos, ocho veces seguidas."]);
+  Comun.nivel("", null);
+  const MEL = [64, 64, 65, 67, 67, 65, 64, 62];
+  const marcas = document.getElementById("marcas"), orq = document.getElementById("orq"), batuta = document.getElementById("batuta"), sub = document.getElementById("sub");
+  marcas.innerHTML = MEL.map(() => "<span></span>").join("");
+  let golpes = [], prev = null, ultimo = 0, sensor = false, hecho = false;
+  function nota(m) { [1, 2].forEach((k, j) => Comun.tono(440 * Math.pow(2, (m - 69) / 12) * k, 0, .45, j ? .05 : .16, "triangle")); }
+  function compas() {
+    const ahora = performance.now(); if (hecho || ahora - ultimo < 250) return; ultimo = ahora;
+    if (golpes.length) { const d = ahora - golpes[golpes.length - 1]; if (d > 1100) golpes = []; else if (golpes.length > 1) { const ant = golpes[golpes.length - 1] - golpes[golpes.length - 2]; if (Math.abs(d - ant) > ant * .35) { golpes = []; Comun.avisar("Más constante"); } } }
+    golpes.push(ahora); nota(MEL[(golpes.length - 1) % MEL.length]);
+    batuta.style.transform = `translateX(-50%) rotate(${golpes.length % 2 ? 30 : -30}deg)`;
+    [...orq.children].forEach((s, i) => s.style.transform = `translateY(${(golpes.length + i) % 2 ? -8 : 0}px)`);
+    [...marcas.children].forEach((s, i) => s.classList.toggle("on", i < golpes.length));
+    if (golpes.length === MEL.length) { hecho = true; setTimeout(() => { Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); }, 400); setTimeout(() => Comun.superado("bravo.html"), 2000); }
+  }
+  function alMover(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; if (prev && Math.hypot(g.x - prev.x, g.y - prev.y, g.z - prev.z) > 9) compas(); prev = g; }
+  addEventListener("pointerdown", () => { if (!sensor) compas(); });
+  Comun.inicio("La orquesta espera a su director", "Subir al podio", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: toca la pantalla al compás"; }, 2000);
+  });
+
+</script>
+</body>
+</html>

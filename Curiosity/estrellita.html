@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Memoria</title>
+<style>
+
+  .ronda { position: absolute; left: 0; right: 0; top: 26%; text-align: center; font-size: 20px; opacity: .7; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="ronda" id="ronda"></div>
+  <div id="piano"></div>
+</main>
+<p class="pista">Escucha y repite. Cada vez, una nota más</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Mira qué teclas se iluminan y repítelas en el mismo orden.", "Es una canción infantil muy conocida. Si fallas, se repite la misma ronda.", "Es el principio de «Estrellita, ¿dónde estás?»: do, do, sol, sol, la, la, sol."]);
+  Comun.nivel("", null);
+  const BLANCAS = [60, 62, 64, 65, 67, 69, 71], RONDAS = [4, 5, 6, 7];
+  // «Estrellita, ¿dónde estás?»: do do sol sol la la sol
+  const sec = [60, 60, 67, 67, 69, 69, 67];
+  const ronda = document.getElementById("ronda");
+  let r = 0, paso = 0, escuchando = false;
+  const p = Motor.piano(document.getElementById("piano"), { desde: 60, hasta: 71, negras: false, etiquetas: null, alTocar: m => {
+    if (!escuchando) return;
+    if (m !== sec[paso]) { escuchando = false; Comun.avisar("Otra vez"); setTimeout(mostrar, 900); return; }
+    if (++paso === RONDAS[r]) { escuchando = false; if (++r === RONDAS.length) Motor.exito(() => Comun.superado("theremin.html")); else setTimeout(mostrar, 800); }
+  } });
+  async function mostrar() {
+    ronda.textContent = `Ronda ${r + 1} de ${RONDAS.length}`;
+    await new Promise(res => setTimeout(res, 500));
+    await Motor.melodia(sec.slice(0, RONDAS[r]), { pulso: .5, alNota: (n, ms) => p.iluminar(n, ms) });
+    paso = 0; escuchando = true;
+  }
+  Comun.inicio("Un piano que recuerda", "Empezar", async () => { mostrar(); });
+
+</script>
+</body>
+</html>

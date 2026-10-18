@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Circunferencia</title>
@@ -37,7 +37,7 @@
     c.beginPath(); puntos.forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y)); c.stroke();
   }
   lienzo.addEventListener("pointerdown", e => { if (hecho) return; dibujando = true; puntos = [{ x: e.clientX, y: e.clientY }]; nota.textContent = ""; lienzo.setPointerCapture(e.pointerId); });
-  lienzo.addEventListener("pointermove", e => { if (!dibujando) return; puntos.push({ x: e.clientX, y: e.clientY }); pintar("#F2E9C9"); });
+  lienzo.addEventListener("pointermove", e => { if (!dibujando) return; puntos.push({ x: e.clientX, y: e.clientY }); pintar("#F3EBDD"); });
   lienzo.addEventListener("pointerup", () => { if (!dibujando) return; dibujando = false; evaluar(); });
   function evaluar() {
     if (puntos.length < 20) return;

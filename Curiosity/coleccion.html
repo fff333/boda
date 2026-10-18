@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B1020">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+
+<title>Mis curiosidades</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #F3EBDD; color: #2B2118; font-family: "Fraunces", Georgia, serif; font-style: italic; }
+  .barra { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: calc(env(safe-area-inset-top) + 10px) 14px 12px; background: linear-gradient(#F3EBDD 75%, rgba(243,235,221,0)); }
+  .barra button { font: inherit; font-size: 16px; color: #2B2118; background: #FBF6EC; border: 1px solid #D6C7A8; border-radius: 30px; padding: 8px 14px; cursor: pointer; }
+  .barra h1 { flex: 1; text-align: center; font-weight: 500; font-size: 19px; }
+  .barra span { color: #8A6A1F; font-style: normal; font-size: 14px; }
+  .lista { display: flex; flex-direction: column; gap: 12px; padding: 6px 14px 40px; max-width: 560px; margin: 0 auto; }
+  .tarjeta { border-radius: 18px; padding: 14px 16px; background: #FBF6EC; border: 1px solid #D6C7A8; box-shadow: 0 2px 0 #E3D6BD; cursor: pointer; }
+  .tarjeta .cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .tarjeta .num { font-style: normal; font-size: 13px; opacity: .55; }
+  .tarjeta h2 { font-weight: 500; font-size: 17px; flex: 1; }
+  .tarjeta .est { color: #C9962B; font-style: normal; font-size: 13px; letter-spacing: 1px; }
+  .tarjeta p { font-size: 15px; line-height: 1.45; opacity: .9; }
+  .tarjeta.bloq { opacity: .45; }
+  .tarjeta.bloq p { font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="barra"><button id="volver">← Volver</button><h1>Mis curiosidades</h1><span id="cuenta"></span></div>
+<div class="lista" id="lista"></div>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  const NOM = {"arcoiris": "La luz ordenada", "cronometro": "A ciegas", "stroop": "Colores", "cremallera": "La cremallera", "globo": "El globo", "eclipse": "Eclipse a dos manos", "calendario": "Hoy", "ambulancia": "El espejo", "escape": "Velocidad de escape", "estatua": "Quieto", "segundo": "El segundo extra", "laberinto": "Laberinto", "maracas": "Maracas", "silbido": "El silbido", "circulo": "El círculo", "pulso": "Sesenta", "gregoriano": "Los diez días perdidos", "t9": "Mensaje", "braille": "Puntos", "cajafuerte": "La combinación", "cuentaatras": "Cuenta atrás", "pleyades": "Las siete hermanas", "vela": "La vela", "dormir": "Apaga la luz", "vaso": "El vaso", "betelgeuse": "La estrella fría", "arena": "Reloj de arena", "tumbado": "Girar", "diente": "Diente de león", "planetas": "Planetas", "liebre": "La Liebre", "jeroglificos": "Jeroglíficos", "anubis": "La pluma", "pez": "La pecera", "pera": "El peral", "llave": "La llave", "zanahoria": "Algo naranja", "trebol": "El trébol", "hora": "La hora real", "brujula": "El norte", "eco": "El eco", "jirafa": "La jirafa", "cementerio": "Cementerio", "montyhall": "Tres puertas", "vuelta": "La vuelta", "iman": "El imán", "saturno": "Los anillos", "silencio": "Silencio absoluto", "escondite": "El escondite", "bocabajo": "Boca abajo", "astronauta": "Gravedad cero", "gigantes": "Tierra firme", "yensid": "El hechicero", "cafe": "Paciencia", "fasesluna": "La luna de hoy", "salto": "El salto", "hal": "HAL 9000", "giro": "El cielo gira", "telescopio": "Telescopio", "australia": "Al otro lado", "sirio": "Brillo", "escarabajo": "El escarabajo", "mosaico": "Mosaico", "copas": "Copas", "estrellita": "Memoria musical", "semana": "Los días", "carbono": "Diamante y grafito", "polar": "La Polar", "diapason": "La nota", "gallina": "El vuelo", "dados": "Los dados", "toctoc": "Toc, toc", "ventana": "Ventana al cielo", "lengua": "Lenguas azules", "unos": "Unos", "canica": "Equilibrio", "pesoluna": "En la Luna", "berlin": "Hora de Berlín", "pitagoras": "La cuerda", "piramide": "La pirámide", "memoria": "Memoria", "eureka": "¡Eureka!", "cuadrados": "Cuadrados", "ariadna": "El hilo", "acueducto": "Acueducto", "romano": "Hora romana", "director": "El director", "deoido": "De oído", "balanzas": "Balanzas", "alreves": "Del revés", "elementos": "Elementos", "prismaluz": "La luz", "papel": "Doblar un papel", "frutas": "Frutas", "tabla": "La tabla", "sos": "SOS", "cesar": "Cifrado", "bombillas": "Binario", "sintonia": "Sintonía", "agujas": "Las agujas", "himno": "El himno", "huellas": "Huellas", "theremin": "Theremín", "fibonacci": "Conejos", "notacolor": "Nota de color", "cumplealreves": "Al revés", "mirilla": "La mirilla", "shakespeare": "Mismo día, distinto día", "cumple": "La fiesta", "firma": "La firma", "mirasidi": "La serie", "faro": "Destellos", "bravo": "El aplauso"};
+  const sup = new Set(Comun.leerLista("superados")), sal = new Set(Comun.leerLista("saltados")), est = Comun.leerMapa("estrellas");
+  const desde = new URLSearchParams(location.search).get("desde");
+  document.getElementById("volver").addEventListener("click", () => { if (history.length > 1) history.back(); else location.href = (desde || Comun.NIVELES[0]) + ".html"; });
+  const lista = document.getElementById("lista"); let n = 0;
+  Comun.NIVELES.forEach((f, i) => {
+    const vista = sup.has(f) || sal.has(f); if (vista) n++;
+    const d = document.createElement("div"); d.className = "tarjeta" + (vista ? "" : " bloq");
+    const e = est[f] || 0;
+    d.innerHTML = `<div class="cab"><span class="num">${i + 1}</span><h2>${vista ? NOM[f] : "🔒 ???"}</h2><span class="est">${vista ? "★".repeat(e) + "☆".repeat(3 - e) : ""}</span></div>
+      <p>${vista ? Comun.CURIOSIDADES[f] : "Supera el reto " + (i + 1) + " para descubrir esta curiosidad."}</p>`;
+    d.addEventListener("click", () => { location.href = f + ".html"; });
+    lista.appendChild(d);
+  });
+  document.getElementById("cuenta").textContent = n + " / " + Comun.NIVELES.length;
+</script>
+</body>
+</html>

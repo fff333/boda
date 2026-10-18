@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>El escarabajo</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada"><canvas class="lienzo" id="l"></canvas></main>
+<p class="pista">Ayuda al escarabajo a llevar el Sol de un lado a otro del cielo</p>
+<p class="subpista" id="sub"></p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c = el.getContext("2d");
+    const aj = () => { el.width = innerWidth * dpr; el.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }; aj(); addEventListener("resize", aj); return c; }
+  Comun.pistas(["El Sol sale por el este (izquierda) y se pone por el oeste (derecha).", "Inclina el móvil hacia la derecha para que el escarabajo empuje.", "Ve con cuidado: si va demasiado deprisa, el Sol rueda hacia atrás en la cuesta."]);
+  Comun.nivel("", null);
+  const ctx = lienzoCompleto(document.getElementById("l")), sub = document.getElementById("sub");
+  let s = 0, v = 0, ax = 0, sensor = false, dedo = null, hecho = false, base = null, ultimo = performance.now();
+  function alMover(e) { const g = Comun.gravedad(e); if (!g) return; sensor = true; if (base === null) base = g.x; ax = g.x - base; }
+  addEventListener("pointerdown", e => { if (sensor) base = null; else dedo = e.clientX; });
+  addEventListener("pointermove", e => { if (dedo !== null) dedo = e.clientX; });
+  addEventListener("pointerup", () => { dedo = null; if (!sensor) ax = 0; });
+  Comun.inicio("Amanece en Egipto", "Empezar el día", async () => {
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", alMover);
+    setTimeout(() => { if (!sensor) sub.textContent = "Sin sensor: mantén el dedo a la derecha"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle(ahora) {
+    const dt = Math.min(ahora - ultimo, 50) / 1000; ultimo = ahora;
+    const W = innerWidth, H = innerHeight;
+    if (!sensor && dedo !== null) ax = (dedo - W / 2) / W * 8;
+    // el camino es un arco: subir cuesta al principio, bajar al final
+    const pendiente = Math.cos(s * Math.PI) * .8;
+    if (!hecho) { v = (v + (ax * .3 - pendiente) * dt) * .98; s = Math.max(0, Math.min(1, s + v * dt * .25)); if (s <= 0) v = Math.max(0, v);
+      if (s >= .99) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("piramide.html"), 1800); } }
+    const cx = W / 2, cy = H * .78, R = Math.min(W * .42, H * .45), ang = Math.PI * (1 - s), sx = cx + Math.cos(ang) * R, sy = cy - Math.sin(ang) * R;
+    const dia = Math.sin(s * Math.PI);
+    ctx.fillStyle = `rgb(${20 + dia * 60},${30 + dia * 90},${60 + dia * 130})`; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "rgba(243,235,221,.2)"; ctx.setLineDash([5, 8]); ctx.beginPath(); ctx.arc(cx, cy, R, Math.PI, 0); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#C9A86A"; ctx.fillRect(0, cy, W, H - cy);
+    ctx.fillStyle = "#B08D50"; ctx.beginPath(); ctx.moveTo(W * .55, cy); ctx.lineTo(W * .7, cy - 70); ctx.lineTo(W * .85, cy); ctx.fill();
+    ctx.fillStyle = "#FFD54F"; ctx.shadowColor = "#FFD54F"; ctx.shadowBlur = 30; ctx.beginPath(); ctx.arc(sx, sy, 22, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+    const bx = sx - Math.sin(ang) * 0 - 26 * Math.sin(ang + Math.PI / 2), by = sy + 26 * Math.cos(ang + Math.PI / 2);
+    ctx.save(); ctx.translate(sx + Math.cos(ang + Math.PI / 2) * 30, sy - Math.sin(ang + Math.PI / 2) * 30); ctx.rotate(-ang + Math.PI / 2);
+    ctx.fillStyle = "#2E7D6B"; ctx.beginPath(); ctx.ellipse(0, 0, 12, 9, 0, 0, 7); ctx.fill(); ctx.fillStyle = "#1B5E50"; ctx.beginPath(); ctx.arc(10, 0, 5, 0, 7); ctx.fill();
+    ctx.restore();
+    requestAnimationFrame(bucle);
+  }
+
+</script>
+</body>
+</html>

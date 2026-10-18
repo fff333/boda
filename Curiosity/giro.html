@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>El cielo gira</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .reloj-txt { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); text-align: center; font-size: 22px; font-style: normal; font-family: "Courier New", monospace; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas><div class="reloj-txt">21:00 → 3:00</div></main>
+<p class="pista">Así está Casiopea a las nueve de la noche. ¿Dónde estará a las tres de la madrugada?</p>
+<p class="subpista" style="bottom:calc(env(safe-area-inset-bottom) + 140px)">Gírala con el dedo alrededor de la Polar</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["A lo largo de la noche, todas las estrellas giran alrededor de la Polar.", "Giran en sentido contrario a las agujas del reloj, 15° cada hora.", "De las 21:00 a las 3:00 pasan 6 horas: gira Casiopea 90° hacia la izquierda."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo);
+  const NOMBRES = [...Cielo.C.casiopea.estrellas, "polar"];
+  let W, H, pos, rot = 0, prev = null, quieto = null, hecho = false;
+  function colocar() { W = innerWidth; H = innerHeight; pos = Cielo.disponer(NOMBRES, 2.53, 89.26, 0, 0, Math.min(W, H) / 70, 120); }
+  colocar(); addEventListener("resize", colocar);
+  const centro = () => [W / 2, H * .5];
+  const ang = e => { const [cx, cy] = centro(); return Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI; };
+  lienzo.addEventListener("pointerdown", e => { prev = ang(e); lienzo.setPointerCapture(e.pointerId); Comun.audio(); });
+  lienzo.addEventListener("pointermove", e => { if (prev == null || hecho) return; const a = ang(e); let d = a - prev; if (d > 180) d -= 360; if (d < -180) d += 360; rot += d; prev = a; revisar(); });
+  lienzo.addEventListener("pointerup", () => prev = null);
+  function revisar() {
+    const r = ((rot % 360) + 540) % 360 - 180;
+    if (Math.abs(r + 90) < 10) { if (!quieto) quieto = setTimeout(() => { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("pleyades.html"), 1800); }, 900); }
+    else { if (quieto) { clearTimeout(quieto); quieto = null; } if (Math.abs(r - 90) < 10) Comun.avisar("Gira hacia el otro lado"); }
+  }
+  (function pintar() {
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 220, 14);
+    const [cx, cy] = centro();
+    ctx.strokeStyle = "rgba(243,235,221,.08)"; [70, 130, 190].forEach(r => { ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.stroke(); });
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot * Math.PI / 180);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.casiopea.lineas, hecho ? "rgba(233,166,184,1)" : "rgba(233,166,184,.6)", 2);
+    for (const n of Cielo.C.casiopea.estrellas) Cielo.estrella(ctx, pos[n][0], pos[n][1], Cielo.E[n][2] - .3, Cielo.E[n][3] || "#FFFFFF", 1.2);
+    ctx.restore();
+    Cielo.estrella(ctx, cx, cy, 1.2, "#FFF4D6");
+    ctx.fillStyle = "rgba(255,244,214,.7)"; ctx.font = "italic 14px Georgia"; ctx.fillText("Polar", cx + 10, cy + 18);
+    requestAnimationFrame(pintar);
+  })();
+
+</script>
+</body>
+</html>

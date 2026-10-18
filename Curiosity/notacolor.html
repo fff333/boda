@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Nota de color</title>
+<style>
+
+  .misterio { position: absolute; left: 50%; top: 26%; transform: translateX(-50%); width: 84px; height: 84px; border-radius: 50%; border: 2px dashed rgba(243,235,221,.5); background: rgba(243,235,221,.08); color: #F3EBDD; font-size: 34px; cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <button class="misterio" id="misterio" aria-label="Nota misteriosa">?</button>
+  <div id="piano"></div>
+</main>
+<p class="pista">Cada nota tiene su color. ¿De qué color es la nota misteriosa?</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Toca la nota misteriosa y luego busca la tecla que suena igual.", "Los colores siguen el orden del arcoíris: do es rojo, re naranja…", "Es la cuarta nota: fa."]);
+  Comun.nivel("", { fa: "Esa es la nota. ¿De qué color es?", amarillo: "Un poco más aguda", azul: "Un poco más grave" });
+  const COL = { 60: "#E53935", 62: "#FB8C00", 64: "#FDD835", 65: "#43A047", 67: "#1E88E5", 69: "#3949AB", 71: "#8E24AA" };
+  Motor.piano(document.getElementById("piano"), { desde: 60, hasta: 71, negras: false, etiquetas: null, colores: COL });
+  document.getElementById("misterio").addEventListener("click", () => Motor.nota(65, 0, 1.4));
+
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Laberinto</title>
@@ -93,14 +93,14 @@
   function dibujar() {
     c.clearRect(0, 0, COLS * T, FILAS * T);
     for (let y = 0; y < FILAS; y++) for (let x = 0; x < COLS; x++) {
-      c.fillStyle = mapa[y][x] ? "#2A3966" : "#0E1426";
+      c.fillStyle = mapa[y][x] ? "#2F5654" : "#0E1426";
       c.fillRect(x * T, y * T, T + .5, T + .5);
     }
-    c.fillStyle = "#E9A6B8"; c.fillRect(SALIDA.x * T + 2, SALIDA.y * T + 2, T - 4, T - 4);
+    c.fillStyle = "#D9A441"; c.fillRect(SALIDA.x * T + 2, SALIDA.y * T + 2, T - 4, T - 4);
     const g = c.createRadialGradient(bx, by, 0, bx, by, R() * 3);
-    g.addColorStop(0, "rgba(242,233,201,.5)"); g.addColorStop(1, "rgba(242,233,201,0)");
+    g.addColorStop(0, "rgba(243,235,221,.5)"); g.addColorStop(1, "rgba(243,235,221,0)");
     c.fillStyle = g; c.beginPath(); c.arc(bx, by, R() * 3, 0, 7); c.fill();
-    c.fillStyle = "#F2E9C9"; c.beginPath(); c.arc(bx, by, R(), 0, 7); c.fill();
+    c.fillStyle = "#F3EBDD"; c.beginPath(); c.arc(bx, by, R(), 0, 7); c.fill();
   }
 </script>
 </body>

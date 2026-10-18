@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Pecera</title>
+<style>
+  .agua { background: linear-gradient(#1E4E8C 0%, #0E2A55 100%); }
+  .pez { position: absolute; width: 70px; transform: translate(-50%, -50%); pointer-events: none; }
+  .pez svg { width: 100%; display: block; transition: transform .2s; }
+  .comida { position: absolute; z-index: 3; width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle, #FFF59D 0%, #FDD835 55%, #F9A825 100%);
+    box-shadow: 0 0 22px 6px rgba(253,216,53,.75); transform: translate(-50%, -50%); animation: flotar 1.6s ease-in-out infinite; pointer-events: none; }
+  .comida::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2px solid rgba(253,216,53,.7); animation: aro 1.6s ease-out infinite; }
+  @keyframes aro { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  .pez { z-index: 4; }
+  @keyframes flotar { 50% { margin-top: -8px; } }
+  .burbuja { position: absolute; border: 2px solid rgba(255,255,255,.4); border-radius: 50%; animation: subir 6s linear infinite; }
+  @keyframes subir { from { transform: translateY(0); } to { transform: translateY(-110vh); } }
+  .contador-pez { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 150px); text-align: center; font-size: 22px; opacity: .7; }
+</style>
+</head>
+<body>
+<main class="escena agua entrada" id="agua">
+  <div class="comida" id="comida"></div>
+  <div class="pez" id="pez">
+    <svg viewBox="0 0 100 60" id="pezsvg">
+      <path d="M78 30 L100 12 L100 48Z" fill="#FB8C00"/>
+      <ellipse cx="45" cy="30" rx="38" ry="22" fill="#FB8C00"/>
+      <path d="M40 9 Q50 0 62 10" fill="#E65100"/>
+      <circle cx="22" cy="25" r="5" fill="#FFFFFF"/><circle cx="21" cy="25" r="2.5" fill="#16292B"/>
+    </svg>
+  </div>
+  <div class="contador-pez" id="cuenta">0 / 3</div>
+</main>
+<p class="subpista" id="sub"></p>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["El pez se mueve hacia donde inclinas el móvil.", "Llévalo hasta la bolita amarilla.", "Necesita comer tres veces."]);
+  Comun.nivel("XIX", null);
+  const agua = document.getElementById("agua"), pez = document.getElementById("pez"), pezsvg = document.getElementById("pezsvg");
+  const comida = document.getElementById("comida"), cuenta = document.getElementById("cuenta"), sub = document.getElementById("sub");
+  let W = innerWidth, H = innerHeight, px = W / 2, py = H / 2, tx = px, ty = py;
+  let base = null, giro = false, comidas = 0, cx = 0, cy = 0, hecho = false;
+  for (let i = 0; i < 10; i++) {
+    const b = document.createElement("div"); b.className = "burbuja";
+    const s = 6 + Math.random() * 14; b.style.width = b.style.height = s + "px";
+    b.style.left = Math.random() * 100 + "%"; b.style.top = (100 + Math.random() * 20) + "%";
+    b.style.animationDelay = (-Math.random() * 6) + "s"; agua.appendChild(b);
+  }
+  function nuevaComida() {
+    W = innerWidth; H = innerHeight;
+    do { cx = W * (.15 + Math.random() * .7); cy = H * (.28 + Math.random() * .42); } while (Math.hypot(cx - px, cy - py) < Math.min(W, H) * .3);
+    comida.style.left = cx + "px"; comida.style.top = cy + "px";
+  }
+  addEventListener("resize", () => { W = innerWidth; H = innerHeight; nuevaComida(); });
+  function alOrientar(e) {
+    if (e.beta == null) return; giro = true; sub.textContent = "";
+    if (!base) base = { b: e.beta, g: e.gamma };
+    tx = W / 2 + (e.gamma - base.g) * (W / 40);
+    ty = H / 2 + (e.beta - base.b) * (H / 50);
+  }
+  addEventListener("pointermove", e => { if (!giro) { tx = e.clientX; ty = e.clientY; } });
+  addEventListener("pointerdown", e => { if (!giro) { tx = e.clientX; ty = e.clientY; } else base = null; });
+  Comun.inicio("Una pecera", "Asomarse", async () => {
+    W = innerWidth; H = innerHeight; px = tx = W / 2; py = ty = H / 2; nuevaComida();
+    if (await Comun.pedirOrientacion()) addEventListener("deviceorientation", alOrientar);
+    setTimeout(() => { if (!giro) sub.textContent = "Arrastra el dedo para guiar al pez"; }, 2000);
+    requestAnimationFrame(bucle);
+  });
+  function bucle() {
+    tx = Math.max(30, Math.min(W - 30, tx)); ty = Math.max(80, Math.min(H - 80, ty));
+    const dx = (tx - px) * .06; px += dx; py += (ty - py) * .06;
+    pez.style.left = px + "px"; pez.style.top = py + "px";
+    if (Math.abs(dx) > .3) pezsvg.style.transform = dx > 0 ? "scaleX(-1)" : "scaleX(1)";
+    if (!hecho && Math.hypot(px - cx, py - cy) < 40) {
+      comidas++; cuenta.textContent = comidas + " / 3";
+      Comun.tono(700, 0, .1, .15, "sine"); Comun.tono(900, .08, .12, .12, "sine"); Comun.vibrar(20);
+      if (comidas >= 3) { hecho = true; comida.style.display = "none"; setTimeout(() => Comun.superado("gato.html", "XIX"), 900); }
+      else nuevaComida();
+    }
+    requestAnimationFrame(bucle);
+  }
+</script>
+</body>
+</html>

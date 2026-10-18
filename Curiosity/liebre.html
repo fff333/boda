@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>La Liebre</title>
+<style>
+  .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
+  canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .numeros { position: absolute; inset: 0; pointer-events: none; }
+  .numeros span { position: absolute; transform: translate(10px, -22px); font-size: 15px; font-style: normal; opacity: .8; }
+  .numeros span.hecho { color: #D9A441; }
+
+</style>
+</head>
+<body>
+
+<main class="escena noche entrada"><canvas class="cielo" id="cielo"></canvas><div class="numeros" id="numeros"></div></main>
+<p class="pista">Une las estrellas en orden</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="cielo.js"></script>
+<script>
+
+  Comun.pistas(["Toca las estrellas siguiendo los números.", "Empieza por el 1 y sigue hasta el 7.", "Esta constelación se llama la Liebre y está justo debajo de Orión, el cazador."]);
+  Comun.nivel("", null);
+  const lienzo = document.getElementById("cielo"), ctx = Cielo.lienzo(lienzo), nums = document.getElementById("numeros");
+  const ORDEN = ["mulep", "arneb", "etalep", "delep", "gamlep", "nihal", "eplep"];
+  let W, H, pos, posOrion, paso = 0, hecho = false;
+  function colocar() {
+    W = innerWidth; H = innerHeight;
+    const k = Math.min(W / 16, H / 30);
+    pos = Cielo.disponer(Cielo.C.liebre.estrellas, 5.5, -19, W / 2, H * .64, k);
+    posOrion = Cielo.disponer(Cielo.C.orion.estrellas, 5.5, -19, W / 2, H * .64, k);
+    nums.innerHTML = ORDEN.map((n, i) => `<span style="left:${pos[n][0]}px;top:${pos[n][1]}px">${i + 1}</span>`).join("");
+  }
+  colocar(); addEventListener("resize", colocar);
+  function pintar() {
+    ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 180, 5);
+    for (const n in posOrion) if (posOrion[n][1] > 0) Cielo.estrella(ctx, posOrion[n][0], posOrion[n][1], Cielo.E[n][2] + 1.2, "rgba(243,235,221,.5)");
+    const hechas = ORDEN.slice(0, paso);
+    ctx.strokeStyle = "rgba(233,166,184,.8)"; ctx.lineWidth = 2; ctx.beginPath();
+    hechas.forEach((n, i) => i ? ctx.lineTo(...pos[n]) : ctx.moveTo(...pos[n])); ctx.stroke();
+    if (hecho) Cielo.dibujarLineas(ctx, pos, Cielo.C.liebre.lineas, "rgba(233,166,184,1)", 2.5);
+    for (const n in pos) Cielo.estrella(ctx, pos[n][0], pos[n][1], 1.2, "#F3EBDD");
+    requestAnimationFrame(pintar);
+  }
+  pintar();
+  lienzo.addEventListener("pointerdown", e => {
+    if (hecho) return;
+    const n = ORDEN[paso], [x, y] = pos[n];
+    if (Math.hypot(e.clientX - x, e.clientY - y) < 34) {
+      paso++; nums.children[paso - 1].classList.add("hecho"); Comun.tono(440 + paso * 60, 0, .3, .12, "sine"); Comun.vibrar(10);
+      if (paso === ORDEN.length) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("betelgeuse.html"), 1800); }
+    } else {
+      const otra = ORDEN.find(m => Math.hypot(e.clientX - pos[m][0], e.clientY - pos[m][1]) < 34);
+      if (otra) { Comun.tono(180, 0, .2, .1, "sine"); Comun.avisar("Esa no toca todavía"); }
+    }
+  });
+
+</script>
+</body>
+</html>

@@ -1,155 +1,237 @@
 // Utilidades compartidas por todos los niveles
 const Comun = (() => {
   // Orden de los niveles (cada uno es un archivo .html) y su código para volver a él
-  const NIVELES = ["arcoiris", "cronometro", "eclipse", "pleyades", "vela", "avestruz", "dormir", "cuentaatras", "betelgeuse", "globo", "puntociego", "tumbado", "hora", "brujula", "eco", "jirafa", "cementerio", "montyhall", "stroop", "cueva", "viernes13", "saturno", "silencio", "escondite", "ambulancia", "vuelta", "gigantes", "estatua", "yensid", "bocabajo", "sol", "salto", "hal", "cafe", "anagrama", "segundo", "polar", "diapason", "gallina", "kamelos", "dados", "laberinto", "bisiesto", "ventana", "maracas", "lengua", "unos", "canica", "berlin", "pitagoras", "silbido", "circulo", "pulso", "memoria", "reyes", "cuadrados", "gregoriano", "escape", "sos", "cesar", "bombillas", "afinar", "braille", "agujas", "cantar", "t9", "theremin", "shakespeare", "cumple", "mirasidi", "cajafuerte", "bravo"];
-  const CODIGOS = {"arcoiris": "HWGQ", "cronometro": "496R", "eclipse": "AFHU", "pleyades": "G6A9", "vela": "WP3S", "avestruz": "YY2E", "dormir": "XFUU", "cuentaatras": "7KVB", "betelgeuse": "ZZ75", "globo": "F39H", "puntociego": "593S", "tumbado": "48BQ", "hora": "JDG5", "brujula": "8K8Q", "eco": "H78S", "jirafa": "3V83", "cementerio": "5NUT", "montyhall": "ACK7", "stroop": "9ZNS", "cueva": "9795", "viernes13": "CUW7", "saturno": "G6S6", "silencio": "M58E", "escondite": "T9ZG", "ambulancia": "N4K6", "vuelta": "AFA6", "gigantes": "FNRH", "estatua": "CTYK", "yensid": "AW9J", "bocabajo": "Q8JU", "sol": "F4LJ", "salto": "V42K", "hal": "N2AG", "cafe": "2EDY", "anagrama": "YBB8", "segundo": "WV6W", "polar": "H97L", "diapason": "KP5X", "gallina": "7QE3", "kamelos": "CNMC", "dados": "D6N8", "laberinto": "BJPJ", "bisiesto": "LM2T", "ventana": "54F2", "maracas": "VMYM", "lengua": "S794", "unos": "U7MW", "canica": "86HT", "berlin": "GPQA", "pitagoras": "F7X4", "silbido": "MBYL", "circulo": "YPHT", "pulso": "PUTJ", "memoria": "GSG5", "reyes": "LGDY", "cuadrados": "MGWT", "gregoriano": "EUWL", "escape": "SSEA", "sos": "4S4A", "cesar": "DGRB", "bombillas": "VHGY", "afinar": "W7C3", "braille": "WP75", "agujas": "HZS2", "cantar": "UYD5", "t9": "BUXU", "theremin": "HV4W", "shakespeare": "BXND", "cumple": "HLHH", "mirasidi": "CJYV", "cajafuerte": "B5JY", "bravo": "422R"};
+  const NIVELES = ["arcoiris", "cronometro", "stroop", "cremallera", "globo", "eclipse", "calendario", "ambulancia", "escape", "estatua", "segundo", "laberinto", "maracas", "silbido", "circulo", "pulso", "gregoriano", "t9", "braille", "cajafuerte", "cuentaatras", "pleyades", "vela", "dormir", "vaso", "betelgeuse", "arena", "tumbado", "diente", "planetas", "liebre", "jeroglificos", "anubis", "pez", "pera", "llave", "zanahoria", "trebol", "hora", "brujula", "eco", "jirafa", "cementerio", "montyhall", "vuelta", "iman", "saturno", "silencio", "escondite", "bocabajo", "astronauta", "gigantes", "yensid", "cafe", "fasesluna", "salto", "hal", "giro", "telescopio", "australia", "sirio", "escarabajo", "mosaico", "copas", "estrellita", "semana", "carbono", "polar", "diapason", "gallina", "dados", "toctoc", "ventana", "lengua", "unos", "canica", "pesoluna", "berlin", "pitagoras", "piramide", "memoria", "eureka", "cuadrados", "ariadna", "acueducto", "romano", "director", "deoido", "balanzas", "alreves", "elementos", "prismaluz", "papel", "frutas", "tabla", "sos", "cesar", "bombillas", "sintonia", "agujas", "himno", "huellas", "theremin", "fibonacci", "notacolor", "cumplealreves", "mirilla", "shakespeare", "cumple", "firma", "mirasidi", "faro", "bravo"];
+  const CODIGOS = {"arcoiris": "HWGQ", "cronometro": "496R", "stroop": "AFHU", "cremallera": "G6A9", "globo": "WP3S", "eclipse": "YY2E", "calendario": "XFUU", "ambulancia": "7KVB", "escape": "ZZ75", "estatua": "F39H", "segundo": "593S", "laberinto": "48BQ", "maracas": "JDG5", "silbido": "8K8Q", "circulo": "H78S", "pulso": "3V83", "gregoriano": "5NUT", "t9": "ACK7", "braille": "9ZNS", "cajafuerte": "9795", "cuentaatras": "CUW7", "pleyades": "G6S6", "vela": "M58E", "dormir": "T9ZG", "vaso": "N4K6", "betelgeuse": "AFA6", "arena": "FNRH", "tumbado": "CTYK", "diente": "AW9J", "planetas": "Q8JU", "liebre": "F4LJ", "jeroglificos": "V42K", "anubis": "N2AG", "pez": "2EDY", "pera": "YBB8", "llave": "WV6W", "zanahoria": "H97L", "trebol": "KP5X", "hora": "7QE3", "brujula": "CNMC", "eco": "D6N8", "jirafa": "BJPJ", "cementerio": "LM2T", "montyhall": "54F2", "vuelta": "VMYM", "iman": "S794", "saturno": "U7MW", "silencio": "86HT", "escondite": "GPQA", "bocabajo": "F7X4", "astronauta": "MBYL", "gigantes": "YPHT", "yensid": "PUTJ", "cafe": "GSG5", "fasesluna": "LGDY", "salto": "MGWT", "hal": "EUWL", "giro": "SSEA", "telescopio": "4S4A", "australia": "DGRB", "sirio": "VHGY", "escarabajo": "W7C3", "mosaico": "WP75", "copas": "HZS2", "estrellita": "UYD5", "semana": "BUXU", "carbono": "HV4W", "polar": "BXND", "diapason": "HLHH", "gallina": "CJYV", "dados": "B5JY", "toctoc": "422R", "ventana": "4QJM", "lengua": "B3SK", "unos": "QBBT", "canica": "84SW", "pesoluna": "JFMC", "berlin": "SXWD", "pitagoras": "AR8D", "piramide": "QK3Z", "memoria": "QTXN", "eureka": "ZY77", "cuadrados": "8VNL", "ariadna": "4K9A", "acueducto": "Y4CM", "romano": "FVZS", "director": "JGBP", "deoido": "VC32", "balanzas": "LGFK", "alreves": "2XSV", "elementos": "CNLU", "prismaluz": "UUYJ", "papel": "2NA8", "frutas": "5YLB", "tabla": "MWKL", "sos": "BHAZ", "cesar": "EZVP", "bombillas": "KRJG", "sintonia": "W9GE", "agujas": "2SVH", "himno": "Y89H", "huellas": "RY7Y", "theremin": "FEF9", "fibonacci": "VSQL", "notacolor": "W5XW", "cumplealreves": "93WM", "mirilla": "N7QY", "shakespeare": "Y42P", "cumple": "K6J5", "firma": "TXHW", "mirasidi": "T6SK", "faro": "TQXK", "bravo": "HTU7"};
   const ELOGIOS = {
     "arcoiris": "Bien visto.",
     "cronometro": "Impecable.",
-    "eclipse": "Pocos lo sacan a la primera.",
-    "pleyades": "Eso es pensar con calma.",
-    "vela": "Muy fino.",
-    "avestruz": "Directo al grano.",
-    "dormir": "Así se hace.",
-    "cuentaatras": "Mente curiosa, mente despierta.",
-    "betelgeuse": "Ni un detalle se te escapa.",
-    "globo": "Has mirado donde nadie mira.",
-    "puntociego": "Elegante.",
-    "tumbado": "Eso no lo sabe cualquiera.",
-    "hora": "Bien visto.",
-    "brujula": "Impecable.",
-    "eco": "Pocos lo sacan a la primera.",
-    "jirafa": "Eso es pensar con calma.",
-    "cementerio": "Muy fino.",
-    "montyhall": "Directo al grano.",
-    "stroop": "Así se hace.",
-    "cueva": "Mente curiosa, mente despierta.",
-    "viernes13": "Ni un detalle se te escapa.",
-    "saturno": "Has mirado donde nadie mira.",
-    "silencio": "Elegante.",
-    "escondite": "Eso no lo sabe cualquiera.",
-    "ambulancia": "Bien visto.",
-    "vuelta": "Impecable.",
-    "gigantes": "Pocos lo sacan a la primera.",
-    "estatua": "Eso es pensar con calma.",
+    "stroop": "Pocos lo sacan a la primera.",
+    "cremallera": "Eso es pensar con calma.",
+    "globo": "Muy fino.",
+    "eclipse": "Directo al grano.",
+    "calendario": "Así se hace.",
+    "ambulancia": "Mente curiosa, mente despierta.",
+    "escape": "Ni un detalle se te escapa.",
+    "estatua": "Has mirado donde nadie mira.",
+    "segundo": "Elegante.",
+    "laberinto": "Eso no lo sabe cualquiera.",
+    "maracas": "Bien visto.",
+    "silbido": "Impecable.",
+    "circulo": "Pocos lo sacan a la primera.",
+    "pulso": "Eso es pensar con calma.",
+    "gregoriano": "Muy fino.",
+    "t9": "Directo al grano.",
+    "braille": "Así se hace.",
+    "cajafuerte": "Mente curiosa, mente despierta.",
+    "cuentaatras": "Ni un detalle se te escapa.",
+    "pleyades": "Has mirado donde nadie mira.",
+    "vela": "Elegante.",
+    "dormir": "Eso no lo sabe cualquiera.",
+    "vaso": "Bien visto.",
+    "betelgeuse": "Impecable.",
+    "arena": "Pocos lo sacan a la primera.",
+    "tumbado": "Eso es pensar con calma.",
+    "diente": "Muy fino.",
+    "planetas": "Directo al grano.",
+    "liebre": "Así se hace.",
+    "jeroglificos": "Mente curiosa, mente despierta.",
+    "anubis": "Ni un detalle se te escapa.",
+    "pez": "Has mirado donde nadie mira.",
+    "pera": "Elegante.",
+    "llave": "Eso no lo sabe cualquiera.",
+    "zanahoria": "Bien visto.",
+    "trebol": "Impecable.",
+    "hora": "Pocos lo sacan a la primera.",
+    "brujula": "Eso es pensar con calma.",
+    "eco": "Muy fino.",
+    "jirafa": "Directo al grano.",
+    "cementerio": "Así se hace.",
+    "montyhall": "Mente curiosa, mente despierta.",
+    "vuelta": "Ni un detalle se te escapa.",
+    "iman": "Has mirado donde nadie mira.",
+    "saturno": "Elegante.",
+    "silencio": "Eso no lo sabe cualquiera.",
+    "escondite": "Bien visto.",
+    "bocabajo": "Impecable.",
+    "astronauta": "Pocos lo sacan a la primera.",
+    "gigantes": "Eso es pensar con calma.",
     "yensid": "Muy fino.",
-    "bocabajo": "Directo al grano.",
-    "sol": "Así se hace.",
+    "cafe": "Directo al grano.",
+    "fasesluna": "Así se hace.",
     "salto": "Mente curiosa, mente despierta.",
     "hal": "Ni un detalle se te escapa.",
-    "cafe": "Has mirado donde nadie mira.",
-    "anagrama": "Elegante.",
-    "segundo": "Eso no lo sabe cualquiera.",
-    "polar": "Bien visto.",
-    "diapason": "Impecable.",
-    "gallina": "Pocos lo sacan a la primera.",
-    "kamelos": "Eso es pensar con calma.",
-    "dados": "Muy fino.",
-    "laberinto": "Directo al grano.",
-    "bisiesto": "Así se hace.",
-    "ventana": "Mente curiosa, mente despierta.",
-    "maracas": "Ni un detalle se te escapa.",
-    "lengua": "Has mirado donde nadie mira.",
-    "unos": "Elegante.",
-    "canica": "Eso no lo sabe cualquiera.",
-    "berlin": "Bien visto.",
-    "pitagoras": "Impecable.",
-    "silbido": "Pocos lo sacan a la primera.",
-    "circulo": "Eso es pensar con calma.",
-    "pulso": "Muy fino.",
-    "memoria": "Directo al grano.",
-    "reyes": "Así se hace.",
-    "cuadrados": "Mente curiosa, mente despierta.",
-    "gregoriano": "Ni un detalle se te escapa.",
-    "escape": "Has mirado donde nadie mira.",
-    "sos": "Elegante.",
-    "cesar": "Eso no lo sabe cualquiera.",
-    "bombillas": "Bien visto.",
-    "afinar": "Impecable.",
-    "braille": "Pocos lo sacan a la primera.",
+    "giro": "Has mirado donde nadie mira.",
+    "telescopio": "Elegante.",
+    "australia": "Eso no lo sabe cualquiera.",
+    "sirio": "Bien visto.",
+    "escarabajo": "Impecable.",
+    "mosaico": "Pocos lo sacan a la primera.",
+    "copas": "Eso es pensar con calma.",
+    "estrellita": "Muy fino.",
+    "semana": "Directo al grano.",
+    "carbono": "Así se hace.",
+    "polar": "Mente curiosa, mente despierta.",
+    "diapason": "Ni un detalle se te escapa.",
+    "gallina": "Has mirado donde nadie mira.",
+    "dados": "Elegante.",
+    "toctoc": "Eso no lo sabe cualquiera.",
+    "ventana": "Bien visto.",
+    "lengua": "Impecable.",
+    "unos": "Pocos lo sacan a la primera.",
+    "canica": "Eso es pensar con calma.",
+    "pesoluna": "Muy fino.",
+    "berlin": "Directo al grano.",
+    "pitagoras": "Así se hace.",
+    "piramide": "Mente curiosa, mente despierta.",
+    "memoria": "Ni un detalle se te escapa.",
+    "eureka": "Has mirado donde nadie mira.",
+    "cuadrados": "Elegante.",
+    "ariadna": "Eso no lo sabe cualquiera.",
+    "acueducto": "Bien visto.",
+    "romano": "Impecable.",
+    "director": "Pocos lo sacan a la primera.",
+    "deoido": "Eso es pensar con calma.",
+    "balanzas": "Muy fino.",
+    "alreves": "Directo al grano.",
+    "elementos": "Así se hace.",
+    "prismaluz": "Mente curiosa, mente despierta.",
+    "papel": "Ni un detalle se te escapa.",
+    "frutas": "Has mirado donde nadie mira.",
+    "tabla": "Elegante.",
+    "sos": "Eso no lo sabe cualquiera.",
+    "cesar": "Bien visto.",
+    "bombillas": "Impecable.",
+    "sintonia": "Pocos lo sacan a la primera.",
     "agujas": "Eso es pensar con calma.",
-    "cantar": "Muy fino.",
-    "t9": "Directo al grano.",
+    "himno": "Muy fino.",
+    "huellas": "Directo al grano.",
     "theremin": "Así se hace.",
-    "shakespeare": "Mente curiosa, mente despierta.",
-    "cumple": "Ni un detalle se te escapa.",
-    "mirasidi": "Has mirado donde nadie mira.",
-    "cajafuerte": "Elegante.",
-    "bravo": "Eso no lo sabe cualquiera."
+    "fibonacci": "Mente curiosa, mente despierta.",
+    "notacolor": "Ni un detalle se te escapa.",
+    "cumplealreves": "Has mirado donde nadie mira.",
+    "mirilla": "Elegante.",
+    "shakespeare": "Eso no lo sabe cualquiera.",
+    "cumple": "Bien visto.",
+    "firma": "Impecable.",
+    "mirasidi": "Pocos lo sacan a la primera.",
+    "faro": "Eso es pensar con calma.",
+    "bravo": "Muy fino."
   };
   // Curiosidad que aparece al superar cada nivel
   const CURIOSIDADES = {
     "arcoiris": "En un arcoíris doble, el segundo tiene los colores al revés, y el cielo entre los dos es más oscuro: se llama banda de Alejandro, por Alejandro de Afrodisias, que la describió hacia el año 200.",
     "cronometro": "Al mirar un reloj de agujas, el primer segundo parece durar más que los demás. Se llama cronostasis: el cerebro «rellena» con la imagen nueva el instante en que movías los ojos.",
+    "stroop": "Es el efecto Stroop (1935): cuando la palabra y el color no coinciden, el cerebro tarda más, porque leer es automático y no puedes evitarlo. Se usa para medir la atención.",
+    "cremallera": "YKK son las siglas de Yoshida Kōgyō Kabushiki-gaisha, la empresa japonesa que Tadao Yoshida fundó en 1934. Fabrica miles de millones de cremalleras al año: se calcula que cerca de la mitad de las que hay en el mundo.",
+    "globo": "El helio que llena los globos sale casi todo de los yacimientos de gas natural y es un recurso escaso: una vez liberado, escapa de la atmósfera al espacio y no vuelve.",
     "eclipse": "La Luna se aleja de la Tierra unos 3,8 cm cada año. Dentro de unos 600 millones de años parecerá demasiado pequeña para tapar el Sol entero: los eclipses totales tienen fecha de caducidad.",
+    "calendario": "Septiembre, octubre, noviembre y diciembre significan «séptimo», «octavo», «noveno» y «décimo»: en el primer calendario romano, el año empezaba en marzo. Julio y agosto llevan los nombres de Julio César y del emperador Augusto.",
+    "ambulancia": "Los espejos no invierten izquierda y derecha: invierten delante y detrás. Por eso «AMBULANCIA» se escribe al revés en el frontal: para leerse bien en el retrovisor del coche de delante.",
+    "escape": "Para escapar de la gravedad terrestre sin más impulso hay que alcanzar 11,2 km/s: unos 40.000 km/h. En la Luna bastan 2,4 km/s, y en un agujero negro no basta ni la velocidad de la luz.",
+    "estatua": "Las mariposas saborean con las patas: tienen receptores del gusto en ellas, y así saben si una hoja es buena para poner sus huevos.",
+    "segundo": "Desde 1972 se han añadido 27 «segundos intercalares» para compensar que la Tierra gira de forma irregular: ese día, el reloj oficial marca 23:59:60. Ha tumbado webs y sistemas de reservas de aerolíneas, y en 2022 se acordó dejar de añadirlos antes de 2035.",
+    "laberinto": "Si alguna vez te pierdes en un laberinto de setos, el truco clásico es apoyar una mano en la pared y caminar sin despegarla nunca, aunque des rodeos: tarde o temprano llegarás a la salida. Funciona en casi todos; solo falla en los que tienen «islas», paredes sueltas que no tocan el borde, diseñadas precisamente para burlar este truco.",
+    "maracas": "Las maracas tradicionales se fabrican con el fruto seco de la tapara o totumo, vaciado y relleno de semillas. Ya las usaban los pueblos taínos antes de la llegada de Colón.",
+    "silbido": "En La Gomera existe el silbo gomero, un lenguaje silbado que reproduce el español y se oye a varios kilómetros. Es Patrimonio Inmaterial de la UNESCO y se enseña en los colegios de la isla.",
+    "circulo": "Se han calculado más de 100 billones de decimales de pi, pero la NASA solo usa 15 para navegar por el sistema solar. Con 40 decimales se calcularía el universo observable con la precisión de un átomo.",
+    "pulso": "Tu corazón late unas 100.000 veces al día y más de 2.500 millones en toda una vida. Un colibrí puede superar las 1.200 pulsaciones por minuto.",
+    "gregoriano": "En 1582, el papa Gregorio XIII corrigió el calendario y se saltaron diez días: del jueves 4 de octubre se pasó al viernes 15. Santa Teresa de Jesús murió esa misma noche, así que la enterraron «once días después» al día siguiente.",
+    "t9": "Los SMS tienen 160 caracteres porque, en 1985, Friedhelm Hillebrand tecleó frases y postales en su máquina de escribir y comprobó que casi todo lo importante cabía en ese espacio.",
+    "braille": "El braille nació de la «escritura nocturna» que Charles Barbier inventó para que los soldados de Napoleón leyeran órdenes a oscuras. Louis Braille la simplificó con solo 15 años.",
+    "cajafuerte": "Durante años, el código para lanzar los misiles nucleares Minuteman de Estados Unidos fue, según un exoficial de lanzamiento, 00000000. Así no se perdía tiempo en caso de ataque.",
+    "cuentaatras": "La cuenta atrás de los cohetes la inventó el cine: Fritz Lang la usó en «La mujer en la Luna» (1929) para crear tensión. Los ingenieros alemanes del programa de cohetes la adoptaron después.",
     "pleyades": "«Subaru» es el nombre japonés de las Pléyades, y las seis estrellas de su logotipo son ese cúmulo. A simple vista se ven unas seis o siete; en realidad son más de mil.",
     "vela": "En gravedad cero, una vela arde con una llama redonda y azulada: sin «arriba» ni «abajo», el aire caliente no sube y la llama no se estira.",
-    "avestruz": "El ojo de un avestruz mide unos 5 cm y es más grande que su cerebro. Y no, no esconde la cabeza en la arena: la agacha para darle la vuelta a sus huevos en el nido.",
     "dormir": "La luz azul de las pantallas frena la melatonina, la hormona que te avisa de que es de noche. Tus ojos tienen unas células que no sirven para ver, sino para medir esa luz.",
-    "cuentaatras": "La cuenta atrás de los cohetes la inventó el cine: Fritz Lang la usó en «La mujer en la Luna» (1929) para crear tensión. Los ingenieros alemanes del programa de cohetes la adoptaron después.",
+    "vaso": "El agua es de las pocas sustancias que ocupan más al congelarse. Por eso el hielo flota y los lagos se hielan solo por arriba: el agua de abajo, a unos 4 °C, permite que los peces sobrevivan al invierno.",
     "betelgeuse": "Entre 2019 y 2020, Betelgeuse perdió casi dos tercios de su brillo y muchos pensaron que iba a estallar. Era una nube de polvo que había expulsado ella misma. Algún día será supernova, pero puede tardar 100.000 años.",
-    "globo": "El helio que llena los globos sale casi todo de los yacimientos de gas natural y es un recurso escaso: una vez liberado, escapa de la atmósfera al espacio y no vuelve.",
-    "puntociego": "Cada ojo tiene un punto ciego donde el nervio óptico sale del ojo y no hay células sensibles a la luz. No lo notas porque tu cerebro rellena el hueco con lo que hay alrededor.",
+    "arena": "Los buenos relojes de arena no llevaban arena de playa: se usaba polvo de mármol o cáscara de huevo molida, que fluyen de forma más regular y no se apelmazan con la humedad.",
     "tumbado": "En el ecuador, la superficie de la Tierra gira a unos 1.670 km/h, y alrededor del Sol vamos a unos 107.000 km/h. No lo notamos porque la velocidad es constante.",
+    "diente": "Las semillas del diente de león vuelan gracias a un remolino de aire que se forma justo encima de su penacho. Se descubrió en 2018 y es un tipo de vórtice que no se conocía.",
+    "planetas": "Todos los planetas del sistema solar, puestos en fila, cabrían en el hueco entre la Tierra y la Luna… y aún sobraría algo de espacio.",
+    "liebre": "Hay 88 constelaciones oficiales. La Unión Astronómica Internacional las fijó en 1922 y en 1930 trazó sus fronteras, como si fueran países del cielo.",
+    "jeroglificos": "Los jeroglíficos se descifraron gracias a la piedra de Rosetta, que repetía un mismo decreto en tres escrituras. Champollion lo consiguió en 1822, tras años de trabajo.",
+    "anubis": "Los egipcios creían que se pensaba con el corazón. Al momificar, lo dejaban dentro del cuerpo… y el cerebro lo sacaban y lo tiraban.",
+    "pez": "La memoria de un pez dorado dura meses, no tres segundos: se les puede entrenar para reconocer colores, sonidos y horarios de comida.",
+    "pera": "Las peras se recogen verdes a propósito: si maduran en la rama, se vuelven harinosas por dentro. Maduran mejor fuera del árbol.",
+    "llave": "Las cerraduras de pasadores más antiguas que se conocen son egipcias, de madera, y tienen unos 4.000 años. El principio es el mismo que el de muchas cerraduras actuales.",
+    "zanahoria": "Las primeras zanahorias cultivadas eran moradas o amarillas. La naranja se popularizó en los Países Bajos en el siglo XVII.",
+    "trebol": "Se calcula que solo uno de cada 5.000 tréboles tiene cuatro hojas. El récord es un trébol de 56 hojas, encontrado en Japón en 2009.",
     "hora": "España vive con la hora de Berlín desde 1940. Por su longitud le correspondería la de Londres, como a Portugal: por eso aquí se come y se cena más tarde que en casi toda Europa.",
     "brujula": "El polo norte magnético no está quieto: se desplaza unos 50 km al año hacia Siberia. Además, el campo magnético terrestre se ha invertido cientos de veces; la última, hace unos 780.000 años.",
     "eco": "Es un mito que el «cuac» de un pato no haga eco. En 2003, la Universidad de Salford lo comprobó en una cámara de reverberación: sí lo hace, pero se confunde con el propio graznido, que se apaga poco a poco.",
     "jirafa": "Las jirafas suelen dormir de pie y a ratos muy cortos, de pocos minutos, para poder huir rápido. A veces se tumban y apoyan la cabeza sobre el lomo, pero casi nunca más de unos minutos seguidos.",
     "cementerio": "«Cementerio» viene del griego koimetérion, que significa «dormitorio»: el lugar donde se duerme. Los primeros cristianos lo usaban porque creían que los muertos solo dormían hasta la resurrección.",
     "montyhall": "Es el problema de Monty Hall: si cambias de puerta, ganas 2 de cada 3 veces. Cuando Marilyn vos Savant lo explicó en 1990, miles de lectores, cientos de ellos doctores, le escribieron diciendo que se equivocaba. Tenía razón.",
-    "stroop": "Es el efecto Stroop (1935): cuando la palabra y el color no coinciden, el cerebro tarda más, porque leer es automático y no puedes evitarlo. Se usa para medir la atención.",
-    "cueva": "Las pinturas de Altamira se hicieron a la luz de lámparas de grasa. Con esa luz parpadeante, los bisontes parecen moverse: algunos investigadores creen que los artistas lo buscaban a propósito.",
-    "viernes13": "Todo mes que empieza en domingo tiene un viernes 13, y todos los años tienen al menos uno (como mucho, tres). El miedo a ese día tiene nombre: parascevedecatriafobia.",
+    "vuelta": "Los bailarines evitan marearse con un truco: fijan la vista en un punto y giran la cabeza de golpe. Además, con años de práctica su cerebro aprende a ignorar parte de la señal del oído interno.",
+    "iman": "Un imán de neodimio puede levantar más de mil veces su propio peso. Son tan potentes que dos de ellos pueden pellizcar la piel y romperse al chocar.",
     "saturno": "Los anillos de Saturno no son de roca: son en más de un 95 % hielo de agua, en trozos que van del tamaño de un grano de arena al de una casa. Y se están deshaciendo: caen poco a poco sobre el planeta.",
     "silencio": "En la sala anecoica de Microsoft, una de las más silenciosas del mundo, se han medido −20 decibelios. Dentro, la gente empieza a oír su propio latido, su respiración… e incluso el roce de sus articulaciones.",
     "escondite": "Hasta los 8 meses, más o menos, un bebé cree que lo que deja de ver deja de existir. Por eso el «¿dónde está…? ¡aquí!» le resulta tan sorprendente: está aprendiendo la permanencia del objeto.",
-    "ambulancia": "Los espejos no invierten izquierda y derecha: invierten delante y detrás. Por eso «AMBULANCIA» se escribe al revés en el frontal: para leerse bien en el retrovisor del coche de delante.",
-    "vuelta": "Los bailarines evitan marearse con un truco: fijan la vista en un punto y giran la cabeza de golpe. Además, con años de práctica su cerebro aprende a ignorar parte de la señal del oído interno.",
-    "gigantes": "Júpiter y Saturno son gigantes gaseosos y Urano y Neptuno, gigantes helados: no tienen una superficie donde posarse. Una nave que «aterrizara» se hundiría en capas de gas cada vez más densas y calientes hasta ser aplastada.",
-    "estatua": "Las mariposas saborean con las patas: tienen receptores del gusto en ellas, y así saben si una hoja es buena para poner sus huevos.",
-    "yensid": "En «Fantasía» (1940), el hechicero de Mickey se llama Yen Sid: Disney escrito al revés. Los animadores le pusieron además las cejas que Walt levantaba cuando algo no le gustaba.",
     "bocabajo": "La primera noche en un sitio nuevo dormimos peor por algo que se llama «efecto primera noche»: la mitad izquierda del cerebro duerme más ligera y queda vigilando, como los delfines.",
-    "sol": "En un solo segundo, el Sol emite unos 3,8 × 10²⁶ julios: miles de veces más energía de la que ha consumido la humanidad en toda su historia.",
+    "astronauta": "En la Estación Espacial, los astronautas crecen hasta unos 5 cm: sin gravedad, los discos de la columna se estiran. Lo pierden en pocos días al volver a la Tierra.",
+    "gigantes": "Júpiter y Saturno son gigantes gaseosos y Urano y Neptuno, gigantes helados: no tienen una superficie donde posarse. Una nave que «aterrizara» se hundiría en capas de gas cada vez más densas y calientes hasta ser aplastada.",
+    "yensid": "En «Fantasía» (1940), el hechicero de Mickey se llama Yen Sid: Disney escrito al revés. Los animadores le pusieron además las cejas que Walt levantaba cuando algo no le gustaba.",
+    "cafe": "Harían falta unas 100 tazas de café seguidas para tomar una dosis peligrosa de cafeína. Y la cafeína tarda unas 5 horas en reducirse a la mitad en tu cuerpo.",
+    "fasesluna": "Siempre vemos la misma cara de la Luna porque tarda exactamente lo mismo en girar sobre sí misma que en dar una vuelta a la Tierra: unos 27 días. Se llama acoplamiento de marea.",
     "salto": "Una pulga salta más de 100 veces su propio tamaño. No lo consigue con músculo, sino con una proteína elástica, la resilina, que acumula energía como un muelle.",
     "hal": "HAL, el ordenador de «2001: Una odisea del espacio», está a una letra de IBM. Arthur C. Clarke juró que era casualidad: HAL viene de «Heuristically programmed ALgorithmic computer».",
-    "cafe": "Harían falta unas 100 tazas de café seguidas para tomar una dosis peligrosa de cafeína. Y la cafeína tarda unas 5 horas en reducirse a la mitad en tu cuerpo.",
-    "anagrama": "En 2011 se subastó un Stradivarius, el «Lady Blunt», por casi 16 millones de dólares. Se donó todo a las víctimas del terremoto de Japón.",
-    "segundo": "Desde 1972 se han añadido 27 «segundos intercalares» para compensar que la Tierra gira de forma irregular: ese día, el reloj oficial marca 23:59:60. Ha tumbado webs y sistemas de reservas de aerolíneas, y en 2022 se acordó dejar de añadirlos antes de 2035.",
+    "giro": "Si fotografías el cielo durante horas apuntando a la Polar, las estrellas dibujan círculos perfectos a su alrededor. No se mueven ellas: es la Tierra la que gira.",
+    "telescopio": "Las tres estrellas del cinturón de Orión parecen estar juntas, pero no: unas están a unos 700 años luz y otras a casi 2.000. Solo coinciden vistas desde aquí.",
+    "australia": "Desde el hemisferio sur, Orión se ve boca abajo, y la Luna también: las manchas que aquí parecen una cara allí aparecen giradas.",
+    "sirio": "La escala de brillo de las estrellas va al revés: cuanto menor es el número, más brilla. Sirio, la más brillante de la noche, tiene magnitud negativa: −1,46.",
+    "escarabajo": "Los escarabajos peloteros se orientan de noche guiándose por la Vía Láctea. Es el primer animal en el que se demostró algo así.",
+    "mosaico": "Las piezas de un mosaico se llaman teselas, y en los mosaicos romanos más finos se cortaban a mano: un metro cuadrado podía tener más de diez mil.",
+    "copas": "Benjamin Franklin inventó un instrumento de cuencos de cristal, la armónica de cristal, y Mozart compuso música para él. Llegó a decirse que su sonido volvía loca a la gente.",
+    "estrellita": "La melodía de «Estrellita, ¿dónde estás?» es una canción francesa del siglo XVIII, «Ah! vous dirai-je, maman», sobre la que Mozart compuso doce variaciones.",
+    "semana": "Los días de la semana vienen de los astros: lunes de la Luna, martes de Marte, miércoles de Mercurio, jueves de Júpiter y viernes de Venus. Sábado viene del hebreo «sabbat» y domingo, del latín «Dominicus», del Señor.",
+    "carbono": "El diamante y la mina de un lápiz son lo mismo: carbono puro. Solo cambia cómo se ordenan sus átomos. Con mucha presión y calor, el grafito puede convertirse en diamante.",
     "polar": "La Polar no será siempre la estrella del norte. El eje de la Tierra «cabecea» como una peonza en ciclos de 26.000 años, y hacia el año 14.000 la estrella polar será Vega.",
     "diapason": "Desde 1939 la nota «la» se afina a 440 hercios. La idea de que 432 Hz es una frecuencia «natural» o sanadora no tiene ninguna base científica.",
     "gallina": "El vuelo más largo registrado de una gallina duró 13 segundos. Las gallinas descienden de un ave de la jungla asiática, el gallo bankiva, que sí vuela distancias cortas.",
-    "kamelos": "Hay una hipótesis sobre el «camello que pasa por el ojo de una aguja»: en griego, kámelos (camello) y kámilos (soga gruesa de barco) se escribían casi igual. Es una teoría discutida, pero haría la frase mucho más lógica.",
     "dados": "En Pompeya se han encontrado dados trucados con plomo. Los más antiguos conocidos tienen unos 5.000 años y aparecieron en la Ciudad Quemada, en Irán, junto a un tablero.",
-    "laberinto": "El laberinto de setos más antiguo que se conserva en el Reino Unido es el de Hampton Court, plantado hacia 1690. Su truco clásico, poner siempre la mano en la misma pared, no funciona en todos los laberintos.",
-    "bisiesto": "Un año es bisiesto si es múltiplo de 4, salvo los múltiplos de 100… que sí lo son si también lo son de 400. Por eso 1900 no lo fue y 2000 sí. Excel, por herencia de Lotus 1-2-3, sigue creyendo que existió el 29 de febrero de 1900.",
+    "toctoc": "Los prisioneros de guerra estadounidenses en Vietnam se comunicaban entre celdas con un código de golpes: el abecedario en una cuadrícula de 5 × 5, con la K sustituida por la C.",
     "ventana": "Más de un tercio de la humanidad, y el 80 % de los norteamericanos, ya no puede ver la Vía Láctea desde su casa por la contaminación lumínica.",
-    "maracas": "Las maracas tradicionales se fabrican con el fruto seco de la tapara o totumo, vaciado y relleno de semillas. Ya las usaban los pueblos taínos antes de la llegada de Colón.",
     "lengua": "No solo hay tres animales con la lengua azul: también la tienen las jirafas y los okapis (que la usan como protección solar), los perros chow chow y el eslizón de lengua azul, entre otros.",
     "unos": "111.111.111 × 111.111.111 = 12.345.678.987.654.321. Funciona con cualquier número de unos hasta nueve: el resultado sube hasta ese número y vuelve a bajar.",
     "canica": "Cuando bebes, la habitación da vueltas porque el alcohol llega al líquido del oído interno y cambia su densidad: el sensor del equilibrio cree que te estás moviendo.",
+    "pesoluna": "Los astronautas del Apolo descubrieron que en la Luna era más cómodo avanzar dando saltitos, como un canguro, que caminar paso a paso.",
     "berlin": "Galicia está más al oeste que casi todo el Reino Unido, pero va una hora por delante. En verano, en Vigo, el sol del mediodía llega pasadas las dos de la tarde.",
     "pitagoras": "Pitágoras descubrió que las notas que suenan bien juntas salen de cuerdas con longitudes en proporciones sencillas, como 1:2 (la octava) o 2:3 (la quinta).",
-    "silbido": "En La Gomera existe el silbo gomero, un lenguaje silbado que reproduce el español y se oye a varios kilómetros. Es Patrimonio Inmaterial de la UNESCO y se enseña en los colegios de la isla.",
-    "circulo": "Se han calculado más de 100 billones de decimales de pi, pero la NASA solo usa 15 para navegar por el sistema solar. Con 40 decimales se calcularía el universo observable con la precisión de un átomo.",
-    "pulso": "Tu corazón late unas 100.000 veces al día y más de 2.500 millones en toda una vida. Un colibrí puede superar las 1.200 pulsaciones por minuto.",
+    "piramide": "La Gran Pirámide de Guiza fue el edificio más alto del mundo durante unos 3.800 años, hasta que en el siglo XIV la superó la aguja de la catedral de Lincoln.",
     "memoria": "En 1956, George Miller publicó que podemos retener «siete, más o menos dos» elementos a la vez. Estudios más recientes rebajan esa cifra a unos cuatro.",
-    "reyes": "Según la tradición francesa, los reyes de la baraja representan a reyes históricos: picas, David; tréboles, Alejandro Magno; corazones, Carlomagno; diamantes, Julio César. Es una costumbre, no una regla.",
+    "eureka": "La historia de Arquímedes y la corona la contó Vitruvio unos 200 años después. Probablemente es adornada: el método de la bañera no habría sido lo bastante preciso.",
     "cuadrados": "En un tablero de ajedrez hay 204 cuadrados si cuentas todos los tamaños, y 1.296 rectángulos.",
-    "gregoriano": "En 1582, el papa Gregorio XIII corrigió el calendario y se saltaron diez días: del jueves 4 de octubre se pasó al viernes 15. Santa Teresa de Jesús murió esa misma noche, así que la enterraron «once días después» al día siguiente.",
-    "escape": "Para escapar de la gravedad terrestre sin más impulso hay que alcanzar 11,2 km/s: unos 40.000 km/h. En la Luna bastan 2,4 km/s, y en un agujero negro no basta ni la velocidad de la luz.",
-    "sos": "SOS no significa «Save Our Souls»: se eligió en 1906 porque en morse (· · · − − − · · ·) es imposible de confundir. El Titanic fue uno de los primeros barcos en usarlo.",
+    "ariadna": "El laberinto que aparece en las monedas antiguas de Creta es «unicursal»: un único camino sin bifurcaciones. En él es imposible perderse.",
+    "acueducto": "El acueducto de Segovia se levantó sin argamasa: sus bloques de granito se sostienen solo por el equilibrio de su propio peso, desde hace casi 2.000 años.",
+    "romano": "En la mayoría de los relojes con números romanos, el 4 se escribe IIII y no IV. Se cree que es por equilibrio visual frente al VIII del otro lado.",
+    "director": "Los primeros directores marcaban el ritmo golpeando el suelo con un bastón. El compositor Jean-Baptiste Lully se golpeó un pie así en 1687 y murió por la infección.",
+    "deoido": "Las melodías que se te quedan pegadas se llaman «gusanos auditivos». Un estudio de 2015 comprobó que mascar chicle ayuda a quitárselas de la cabeza.",
+    "balanzas": "La balanza de dos platos es uno de los instrumentos de medida más antiguos: ya se usaba en Egipto y Mesopotamia hace más de 4.000 años.",
+    "alreves": "Las palabras que, leídas al revés, forman otra distinta se llaman anacíclicas: amor y Roma, ateo y oeta, Adán y nada.",
+    "elementos": "El símbolo del cobre, Cu, viene del latín cyprium: «de Chipre», la isla de donde los romanos sacaban gran parte de su cobre.",
+    "prismaluz": "Isaac Newton fue el primero en demostrar con un prisma que la luz blanca es la suma de todos los colores, y que un segundo prisma puede volver a juntarlos.",
+    "papel": "Durante años se dijo que un papel no podía doblarse por la mitad más de 7 veces. En 2002, la estudiante Britney Gallivan lo dobló 12 veces, usando un rollo de papel de más de 1 km de largo.",
+    "frutas": "En botánica, un fruto es lo que se forma a partir de la flor y contiene las semillas. Por eso el tomate, el pepino y la berenjena son frutos, y el plátano es técnicamente una baya.",
+    "tabla": "El oxígeno es el elemento más abundante de la corteza terrestre: casi la mitad de su masa. Está en las rocas, sobre todo combinado con silicio.",
+    "sos": "La creencia popular dice que SOS significa «Save Our Souls» (salvad nuestras almas). Sin embargo, no significa nada: se eligió en 1906 porque en morse (· · · − − − · · ·) es fácil de enviar e imposible de confundir. El Titanic fue uno de los primeros barcos en usarlo.",
     "cesar": "El cifrado César se sigue usando como chiste: en internet se usa ROT13 (mover 13 letras) para ocultar spoilers. Como el abecedario inglés tiene 26 letras, aplicarlo dos veces devuelve el texto original.",
     "bombillas": "El primer «bug» informático fue un bicho de verdad: en 1947, el equipo de Grace Hopper encontró una polilla atascada en un relé del Harvard Mark II y la pegó en el cuaderno de registro.",
-    "afinar": "Los afinadores de piano escuchan los «batidos»: el vaivén que se oye cuando dos notas casi iguales suenan juntas. Cuanto más lento es el vaivén, más cerca están.",
-    "braille": "El braille nació de la «escritura nocturna» que Charles Barbier inventó para que los soldados de Napoleón leyeran órdenes a oscuras. Louis Braille la simplificó con solo 15 años.",
+    "sintonia": "El «efecto Mozart», la idea de que escuchar a Mozart te hace más listo, nació de un estudio de 1993 con un efecto mínimo y pasajero. Estudios posteriores no lo han confirmado.",
     "agujas": "Las agujas de un reloj se superponen 22 veces al día, no 24: entre las 11 y la 1 solo coinciden una vez, a las 12.",
-    "cantar": "Solo 1 de cada 10.000 personas tiene oído absoluto, pero entre quienes hablan lenguas tonales desde niños, como el mandarín, es muchísimo más frecuente.",
-    "t9": "Los SMS tienen 160 caracteres porque, en 1985, Friedhelm Hillebrand tecleó frases y postales en su máquina de escribir y comprobó que casi todo lo importante cabía en ese espacio.",
+    "himno": "Beethoven estaba prácticamente sordo cuando compuso la Novena Sinfonía. En el estreno, en 1824, tuvieron que girarlo hacia el público para que viera los aplausos.",
+    "huellas": "Las huellas de los astronautas siguen intactas en la Luna: allí no hay viento ni lluvia que las borre. Podrían durar millones de años.",
     "theremin": "El theremín, inventado en 1920, se toca sin tocarlo: las manos alteran un campo eléctrico. Su inventor, Léon Theremin, se lo enseñó a Lenin en 1922, que llegó a tocar una pieza de Glinka.",
+    "fibonacci": "Fibonacci planteó el problema de los conejos en 1202. La misma serie aparece en las espirales de las piñas y de los girasoles.",
+    "notacolor": "Algunas personas con sinestesia ven colores al oír música. Se calcula que alrededor de un 4 % de la población tiene algún tipo de sinestesia.",
+    "cumplealreves": "«Cumpleaños feliz» procede de «Good Morning to All», una canción infantil de 1893. Sus derechos se pagaron en los tribunales hasta 2016, cuando pasó al dominio público.",
+    "mirilla": "Las mirillas de las puertas usan una lente de «ojo de pez», que permite ver casi 180 grados desde dentro… y casi nada desde fuera.",
     "shakespeare": "Cervantes y Shakespeare no murieron el mismo día: Inglaterra aún usaba el calendario juliano. El «23 de abril» de Shakespeare fue el 3 de mayo en el calendario de Cervantes, que en realidad murió el 22 y fue enterrado el 23.",
     "cumple": "Con 23 personas hay más de un 50 % de probabilidades de que dos cumplan años el mismo día. Con 70, más del 99,9 %.",
+    "firma": "Bach firmó con su nombre en notas: en la notación alemana, B-A-C-H es si bemol, la, do, si. Más de 400 obras de otros compositores usan ese motivo como homenaje.",
     "mirasidi": "Esta serie, «mira y di», la estudió John Conway: cada término es aproximadamente un 30 % más largo que el anterior, según una constante que tiene su nombre.",
-    "cajafuerte": "Durante años, el código para lanzar los misiles nucleares Minuteman de Estados Unidos fue, según un exoficial de lanzamiento, 00000000. Así no se perdía tiempo en caso de ataque.",
+    "faro": "Cada faro tiene su propio ritmo de destellos, como una huella dactilar, para que los marinos sepan cuál están viendo. Ese ritmo aparece en las cartas náuticas.",
     "bravo": "La ovación más larga registrada duró 80 minutos: fue para Plácido Domingo en la Ópera de Viena en 1991, con 101 salidas a saludar."
   };
   // La historia: lo que pasa al superar cada nivel
@@ -162,7 +244,9 @@ const Comun = (() => {
   // Comentarios de los personajes al pedir la primera pista
   const BURLAS = {};
   // Respuestas de cada reto (guardadas como huella, no en claro)
-  const RESPUESTAS = {"cuentaatras": [5859364, 2087386359], "brujula": [187763717], "eco": [2087777041], "viernes13": [985092821], "silencio": [1429953438], "ambulancia": [2214441750], "yensid": [952350759, 1126390473], "hal": [193418371], "segundo": [3820287982], "diapason": [5861000], "dados": [5859362], "unos": [746460316], "berlin": [5859367, 2085884967], "cuadrados": [5859360], "gregoriano": [5859361, 3319905752], "escape": [193359095], "sos": [193433706], "cesar": [2087589023], "bombillas": [5859203], "braille": [194663892], "agujas": [5859303], "t9": [2087952001], "shakespeare": [5859365, 2087898114], "cumple": [5859396], "mirasidi": [3861827527], "cajafuerte": [193355920]};
+  const RESPUESTAS = {"cremallera": [193435772], "ambulancia": [2214441750], "escape": [193359095], "segundo": [3820287982], "gregoriano": [5859361, 3319905752], "t9": [2087952001], "braille": [194663892], "cajafuerte": [193355920], "cuentaatras": [5859364, 2087386359], "brujula": [187763717], "eco": [2087777041], "cementerio": [1128788970, 3325922795, 3430751799, 3796595045, 3940374379], "saturno": [1743537, 177920610, 472467666, 2087555543], "silencio": [1429953438], "yensid": [952350759, 1126390473], "hal": [193418371], "semana": [2415620861], "carbono": [177606, 3505470137], "diapason": [5861000], "dados": [5859362], "unos": [746460316], "berlin": [5859367, 2085884967], "cuadrados": [5859360], "balanzas": [177555, 2088334857], "alreves": [2088305204], "elementos": [2087777072], "papel": [5859366, 2087388328], "tabla": [177610, 427447032], "sos": [193433706], "cesar": [2087589023], "bombillas": [5859203], "sintonia": [1466999994], "agujas": [5859303], "himno": [2364319273], "huellas": [2085891426], "fibonacci": [5859367, 182277280], "notacolor": [190044133], "cumplealreves": [3621669204], "mirilla": [5859428, 1290554165], "shakespeare": [5859365, 2087898114], "cumple": [5859396], "firma": [2087732461], "mirasidi": [3861827527], "faro": [5861404]};
+  // Cómo se responde cada reto: [respuesta, formato del candado o null para fichas]
+  const FICHAS = {"segundo": ["235960", "##:##:##"], "gregoriano": ["15", "##"], "shakespeare": ["11", "##"], "berlin": ["1300", "##:##"], "escape": ["112", "##,#"], "unos": ["12345678987654321", null], "yensid": ["DISNEY", null], "hal": ["IBM", null], "ambulancia": ["AMBULANCIA", null], "sos": ["SOS", null], "silencio": ["LATIDO", null], "diapason": ["LA", null], "cesar": ["FARO", null], "braille": ["RADIO", null], "t9": ["TAXI", null], "bombillas": ["42", "##"], "dados": ["16", "##"], "cumple": ["23", "##"], "mirasidi": ["312211", "######"], "agujas": ["75", "##"], "cajafuerte": ["647", "###"], "cuadrados": ["14", "##"], "brujula": ["POLAR", null], "eco": ["CUAC", null], "cuentaatras": ["10", "##"], "cremallera": ["YKK", null], "saturno": ["HIELO", null], "cementerio": ["DORMITORIO", null], "semana": ["MERCURIO", null], "papel": ["12", "##"], "carbono": ["CARBONO", null], "firma": ["BACH", null], "sintonia": ["MOZART", null], "himno": ["BEETHOVEN", null], "balanzas": ["6", "#"], "huellas": ["1969", "####"], "fibonacci": ["13", "##"], "alreves": ["ROMA", null], "elementos": ["CUBA", null], "notacolor": ["VERDE", null], "cumplealreves": ["CUMPLEAÑOS", null], "faro": ["PI", null], "mirilla": ["32", "##"], "tabla": ["O", null]};
   const huella = s => { let x = 5381; for (const ch of s) x = (Math.imul(x, 33) ^ ch.charCodeAt(0)) >>> 0; return x; };
   const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "tomorrow": "manana", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
 
@@ -174,6 +258,8 @@ const Comun = (() => {
   const leer = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
   const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   // Listas guardadas (niveles superados y saltados)
+  const leerMapa = k => { try { const x = JSON.parse(leer(k, "{}")); return x && typeof x === "object" ? x : {}; } catch (e) { return {}; } };
+  let pistasUsadas = 0;
   const leerLista = k => { const v = leer(k, ""); if (!v) return []; try { const x = JSON.parse(v); return Array.isArray(x) ? x : []; } catch (e) { return String(v).split(",").filter(Boolean); } };
   const guardarLista = (k, l) => guardar(k, JSON.stringify(l));
   const idioma = leer("idioma", "es");
@@ -221,6 +307,12 @@ const Comun = (() => {
       Object.defineProperty(c, "destination", { value: salida, configurable: true, writable: true });
     } catch (e) { salida = null; }
   }
+  // Al salir del nivel: micrófono, sensores y audio en reposo para ahorrar batería
+  let flujoPropio = null;
+  addEventListener("pagehide", () => {
+    if (flujoPropio) { flujoPropio.getTracks().forEach(t => t.stop()); flujoPropio = null; }
+    if (marco) { try { marco.cerrarMicro && marco.cerrarMicro(); marco.pararSensores && marco.pararSensores(); marco.dormirAudio && marco.dormirAudio(); } catch (e) {} }
+  });
   addEventListener("pagehide", () => {
     if (!salida) return;
     try {
@@ -277,6 +369,8 @@ const Comun = (() => {
   function superado(url, saltado = false) {
     url = (NIVELES[indice + 1] || "fin") + ".html";
     if (pasando) return; pasando = true;
+    if (flujoPropio) { flujoPropio.getTracks().forEach(t => t.stop()); flujoPropio = null; }
+    if (marco) { try { marco.cerrarMicro && marco.cerrarMicro(); marco.pararSensores && marco.pararSensores(); } catch (e) {} }
     if (indice >= 0) {
       const clave = saltado ? "saltados" : "superados", lista = leerLista(clave);
       if (!lista.includes(archivo)) { lista.push(archivo); guardarLista(clave, lista); }
@@ -287,10 +381,14 @@ const Comun = (() => {
     const frase = ELOGIOS[archivo] || "";
     const codigo = nSig >= 0 ? `<span class="sup-codigo">Código del reto ${nSig + 1}: <b>${CODIGOS[siguiente]}</b></span>` : "";
     const luz = Math.round((indice + 1) / NIVELES.length * 100);
+    const est = saltado ? 0 : 3 - Math.min(2, pistasUsadas), mapaE = leerMapa("estrellas");
+    if (!saltado && (mapaE[archivo] || 0) < est) { mapaE[archivo] = est; guardar("estrellas", JSON.stringify(mapaE)); }
+    const descubiertas = new Set([...leerLista("superados"), ...leerLista("saltados"), archivo]).size;
     document.body.insertAdjacentHTML("beforeend", `
       <div class="superado" role="status">
         <span class="sup-nivel">Reto ${indice + 1} ${saltado ? "saltado" : "superado"}</span>
-        <span class="sup-curio">¿Sabías que…?</span>
+        ${saltado ? "" : `<div class="sup-estrellas" aria-label="${est} estrellas">${[1, 2, 3].map(k => `<span class="${k <= est ? "on" : ""}" style="animation-delay:${.25 + k * .22}s">★</span>`).join("")}</div>`}
+        <span class="sup-curio">¿Sabías que…? · ${descubiertas} de ${NIVELES.length}</span>
         <p class="relato">${CURIOSIDADES[archivo] || ""}</p>
         ${saltado ? "" : `<p class="elogio">${frase}</p>`}
         <div class="luz-tilin"><span class="lt-txt">Progreso</span><div class="lt-barra"><span style="width:${luz}%"></span></div><span class="lt-num">${luz} %</span></div>
@@ -302,6 +400,21 @@ const Comun = (() => {
     // Apagar los sonidos del nivel (la radio, los zumbidos…) poco después de la melodía de victoria
     if (salida) { const c = audio(); salida.gain.setTargetAtTime(0, c.currentTime + 1.2, .25); }
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("visible")));
+    if (!saltado) { confeti(); for (let k = 1; k <= est; k++) tono(660 + k * 220, .25 + k * .22, .35, .1, "sine"); }
+  }
+
+  // Lluvia de confeti al superar un reto
+  function confeti() {
+    const cv = document.createElement("canvas"); cv.className = "confeti-cv"; document.body.appendChild(cv);
+    const W = cv.width = innerWidth, H = cv.height = innerHeight, x = cv.getContext("2d");
+    const COL = ["#FFD54F", "#D9A441", "#64B5F6", "#81C784", "#F3EBDD", "#FFB74D"];
+    const ps = Array.from({ length: 90 }, () => ({ x: W / 2, y: H * .35, vx: (Math.random() - .5) * 9, vy: -Math.random() * 9 - 3, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3, c: COL[Math.floor(Math.random() * COL.length)], w: 5 + Math.random() * 5 }));
+    let t = 0;
+    (function paso() {
+      x.clearRect(0, 0, W, H); t++;
+      ps.forEach(p => { p.vy += .22; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.globalAlpha = Math.max(0, 1 - t / 110); x.fillRect(-p.w / 2, -p.w / 4, p.w, p.w / 2); x.restore(); });
+      if (t < 110) requestAnimationFrame(paso); else cv.remove();
+    })();
   }
 
   const CONEJO = `<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -329,6 +442,7 @@ const Comun = (() => {
             <button class="accion corta" data-a="codigo">Ir</button>
           </div>
           <button class="accion" data-a="mapa">🗺️ Mapa</button>
+          <button class="accion" data-a="coleccion">📚 Mis curiosidades</button>
           <button class="accion" data-a="portada">🏠 Portada</button>
           <button class="cerrar">Volver al juego</button>
         </div>
@@ -348,6 +462,7 @@ const Comun = (() => {
       if (a === "idioma") { guardar("idioma", idioma === "es" ? "en" : "es"); if (marco && marco.aplicarIdioma) marco.aplicarIdioma(); location.reload(); }
       if (a === "portada") (marco || window).location.href = "index.html";
       if (a === "mapa") location.href = "mapa.html?desde=" + encodeURIComponent(archivo);
+      if (a === "coleccion") location.href = "coleccion.html?desde=" + encodeURIComponent(archivo);
       if (a === "codigo") {
         const n = irACodigo(input.value);
         if (n) location.href = n + ".html";
@@ -372,6 +487,7 @@ const Comun = (() => {
       cap.addEventListener("pointerdown", e => { e.stopPropagation(); clearTimeout(t); quitar(); });
     }
     if (indice >= 0) {
+      setTimeout(() => { const b = document.querySelector(".boton-pista"); if (b && !pasando && !pistasUsadas) b.classList.add("llamar-pista"); }, 45000);
       aparicion();
       if (archivo === "siete") { const n = document.querySelector(".numero"); n.innerHTML = '<s>13</s> 12½'; n.title = "La sombra ha cambiado el número"; }
       menu();
@@ -418,6 +534,11 @@ const Comun = (() => {
     }
     r.querySelector(".entrar").addEventListener("click", probar);
     input.addEventListener("keydown", e => { if (e.key === "Enter") probar(); });
+    // En lugar de escribir: fichas de letras o candado de ruedas
+    if (FICHAS[archivo]) {
+      r.innerHTML = `<button class="boton-responder" aria-label="Responder"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12 L20 3 M17 6 L20 9 M15 8 L17 10"/></svg><span>Responder</span></button>`;
+      r.querySelector("button").addEventListener("click", () => { audio(); abrirRespuesta(FICHAS[archivo]); });
+    }
   }
 
   // Pantalla inicial: desbloquea el audio y pide permisos con un toque
@@ -437,9 +558,9 @@ const Comun = (() => {
   // ---------- Personajes ----------
   const FIGURAS = {
     // La sombra: un espectro oscuro con orejas de conejo
-    sombra: `<svg viewBox="0 0 120 150"><defs><linearGradient id="gSom" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070E" stop-opacity=".95"/><stop offset=".75" stop-color="#0B1020" stop-opacity=".8"/><stop offset="1" stop-color="#0B1020" stop-opacity="0"/></linearGradient></defs>
+    sombra: `<svg viewBox="0 0 120 150"><defs><linearGradient id="gSom" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070E" stop-opacity=".95"/><stop offset=".75" stop-color="#16292B" stop-opacity=".8"/><stop offset="1" stop-color="#16292B" stop-opacity="0"/></linearGradient></defs>
       <path d="M44 8 C38 22 39 40 44 52 C30 58 24 72 24 88 C24 112 30 130 22 146 C34 140 40 148 48 140 C56 150 64 140 72 148 C80 140 88 148 98 144 C90 128 96 110 96 88 C96 72 90 58 76 52 C82 40 83 22 76 8 C70 20 68 34 66 48 C63 47 57 47 54 48 C52 34 50 20 44 8Z" fill="url(#gSom)"/>
-      <path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#E9A6B8"/><path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#FFF" opacity=".5"/></svg>`,
+      <path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#D9A441"/><path d="M47 72 Q52 68 57 72 Q52 75 47 72Z M63 72 Q68 68 73 72 Q68 75 63 72Z" fill="#FFF" opacity=".5"/></svg>`,
     // Don Cuervo: silueta elegante con brillo azulado
     cuervo: `<svg viewBox="0 0 140 110"><defs><linearGradient id="gCue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A3446"/><stop offset="1" stop-color="#07090D"/></linearGradient></defs>
       <path d="M14 70 C28 52 46 44 70 44 C86 44 98 38 108 30 C116 26 124 28 128 34 L138 38 L127 42 C124 52 116 58 106 62 C102 78 88 88 66 90 L52 104 L54 90 C36 88 22 82 14 70Z" fill="url(#gCue)"/>
@@ -499,6 +620,52 @@ const Comun = (() => {
     return el;
   }
 
+  function abrirRespuesta([valor, formato]) {
+    let h = document.querySelector(".hoja-resp");
+    if (h) { h.classList.add("abierta"); return; }
+    document.body.insertAdjacentHTML("beforeend", `<div class="hoja-resp" role="dialog" aria-modal="true"><div class="hoja-int"><div class="hoja-zona"></div>
+      <div class="hoja-acc">${formato ? "" : '<button class="h-borrar">Borrar</button>'}<button class="h-cerrar">Cerrar</button></div></div></div>`);
+    h = document.querySelector(".hoja-resp"); const zona = h.querySelector(".hoja-zona");
+    h.addEventListener("pointerdown", e => e.stopPropagation());
+    h.addEventListener("click", e => { if (e.target === h) h.classList.remove("abierta"); });
+    h.querySelector(".h-cerrar").addEventListener("click", () => h.classList.remove("abierta"));
+    const comprobar = txt => (RESPUESTAS[archivo] || []).includes(huella(normalizar(txt)));
+    const acierto = () => { h.classList.remove("abierta"); tono(523.25, 0, .5, .18); tono(783.99, .12, .8, .18); vibrar(40); setTimeout(() => superado(), 300); };
+    if (formato) {
+      const ruedas = [];
+      zona.innerHTML = `<div class="candado">${[...formato].map(ch => ch === "#" ? '<div class="rueda"><button class="r-arr" aria-label="Subir">▲</button><span class="r-dig">0</span><button class="r-abj" aria-label="Bajar">▼</button></div>' : `<span class="r-sep">${ch}</span>`).join("")}</div>`;
+      zona.querySelectorAll(".rueda").forEach(rd => {
+        const st = { v: 0, el: rd.querySelector(".r-dig") }; ruedas.push(st);
+        const mover = d => { st.v = (st.v + d + 10) % 10; st.el.textContent = st.v; tono(1800, 0, .03, .05, "square"); vibrar(5); if (comprobar(ruedas.map(x => x.v).join(""))) acierto(); };
+        rd.querySelector(".r-arr").addEventListener("click", () => mover(1));
+        rd.querySelector(".r-abj").addEventListener("click", () => mover(-1));
+        let y0 = null;
+        rd.addEventListener("pointerdown", e => { y0 = e.clientY; });
+        rd.addEventListener("pointermove", e => { if (y0 == null) return; const d = e.clientY - y0; if (Math.abs(d) > 24) { mover(d < 0 ? 1 : -1); y0 = e.clientY; } });
+        rd.addEventListener("pointerup", () => y0 = null);
+      });
+    } else {
+      const letras = [...valor], esNum = /^[0-9]+$/.test(valor), abc = "ABCDEFGHIJLMNOPRSTUVZ";
+      const extra = Math.min(5, Math.max(3, Math.ceil(letras.length / 2))), monton = [...letras];
+      for (let i = 0; i < extra; i++) monton.push(esNum ? String(Math.floor(Math.random() * 10)) : abc[Math.floor(Math.random() * abc.length)]);
+      monton.sort(() => Math.random() - .5);
+      zona.innerHTML = `<div class="slots">${letras.map(() => '<span class="slot"></span>').join("")}</div><div class="fichas-r">${monton.map(l => `<button class="ficha-r">${l}</button>`).join("")}</div>`;
+      const slots = [...zona.querySelectorAll(".slot")], usadas = slots.map(() => null);
+      const pintar = () => slots.forEach((s, k) => { s.textContent = usadas[k] ? usadas[k].textContent : ""; s.classList.toggle("lleno", !!usadas[k]); });
+      zona.querySelectorAll(".ficha-r").forEach(b => b.addEventListener("click", () => {
+        const k = usadas.indexOf(null); if (k < 0 || b.disabled) return;
+        usadas[k] = b; b.disabled = true; tono(700 + k * 30, 0, .06, .07, "sine"); pintar();
+        if (!usadas.includes(null)) {
+          if (comprobar(usadas.map(x => x.textContent).join(""))) acierto();
+          else { const fila = zona.querySelector(".slots"); fila.classList.remove("mal"); void fila.offsetWidth; fila.classList.add("mal"); tono(160, 0, .25, .12, "sine"); vibrar([20, 40, 20]); avisar("No es correcto"); }
+        }
+      }));
+      slots.forEach((s, k) => s.addEventListener("click", () => { if (!usadas[k]) return; usadas[k].disabled = false; usadas[k] = null; pintar(); }));
+      h.querySelector(".h-borrar").addEventListener("click", () => { usadas.forEach((b, k) => { if (b) { b.disabled = false; usadas[k] = null; } }); pintar(); });
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => h.classList.add("abierta")));
+  }
+
   // Rendirse: pasa al siguiente nivel después de confirmarlo
   function rendirse() {
     if (indice < 0) return;
@@ -551,6 +718,7 @@ const Comun = (() => {
     panel.querySelector(".me-rindo").addEventListener("click", e => { e.stopPropagation(); rendirse(); });
     function mostrar() {
       contador.textContent = `Pista ${vistas} de ${lista.length}`;
+      pistasUsadas = Math.max(pistasUsadas, vistas);
       const p = lista[vistas - 1];
       texto.textContent = typeof p === "function" ? p() : p;
       if (alMostrar) alMostrar(vistas);
@@ -575,7 +743,7 @@ const Comun = (() => {
   }
 
   async function pedirOrientacion() {
-    if (marco) return marco.MOVIMIENTO_OK;
+    if (marco) { if (marco.activarSensores) marco.activarSensores(); return marco.MOVIMIENTO_OK; }
     try {
       if (typeof DeviceOrientationEvent !== "undefined" &&
           typeof DeviceOrientationEvent.requestPermission === "function")
@@ -584,7 +752,7 @@ const Comun = (() => {
     } catch (e) { return false; }
   }
   async function pedirMovimiento() {
-    if (marco) return marco.MOVIMIENTO_OK;
+    if (marco) { if (marco.activarSensores) marco.activarSensores(); return marco.MOVIMIENTO_OK; }
     try {
       if (typeof DeviceMotionEvent !== "undefined" &&
           typeof DeviceMotionEvent.requestPermission === "function")
@@ -594,9 +762,9 @@ const Comun = (() => {
   }
   // Devuelve una función que mide el volumen (0 a ~1), o null si no hay micrófono
   async function pedirMicro() {
-    if (marco) return marco.MICRO;
+    if (marco) return marco.abrirMicro ? await marco.abrirMicro() : marco.MICRO;
     try {
-      const flujo = await navigator.mediaDevices.getUserMedia({
+      const flujo = flujoPropio = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
       });
       const c = audio();
@@ -621,9 +789,9 @@ const Comun = (() => {
   }
   // Analizador de frecuencias del micrófono (para silbidos y notas cantadas)
   async function pedirAnalizador() {
-    if (marco) return marco.ANALIZADOR || null;
+    if (marco) { if (marco.abrirMicro) await marco.abrirMicro(); return marco.ANALIZADOR || null; }
     try {
-      const flujo = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+      const flujo = flujoPropio = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
       const c = audio(), an = c.createAnalyser(); an.fftSize = 2048;
       c.createMediaStreamSource(flujo).connect(an); return an;
     } catch (e) { return null; }
@@ -645,6 +813,6 @@ const Comun = (() => {
   }
 
   return { sombra, audio, tono, vibrar, normalizar, ir, avisar, nivel, inicio, superado, pistas, t, idioma, gravedad, pedirAnalizador, frecuencia,
-           NIVELES, CODIGOS, irACodigo, leer, guardar, leerLista,
+           NIVELES, CODIGOS, irACodigo, leer, guardar, leerLista, leerMapa, CURIOSIDADES,
            pedirOrientacion, pedirMovimiento, pedirMicro };
 })();

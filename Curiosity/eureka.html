@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>¡Eureka!</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .banera { position: absolute; left: 50%; top: 46%; width: min(70vw, 300px); height: 170px; transform: translate(-50%, -50%); border: 4px solid #F3EBDD; border-top: none; border-radius: 0 0 30px 30px; overflow: hidden; }
+  .agua-e { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(100,181,246,.6); height: 50%; transition: height .8s; }
+  .marca-e { position: absolute; left: 0; right: 0; border-top: 2px dashed rgba(233,166,184,.8); }
+  .corona-dentro { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); font-size: 46px; opacity: 0; transition: opacity .3s; }
+  .coronas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 96px); display: flex; justify-content: center; gap: 14px; }
+  .coronas button { width: 84px; padding: 10px 0; border-radius: 16px; border: 1px solid rgba(243,235,221,.35); background: rgba(243,235,221,.06); color: #F3EBDD; font-family: inherit; font-size: 36px; cursor: pointer; }
+  .coronas small { display: block; font-size: 13px; }
+  .elegir { position: absolute; left: 0; right: 0; top: 66%; text-align: center; font-size: 17px; opacity: .8; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada">
+  <div class="banera"><div class="agua-e" id="agua"></div><div class="marca-e" id="marca"></div><div class="corona-dentro" id="dentro">👑</div></div>
+  <div class="elegir" id="elegir"></div>
+  <div class="coronas" id="coronas"></div>
+</main>
+<p class="pista">Las tres coronas pesan lo mismo, pero una es falsa</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Arquímedes descubrió la corona falsa mirando cuánto subía el agua.", "Toca cada corona para meterla en el agua y fíjate en la marca.", "La falsa ocupa más sitio, así que hace subir más el agua. Tócala dos veces para elegirla."]);
+  Comun.nivel("", null);
+  const SUBE = [10, 16, 10], FALSA = 1;
+  const agua = document.getElementById("agua"), dentro = document.getElementById("dentro"), elegir = document.getElementById("elegir"), cont = document.getElementById("coronas");
+  let probadas = new Set(), ultima = null, hecho = false, ocupado = false;
+  ["A", "B", "C"].forEach((n, i) => {
+    const b = document.createElement("button"); b.innerHTML = `👑<small>${n}</small>`;
+    b.addEventListener("click", () => {
+      if (hecho || ocupado) return;
+      if (ultima === i && probadas.size === 3) {
+        if (i === FALSA) { hecho = true; elegir.textContent = "¡Eureka!"; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("ariadna.html"), 1800); }
+        else { Comun.tono(160, 0, .2, .1, "sine"); Comun.avisar("Esa es de oro puro"); ultima = null; }
+        return;
+      }
+      ocupado = true; ultima = i; probadas.add(i); dentro.style.opacity = 1; agua.style.height = (50 + SUBE[i]) + "%"; Comun.tono(300, 0, .3, .1, "sine");
+      setTimeout(() => { dentro.style.opacity = 0; agua.style.height = "50%"; ocupado = false; if (probadas.size === 3) elegir.textContent = "Toca otra vez la corona falsa"; }, 1500);
+    });
+    cont.appendChild(b);
+  });
+  document.getElementById("marca").style.bottom = "60%";
+
+</script>
+</body>
+</html>

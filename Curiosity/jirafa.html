@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>La jirafa</title>
-<style>.barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(242,233,201,.15); }
-  .barra-q span { display: block; height: 100%; width: 0; background: #F2E9C9; border-radius: 3px; }
+<style>.barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(243,235,221,.15); }
+  .barra-q span { display: block; height: 100%; width: 0; background: #F3EBDD; border-radius: 3px; }
   .jirafa { position: absolute; left: 50%; top: 54%; width: min(52vw, 230px); transform: translate(-50%, -50%); }
   .jirafa svg { width: 100%; display: block; }
   .zz { opacity: 0; transition: opacity 1s; } .duerme .zz { opacity: 1; } .duerme .ojo-a { opacity: 0; } .ojo-c { opacity: 0; } .duerme .ojo-c { opacity: 1; }
 </style>
 </head>
-<body>
+<body class="tema-papel">
 
 <main class="escena entrada" id="escena">
   <div class="jirafa"><svg viewBox="0 0 200 300">
@@ -27,7 +27,7 @@
     <path d="M152 26 L150 12 M162 24 L163 10" stroke="#8A6A3A" stroke-width="4" stroke-linecap="round"/>
     <g fill="#9A6B34" opacity=".75"><circle cx="80" cy="185" r="7"/><circle cx="104" cy="178" r="8"/><circle cx="126" cy="192" r="6"/><circle cx="92" cy="200" r="5"/><circle cx="140" cy="140" r="5"/><circle cx="146" cy="105" r="5"/><circle cx="153" cy="75" r="4"/></g>
     <circle class="ojo-a" cx="170" cy="38" r="3" fill="#1A1208"/><path class="ojo-c" d="M166 38 Q170 41 174 38" stroke="#1A1208" stroke-width="2" fill="none"/>
-    <text class="zz" x="178" y="14" font-family="Georgia" font-style="italic" font-size="18" fill="#F2E9C9">z z</text>
+    <text class="zz" x="178" y="14" font-family="Georgia" font-style="italic" font-size="18" fill="#F3EBDD">z z</text>
   </svg></div>
   <div class="barra-q"><span id="barra"></span></div>
 </main>
