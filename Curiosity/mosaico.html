@@ -12,9 +12,9 @@
 <style>
   canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 
-  .mos { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(84vw, 360px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: #3E2A1A; padding: 3px; border-radius: 8px; }
+  .mos { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(84vw, 360px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; background: #3E2A1A; padding: 3px; border-radius: 8px; }
   .tesela { border: none; padding: 0; cursor: pointer; overflow: hidden; background: #E6D3A3; }
-  .tesela div { width: 300%; height: 300%; transition: transform .25s; }
+  .tesela div { width: 400%; height: 400%; transition: transform .25s; }
   .tesela svg { width: 100%; height: 100%; display: block; }
 
 </style>
@@ -37,11 +37,11 @@
     <ellipse cx="128" cy="95" rx="15" ry="45" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/><ellipse cx="172" cy="95" rx="15" ry="45" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/>
     <circle cx="150" cy="160" r="40" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/><ellipse cx="150" cy="225" rx="55" ry="35" fill="#F7F0DC" stroke="#3E2A1A" stroke-width="3"/>
     <circle cx="136" cy="152" r="5" fill="#3E2A1A"/><circle cx="164" cy="152" r="5" fill="#3E2A1A"/><path d="M144 172 L156 172 L150 179Z" fill="#8E2433"/></svg>`;
-  const mos = document.getElementById("mos"), giros = Array.from({ length: 9 }, () => 1 + Math.floor(Math.random() * 3));
+  const mos = document.getElementById("mos"), giros = Array.from({ length: 16 }, () => 1 + Math.floor(Math.random() * 3));
   let hecho = false;
   giros.forEach((g, i) => {
-    const x = i % 3, y = Math.floor(i / 3), b = document.createElement("button"); b.className = "tesela";
-    b.innerHTML = `<div style="transform: translate(${-x * 33.333}%, ${-y * 33.333}%)">${IMG}</div>`;
+    const x = i % 4, y = Math.floor(i / 4), b = document.createElement("button"); b.className = "tesela";
+    b.innerHTML = `<div style="transform: translate(${-x * 25}%, ${-y * 25}%)">${IMG}</div>`;
     b.style.transform = `rotate(${g * 90}deg)`; b.style.transition = "transform .25s";
     b.addEventListener("click", () => {
       if (hecho) return; giros[i] = (giros[i] + 1); b.style.transform = `rotate(${giros[i] * 90}deg)`; Comun.tono(600, 0, .05, .06, "square");

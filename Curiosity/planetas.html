@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Planetas</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .sistema { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(94vw, 440px); display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 6px; }
+  .planeta { width: 22%; display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; color: #F3EBDD; font-family: inherit; font-style: italic; font-size: 13px; cursor: pointer; }
+  .planeta .bola { border-radius: 50%; }
+  .planeta .n { height: 18px; font-style: normal; color: #D9A441; font-size: 15px; }
+  .planeta.mal { animation: no .35s; }
+  @keyframes no { 30% { transform: translateX(-5px); } 60% { transform: translateX(4px); } }
+  .sol-b { position: absolute; left: 50%; top: 24%; width: 70px; height: 70px; margin-left: -35px; border-radius: 50%; background: radial-gradient(circle, #FFF6CF, #FFB300); box-shadow: 0 0 40px #FFB300; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:#0E1B1C"><div class="sol-b"></div><div class="sistema" id="sistema"></div></main>
+<p class="pista">Ordena los planetas del más cercano al Sol al más lejano</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Toca los planetas empezando por el que está más cerca del Sol.", "Los cuatro primeros son pequeños y rocosos; los cuatro últimos, gigantes.", "Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano y Neptuno."]);
+  Comun.nivel("", null);
+  const P = [["Mercurio", 14, "#A1887F"], ["Venus", 20, "#FFCC80"], ["Tierra", 21, "#4FC3F7"], ["Marte", 17, "#E57373"], ["Júpiter", 44, "#D7B899"], ["Saturno", 38, "#E6D3A3"], ["Urano", 28, "#80DEEA"], ["Neptuno", 27, "#5C6BC0"]];
+  const cont = document.getElementById("sistema"); let paso = 0, hecho = false, travesura = true;
+  [5, 2, 7, 0, 4, 6, 1, 3].forEach(i => {
+    const [n, r, c] = P[i], b = document.createElement("button"); b.className = "planeta";
+    const anillo = n === "Saturno" ? `;box-shadow:0 0 0 3px #0E1B1C, 0 0 0 6px rgba(230,211,163,.6)` : "";
+    b.innerHTML = `<span class="n"></span><span class="bola" style="width:${r}px;height:${r}px;background:${c}${anillo}"></span><span>${n}</span>`;
+    b.addEventListener("click", () => {
+      if (hecho || b.querySelector(".n").textContent) return;
+      if (i === paso) { paso++; b.querySelector(".n").textContent = paso; Comun.tono(300 + paso * 60, 0, .3, .12, "sine");
+        if (paso === 4 && !travesura) {
+          travesura = true;
+          const jup = [...cont.children].find(x => x.textContent.includes("Júpiter")), r = jup.getBoundingClientRect();
+          setTimeout(() => {
+            jup.style.visibility = "hidden";
+            Comun.sombra(r.left + r.width / 2, r.top + r.height, "¡Este es enorme! Me lo llevo…", 2400);
+            setTimeout(() => { jup.style.visibility = ""; Comun.sombra(r.left + r.width / 2, r.top + r.height, "…vale, vale, toma", 1800); }, 2600);
+          }, 300);
+        }
+        if (paso === 8) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("pesoluna.html"), 1600); } }
+      else { b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal"); Comun.tono(160, 0, .2, .1, "sine"); Comun.avisar("Ese no va ahí. Vuelve a empezar");
+        paso = 0; cont.querySelectorAll(".n").forEach(x => x.textContent = ""); }
+    });
+    cont.appendChild(b);
+  });
+
+</script>
+</body>
+</html>

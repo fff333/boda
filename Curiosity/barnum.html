@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>El análisis</title>
+<style>
+  .lab { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #1F3A3A 0%, #0E1B1C 75%); color: #DDEFEA; }
+  .etapa { position: absolute; left: 0; right: 0; top: calc(env(safe-area-inset-top) + 70px); bottom: calc(env(safe-area-inset-bottom) + 30px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 0 7vw; text-align: center; overflow-y: auto; }
+  .titulo-lab { font-family: "Courier New", monospace; font-style: normal; font-size: 13px; letter-spacing: .25em; text-transform: uppercase; color: #6FE3C1; }
+  .instr { font-size: clamp(18px, 5vw, 23px); line-height: 1.35; max-width: 24ch; }
+  .huella { width: 150px; height: 180px; position: relative; border-radius: 40% 40% 45% 45%; border: 2px solid rgba(111,227,193,.35); overflow: hidden; touch-action: none; cursor: pointer; }
+  .huella svg { width: 100%; height: 100%; }
+  .barrido { position: absolute; left: 0; right: 0; height: 3px; background: #6FE3C1; box-shadow: 0 0 14px #6FE3C1; top: 0; opacity: 0; }
+  .escaneando .barrido { opacity: 1; animation: barrer 1s linear infinite; }
+  @keyframes barrer { from { top: 0; } to { top: 100%; } }
+  .barra-lab { width: 220px; height: 6px; border-radius: 3px; background: rgba(111,227,193,.15); overflow: hidden; }
+  .barra-lab span { display: block; height: 100%; width: 0; background: #6FE3C1; }
+  .colores-lab { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .colores-lab button { width: 110px; height: 70px; border-radius: 14px; border: 2px solid rgba(255,255,255,.15); cursor: pointer; }
+  .punto-lab { width: 70px; height: 70px; border-radius: 50%; background: #F2B544; border: none; box-shadow: 0 0 30px #F2B544; cursor: pointer; visibility: hidden; }
+  .datos { width: 100%; max-width: 360px; font-family: "Courier New", monospace; font-style: normal; font-size: 14px; text-align: left; }
+  .datos div { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed rgba(111,227,193,.25); opacity: 0; transform: translateY(6px); transition: all .4s; }
+  .datos div.on { opacity: 1; transform: none; }
+  .datos b { color: #6FE3C1; font-weight: normal; }
+  .perfil { max-width: 380px; text-align: left; font-size: 16px; line-height: 1.5; }
+  .perfil p { margin-bottom: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 380px; }
+  .chips span { font-family: "Courier New", monospace; font-style: normal; font-size: 12px; padding: 5px 9px; border-radius: 20px; background: rgba(111,227,193,.12); color: #6FE3C1; border: 1px solid rgba(111,227,193,.3); }
+  .nota-lab { display: flex; gap: 8px; }
+  .nota-lab button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(111,227,193,.5); background: rgba(111,227,193,.08); color: #DDEFEA; font-size: 18px; font-style: normal; cursor: pointer; }
+  .glitch { animation: glitch .6s steps(2) 3; }
+  @keyframes glitch { 25% { transform: translate(-6px, 2px) skewX(6deg); filter: hue-rotate(90deg); } 50% { transform: translate(5px, -3px); opacity: .6; } 75% { transform: translate(-3px, 1px) skewX(-4deg); } }
+  .rev { font-size: clamp(20px, 5.6vw, 26px); line-height: 1.35; max-width: 22ch; }
+  .compara { font-family: "Courier New", monospace; font-style: normal; font-size: 15px; line-height: 1.8; }
+  .compara b { color: #F2B544; font-weight: normal; }
+  .boton-lab { font: inherit; font-size: 17px; color: #0E1B1C; background: #6FE3C1; border: none; border-radius: 30px; padding: 12px 28px; cursor: pointer; }
+</style>
+</head>
+<body>
+<main class="escena lab entrada"><div class="etapa" id="etapa"></div></main>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="plantillas.js"></script>
+<script>
+  Comun.pistas(["No hay respuestas incorrectas: sigue las instrucciones del análisis.", "Lee tu perfil con calma y puntúa lo preciso que te parece.", "Cualquier puntuación vale… pero fíjate en lo que pasa después."]);
+  Comun.nivel("", null);
+  const etapa = document.getElementById("etapa"), D = {};
+  const espera = ms => new Promise(r => setTimeout(r, ms));
+  const pantalla = html => { etapa.innerHTML = html; etapa.scrollTop = 0; };
+  const pitido = (f = 880) => Comun.tono(f, 0, .08, .06, "sine");
+
+  // 1 · Huella
+  function huella() {
+    pantalla(`<span class="titulo-lab">Análisis de perfil · 1/4</span><p class="instr">Mantén el dedo sobre el sensor</p>
+      <div class="huella" id="huella"><svg viewBox="0 0 150 180">${[18, 30, 42, 54, 66].map(r => `<path d="M${75 - r} 110 Q${75 - r} ${110 - r * 1.6} 75 ${110 - r * 1.6} Q${75 + r} ${110 - r * 1.6} ${75 + r} 110 Q${75 + r} ${110 + r * .9} ${75 + r * .4} ${110 + r * 1.1}" fill="none" stroke="rgba(111,227,193,.45)" stroke-width="2.5"/>`).join("")}</svg><div class="barrido"></div></div>
+      <div class="barra-lab"><span id="pb"></span></div>`);
+    const h = document.getElementById("huella"), pb = document.getElementById("pb"); let t0 = null, fuerza = 0, raf;
+    const parar = () => { h.classList.remove("escaneando"); t0 = null; pb.style.width = "0"; cancelAnimationFrame(raf); };
+    h.addEventListener("pointerdown", e => { h.setPointerCapture(e.pointerId); t0 = performance.now(); fuerza = e.pressure || .5; h.classList.add("escaneando"); pitido();
+      (function paso() { if (t0 === null) return; const p = Math.min(1, (performance.now() - t0) / 3000); pb.style.width = (p * 100) + "%";
+        if (p >= 1) { D.presion = Math.round(55 + fuerza * 40 + Math.random() * 6); pitido(1320); Comun.vibrar(40); parar(); quieto(); } else raf = requestAnimationFrame(paso); })(); });
+    h.addEventListener("pointerup", parar); h.addEventListener("pointercancel", parar);
+  }
+  // 2 · Pulso: el móvil quieto
+  async function quieto() {
+    pantalla(`<span class="titulo-lab">Análisis de perfil · 2/4</span><p class="instr">Sujeta el móvil sin moverlo</p><div class="barra-lab"><span id="pb"></span></div>`);
+    const pb = document.getElementById("pb"); let mov = 0, n = 0, prev = null;
+    const f = e => { const g = Comun.gravedad(e); if (!g) return; if (prev) { mov += Math.hypot(g.x - prev.x, g.y - prev.y, g.z - prev.z); n++; } prev = g; };
+    if (await Comun.pedirMovimiento()) addEventListener("devicemotion", f);
+    for (let i = 1; i <= 30; i++) { await espera(100); pb.style.width = (i / 30 * 100) + "%"; }
+    removeEventListener("devicemotion", f);
+    D.estabilidad = n ? Math.max(61, Math.min(98, Math.round(100 - (mov / n) * 40))) : 88 + Math.floor(Math.random() * 8);
+    pitido(1320); color();
+  }
+  // 3 · Color
+  function color() {
+    pantalla(`<span class="titulo-lab">Análisis de perfil · 3/4</span><p class="instr">Elige el color que más te atraiga ahora mismo</p><div class="colores-lab" id="col"></div>`);
+    const C = [["azul", "#2F6FB0"], ["verde", "#2E8B6B"], ["rojo", "#B23A3A"], ["ámbar", "#D9A441"]], t0 = performance.now(), col = document.getElementById("col");
+    C.sort(() => Math.random() - .5).forEach(([n, c]) => { const b = document.createElement("button"); b.style.background = c; b.setAttribute("aria-label", n);
+      b.addEventListener("click", () => { D.color = n; D.tColor = ((performance.now() - t0) / 1000).toFixed(1); pitido(); reaccion(); }); col.appendChild(b); });
+  }
+  // 4 · Reacción
+  async function reaccion() {
+    pantalla(`<span class="titulo-lab">Análisis de perfil · 4/4</span><p class="instr">Toca el punto en cuanto aparezca</p><button class="punto-lab" id="pt" aria-label="Punto"></button>`);
+    const pt = document.getElementById("pt"); let t0 = null, listo = false;
+    etapa.onpointerdown = () => { if (!listo) Comun.avisar("Espera a que aparezca"); };
+    await espera(1200 + Math.random() * 1600); listo = true; pt.style.visibility = "visible"; t0 = performance.now();
+    pt.addEventListener("pointerdown", e => { e.stopPropagation(); D.reaccion = Math.round(performance.now() - t0); etapa.onpointerdown = null; pitido(1320); analisis(); }, { once: true });
+  }
+  // Análisis con los datos medidos
+  async function analisis() {
+    const h = new Date(), hora = h.getHours() + ":" + String(h.getMinutes()).padStart(2, "0");
+    D.momento = h.getHours() < 7 ? "de madrugada" : h.getHours() < 14 ? "por la mañana" : h.getHours() < 21 ? "por la tarde" : "por la noche";
+    const filas = [["Presión del dedo", D.presion + " %"], ["Estabilidad del pulso", D.estabilidad + " %"], ["Color elegido", D.color], ["Tiempo de decisión", D.tColor + " s"],
+      ["Tiempo de reacción", D.reaccion + " ms"], ["Hora del análisis", hora + " (" + D.momento + ")"]];
+    pantalla(`<span class="titulo-lab">Analizando tus respuestas…</span><div class="datos" id="datos">${filas.map(([a, b]) => `<div><span>${a}</span><b>${b}</b></div>`).join("")}</div><div class="barra-lab"><span id="pb"></span></div>`);
+    const fs = document.querySelectorAll("#datos div"), pb = document.getElementById("pb");
+    for (let i = 0; i < fs.length; i++) { await espera(550); fs[i].classList.add("on"); pitido(600 + i * 90); pb.style.width = ((i + 1) / fs.length * 100) + "%"; }
+    await espera(900); perfil();
+  }
+  // El perfil «personalizado»
+  function perfil() {
+    const rapido = D.reaccion < 400 ? "una mente rápida" : "una mente reflexiva";
+    pantalla(`<span class="titulo-lab">Patrones detectados</span>
+      <div class="chips"><span>Presión ${D.presion} %</span><span>Pulso ${D.estabilidad} %</span><span>${D.color}</span><span>${D.reaccion} ms</span><span>${D.momento}</span></div>
+      <div class="perfil">
+        <p>Las personas que eligen el ${D.color} ${D.momento} suelen tener una gran necesidad de que los demás las aprecien, aunque a veces les cuesta mostrarlo.</p>
+        <p>Tu tiempo de reacción revela ${rapido}, pero eres bastante crítico contigo mismo.</p>
+        <p>Tienes capacidades que todavía no has aprovechado del todo.</p>
+        <p>A veces eres extrovertido y sociable; otras, reservado y prudente.</p>
+        <p>Te gusta cierta variedad y te incomoda sentirte atado por normas y rutinas.</p>
+        <p>Te enorgulleces de pensar por ti mismo y no aceptas una idea sin buenas razones.</p>
+      </div>
+      <p class="instr" style="font-size:18px">Con estos patrones, ¿qué precisión tiene el análisis?</p>
+      <div class="nota-lab">${[1, 2, 3, 4, 5].map(n => `<button data-n="${n}">${n}</button>`).join("")}</div>`);
+    etapa.querySelectorAll(".nota-lab button").forEach(b => b.addEventListener("click", () => revelar(+b.dataset.n)));
+  }
+  // La revelación
+  async function revelar(nota) {
+    etapa.classList.add("glitch"); Comun.tono(120, 0, .5, .15, "sawtooth"); Comun.vibrar([40, 30, 80]);
+    await espera(1800); etapa.classList.remove("glitch");
+    pantalla(`<p class="rev">Este es exactamente el mismo perfil que recibe todo el mundo.</p>
+      <p class="instr" style="font-size:17px">Los datos que has visto no se han usado para nada: solo estaban ahí para que el análisis pareciera más preciso.</p>
+      <div class="compara">Tu valoración: <b>${nota} / 5</b><br>Media en el experimento original: <b>4,3 / 5</b></div>
+      <button class="boton-lab" id="fin">Ver la curiosidad</button>`);
+    document.getElementById("fin").addEventListener("click", () => Plantilla.exito());
+  }
+  Comun.inicio("Análisis de perfil", "Empezar", async () => { huella(); });
+</script>
+</body>
+</html>
