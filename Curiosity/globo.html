@@ -88,7 +88,6 @@
     setTimeout(() => Comun.superado("arcoiris.html", "III"), 1500);
   }
   globo.style.transform = "translate(-50%, -100%) scale(1)";
-  globo.addEventListener("pointerdown", () => { inflar(.12); Comun.tono(200 + tam * 120, 0, .1, .08, "sine"); });
   Comun.inicio("Un globo sin hinchar", "Empezar la fiesta", async () => {
     medir = await Comun.pedirMicro();
     (function bucle() { if (medir && medir() > .06) inflar(.012); requestAnimationFrame(bucle); })();

@@ -28,7 +28,7 @@
 <script>
 function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c = el.getContext("2d");
     const aj = () => { el.width = innerWidth * dpr; el.height = innerHeight * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); }; aj(); addEventListener("resize", aj); return c; }
-  Comun.pistas(["Las mariposas se asustan con facilidad.", "Cualquier movimiento la espanta.", "Deja el móvil completamente quieto (por ejemplo, apoyado en la mesa) durante cinco segundos."]);
+  Comun.pistas(["Las mariposas se asustan con facilidad.", "Cualquier movimiento la espanta.", "Deja el móvil completamente quieto (por ejemplo, apoyado en la mesa) durante unos nueve segundos."]);
   Comun.nivel("", null);
   const ctx = lienzoCompleto(document.getElementById("l")), barra = document.getElementById("barra"), sub = document.getElementById("sub");
   let p = 0, movido = 0, sensor = false, dedo = null, hecho = false, ultimo = performance.now(), t0 = performance.now(), prev = null;
@@ -49,7 +49,7 @@ function lienzoCompleto(el) { const dpr = Math.min(devicePixelRatio || 1, 2), c 
     const dt = Math.min(ahora - ultimo, 50); ultimo = ahora;
     if (!hecho) {
       const quieto = sensor ? movido < .35 : dedo !== null;
-      if (quieto) p = Math.min(1, p + dt / 5000);
+      if (quieto) p = Math.min(1, p + dt / 9000);
       else { if (p > .1) Comun.tono(1200, 0, .05, .04, "sine"); p = Math.max(0, p - dt / 400); }
       if (p >= 1) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("diente.html"), 1800); }
     }

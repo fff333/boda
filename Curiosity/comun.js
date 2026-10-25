@@ -1,7 +1,7 @@
 // Utilidades compartidas por todos los niveles
 const Comun = (() => {
   // Orden de los niveles (cada uno es un archivo .html) y su código para volver a él
-  const NIVELES = ["arcoiris", "cronometro", "stroop", "cremallera", "globo", "eclipse", "calendario", "ambulancia", "escape", "estatua", "segundo", "laberinto", "maracas", "silbido", "circulo", "pulso", "gregoriano", "t9", "braille", "cajafuerte", "cuentaatras", "pleyades", "vela", "dormir", "vaso", "betelgeuse", "arena", "tumbado", "diente", "planetas", "pez", "pera", "trebol", "hora", "brujula", "barnum", "eco", "jirafa", "cementerio", "montyhall", "vuelta", "iman", "saturno", "silencio", "escondite", "bocabajo", "astronauta", "gigantes", "yensid", "cafe", "salto", "hal", "giro", "telescopio", "australia", "sirio", "escarabajo", "mosaico", "copas", "estrellita", "semana", "carbono", "polar", "diapason", "gallina", "dados", "toctoc", "ventana", "lengua", "unos", "canica", "pesoluna", "berlin", "pitagoras", "piramide", "memoria", "eureka", "cuadrados", "ariadna", "acueducto", "romano", "director", "deoido", "balanzas", "alreves", "prismaluz", "papel", "frutas", "tabla", "sos", "cesar", "bombillas", "sintonia", "agujas", "himno", "huellas", "theremin", "fibonacci", "notacolor", "cumplealreves", "mirilla", "shakespeare", "cumple", "firma", "mirasidi", "faro", "bravo"];
+  const NIVELES = ["arcoiris", "cronometro", "stroop", "cremallera", "pulso", "globo", "eclipse", "calendario", "ambulancia", "escape", "estatua", "segundo", "laberinto", "maracas", "silbido", "circulo", "gregoriano", "t9", "braille", "cajafuerte", "cuentaatras", "pleyades", "vela", "dormir", "vaso", "betelgeuse", "arena", "tumbado", "diente", "planetas", "pez", "pera", "trebol", "hora", "brujula", "barnum", "eco", "jirafa", "cementerio", "montyhall", "vuelta", "iman", "saturno", "silencio", "escondite", "bocabajo", "astronauta", "gigantes", "yensid", "cafe", "salto", "hal", "giro", "telescopio", "australia", "sirio", "escarabajo", "mosaico", "copas", "estrellita", "semana", "carbono", "polar", "diapason", "gallina", "dados", "toctoc", "ventana", "lengua", "unos", "canica", "pesoluna", "berlin", "pitagoras", "piramide", "memoria", "eureka", "cuadrados", "ariadna", "acueducto", "romano", "director", "deoido", "balanzas", "alreves", "prismaluz", "papel", "frutas", "tabla", "sos", "cesar", "bombillas", "sintonia", "agujas", "himno", "huellas", "theremin", "fibonacci", "notacolor", "cumplealreves", "mirilla", "shakespeare", "cumple", "firma", "mirasidi", "faro", "bravo"];
   const CODIGOS = {"arcoiris": "HWGQ", "cronometro": "496R", "stroop": "AFHU", "cremallera": "G6A9", "globo": "WP3S", "eclipse": "YY2E", "calendario": "XFUU", "ambulancia": "7KVB", "escape": "ZZ75", "estatua": "F39H", "segundo": "593S", "laberinto": "48BQ", "maracas": "JDG5", "silbido": "8K8Q", "circulo": "H78S", "pulso": "3V83", "gregoriano": "5NUT", "t9": "ACK7", "braille": "9ZNS", "cajafuerte": "9795", "cuentaatras": "CUW7", "pleyades": "G6S6", "vela": "M58E", "dormir": "T9ZG", "vaso": "N4K6", "betelgeuse": "AFA6", "arena": "FNRH", "tumbado": "CTYK", "diente": "AW9J", "planetas": "Q8JU", "pez": "F4LJ", "pera": "V42K", "trebol": "N2AG", "hora": "2EDY", "brujula": "YBB8", "barnum": "SWNR", "eco": "WV6W", "jirafa": "H97L", "cementerio": "KP5X", "montyhall": "7QE3", "vuelta": "CNMC", "iman": "D6N8", "saturno": "BJPJ", "silencio": "LM2T", "escondite": "54F2", "bocabajo": "VMYM", "astronauta": "S794", "gigantes": "U7MW", "yensid": "86HT", "cafe": "GPQA", "salto": "F7X4", "hal": "MBYL", "giro": "YPHT", "telescopio": "PUTJ", "australia": "GSG5", "sirio": "LGDY", "escarabajo": "MGWT", "mosaico": "EUWL", "copas": "SSEA", "estrellita": "4S4A", "semana": "DGRB", "carbono": "VHGY", "polar": "W7C3", "diapason": "WP75", "gallina": "HZS2", "dados": "UYD5", "toctoc": "BUXU", "ventana": "HV4W", "lengua": "BXND", "unos": "HLHH", "canica": "CJYV", "pesoluna": "B5JY", "berlin": "422R", "pitagoras": "4QJM", "piramide": "B3SK", "memoria": "QBBT", "eureka": "84SW", "cuadrados": "JFMC", "ariadna": "SXWD", "acueducto": "AR8D", "romano": "QK3Z", "director": "QTXN", "deoido": "ZY77", "balanzas": "8VNL", "alreves": "4K9A", "prismaluz": "Y4CM", "papel": "FVZS", "frutas": "JGBP", "tabla": "VC32", "sos": "LGFK", "cesar": "2XSV", "bombillas": "CNLU", "sintonia": "UUYJ", "agujas": "2NA8", "himno": "5YLB", "huellas": "MWKL", "theremin": "BHAZ", "fibonacci": "EZVP", "notacolor": "KRJG", "cumplealreves": "W9GE", "mirilla": "2SVH", "shakespeare": "Y89H", "cumple": "RY7Y", "firma": "FEF9", "mirasidi": "VSQL", "faro": "W5XW", "bravo": "93WM"};
   const ELOGIOS = {
     "arcoiris": "Bien visto.",
@@ -234,7 +234,7 @@ const Comun = (() => {
   // Respuestas de cada reto (guardadas como huella, no en claro)
   const RESPUESTAS = {"cremallera": [193435772], "ambulancia": [2214441750], "escape": [193359095], "segundo": [3820287982], "gregoriano": [5859361, 3319905752], "t9": [2087952001], "braille": [194663892], "cajafuerte": [193355920], "cuentaatras": [5859364, 2087386359], "brujula": [187763717], "eco": [2087777041], "cementerio": [1128788970, 3325922795, 3430751799, 3796595045, 3940374379], "saturno": [1743537, 177920610, 472467666, 2087555543], "silencio": [1429953438], "yensid": [952350759, 1126390473], "hal": [193418371], "semana": [2415620861], "carbono": [177606, 3505470137], "diapason": [5861000], "dados": [5859362], "unos": [746460316], "berlin": [5859367, 2085884967], "cuadrados": [5859360], "balanzas": [177555, 2088334857], "alreves": [2087551747], "papel": [5859366, 2087388328], "tabla": [177610, 427447032], "sos": [193433706], "cesar": [2087589023], "bombillas": [5859203], "sintonia": [1466999994], "agujas": [5859303], "himno": [2364319273], "huellas": [2085891426], "fibonacci": [5859367, 182277280], "notacolor": [190044133], "cumplealreves": [3621669204], "mirilla": [5859428, 1290554165], "shakespeare": [5859365, 2087898114], "cumple": [5859396], "firma": [2087732461], "mirasidi": [3861827527], "faro": [5861404]};
   // Cómo se responde cada reto: [respuesta, formato del candado o null para fichas]
-  const FICHAS = {"segundo": ["235960", "##:##:##"], "gregoriano": ["15", "##"], "shakespeare": ["11", "##"], "berlin": ["1300", "##:##"], "escape": ["112", "##,#"], "unos": ["12345678987654321", null], "yensid": ["DISNEY", null], "hal": ["IBM", null], "ambulancia": ["AMBULANCIA", null], "sos": ["SOS", null], "silencio": ["LATIDO", null], "diapason": ["LA", null], "cesar": ["FARO", null], "braille": ["RADIO", null], "t9": ["TAXI", null], "bombillas": ["42", "##"], "dados": ["16", "##"], "cumple": ["23", "##"], "mirasidi": ["312211", "######"], "agujas": ["75", "##"], "cajafuerte": ["647", "###"], "cuadrados": ["14", "##"], "brujula": ["POLAR", null], "eco": ["CUAC", null], "cuentaatras": ["10", "##"], "cremallera": ["YKK", null], "saturno": ["HIELO", null], "cementerio": ["DORMITORIO", null], "semana": ["MERCURIO", null], "papel": ["12", "##"], "carbono": ["CARBONO", null], "firma": ["BACH", null], "sintonia": ["MOZART", null], "himno": ["BEETHOVEN", null], "balanzas": ["6", "#"], "huellas": ["1969", "####"], "fibonacci": ["13", "##"], "alreves": ["ABAD", null], "notacolor": ["VERDE", null], "cumplealreves": ["CUMPLEAÑOS", null], "faro": ["PI", null], "mirilla": ["32", "##"], "tabla": ["O", null]};
+  const FICHAS = {"segundo": ["235960", "##:##:##"], "gregoriano": ["15", "##"], "shakespeare": ["11", "##"], "berlin": ["1300", "##:##"], "escape": ["112", "##,#"], "unos": ["12345678987654321", null], "yensid": ["DISNEY", null], "hal": ["IBM", null], "ambulancia": ["AMBULANCIA", null], "sos": ["SOS", null], "silencio": ["LATIDO", null], "diapason": ["LA", null], "cesar": ["FARO", null], "braille": ["RADIO", null], "t9": ["TAXI", null], "bombillas": ["42", "##"], "dados": ["16", "##"], "cumple": ["23", "##"], "agujas": ["75", "##"], "cajafuerte": ["647", "###"], "cuadrados": ["14", "##"], "brujula": ["POLAR", null], "eco": ["CUAC", null], "cuentaatras": ["10", "##"], "cremallera": ["YKK", null], "saturno": ["HIELO", null], "cementerio": ["DORMITORIO", null], "semana": ["MERCURIO", null], "papel": ["12", "##"], "carbono": ["CARBONO", null], "firma": ["BACH", null], "sintonia": ["MOZART", null], "himno": ["BEETHOVEN", null], "balanzas": ["6", "#"], "huellas": ["1969", "####"], "fibonacci": ["13", "##"], "alreves": ["ABAD", null], "notacolor": ["VERDE", null], "cumplealreves": ["CUMPLEAÑOS", null], "faro": ["PI", null], "mirilla": ["32", "##"], "tabla": ["O", null]};
   const huella = s => { let x = 5381; for (const ch of s) x = (Math.imul(x, 33) ^ ch.charCodeAt(0)) >>> 0; return x; };
   const ALIAS = { en: {"burrow": "madriguera", "hole": "agujero", "echo": "eco", "clock": "reloj", "compass": "brujula", "polaris": "polar", "northstar": "polar", "silence": "silencio", "seven": "siete", "rabbit": "conejo", "bunny": "conejo", "whiterabbit": "conejo", "five": "cinco", "sun": "sol", "pear": "pera", "clover": "trebol", "moon": "luna", "future": "futuro", "tomorrow": "manana", "lighthouse": "faro", "rome": "roma", "a": "la", "green": "verde", "birthday": "cumpleanos", "happybirthday": "cumpleanos", "octave": "octava", "violin": "violin", "rome": "roma", "copper": "cuba", "eight": "octava", "love": "amor"} };
 
@@ -299,7 +299,7 @@ const Comun = (() => {
   let flujoPropio = null;
   addEventListener("pagehide", () => {
     if (flujoPropio) { flujoPropio.getTracks().forEach(t => t.stop()); flujoPropio = null; }
-    if (marco) { try { marco.cerrarMicro && marco.cerrarMicro(); marco.pararSensores && marco.pararSensores(); marco.dormirAudio && marco.dormirAudio(); } catch (e) {} }
+    if (marco) { try { marco.cerrarMicro && marco.cerrarMicro(); marco.pararSensores && marco.pararSensores(); } catch (e) {} }
   });
   addEventListener("pagehide", () => {
     if (!salida) return;
@@ -367,7 +367,7 @@ const Comun = (() => {
     const siguiente = url.replace(/\.html$/, "");
     const nSig = NIVELES.indexOf(siguiente);
     const frase = ELOGIOS[archivo] || "";
-    const codigo = nSig >= 0 ? `<span class="sup-codigo">Código del reto ${nSig + 1}: <b>${CODIGOS[siguiente]}</b></span>` : "";
+    const codigo = "";
     const luz = Math.round((indice + 1) / NIVELES.length * 100);
     const est = saltado ? 0 : 3 - Math.min(2, pistasUsadas), mapaE = leerMapa("estrellas");
     if (!saltado && (mapaE[archivo] || 0) < est) { mapaE[archivo] = est; guardar("estrellas", JSON.stringify(mapaE)); }
@@ -421,14 +421,9 @@ const Comun = (() => {
       <button class="boton-menu" aria-label="Menú">☰</button>
       <div class="panel-menu" role="dialog" aria-modal="true" aria-label="Menú">
         <div class="tarjeta">
-          <span class="contador">Nivel ${indice + 1}</span>
-          <p class="mi-codigo">Código de este reto: <b>${CODIGOS[archivo] || "—"}</b></p>
+          <span class="contador">Reto ${indice + 1}</span>
           ${anterior ? `<button class="accion" data-a="atras">← Reto anterior</button>` : ""}
           <button class="accion" data-a="rendirse">🏳️ Me rindo, pasar de reto</button>
-          <div class="fila-codigo">
-            <input type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Código" aria-label="Código de nivel">
-            <button class="accion corta" data-a="codigo">Ir</button>
-          </div>
           <button class="accion" data-a="mapa">🗺️ Mapa</button>
           <button class="accion" data-a="coleccion">📚 Mis curiosidades</button>
           <button class="accion" data-a="portada">🏠 Portada</button>
@@ -437,7 +432,6 @@ const Comun = (() => {
       </div>`);
     const boton = document.querySelector(".boton-menu"), panel = document.querySelector(".panel-menu");
     [boton, panel].forEach(el => el.addEventListener("pointerdown", e => e.stopPropagation()));
-    const input = panel.querySelector("input");
     boton.addEventListener("click", e => { e.stopPropagation(); audio(); panel.classList.add("abierto"); });
     const cerrar = () => panel.classList.remove("abierto");
     panel.querySelector(".cerrar").addEventListener("click", cerrar);
@@ -451,13 +445,7 @@ const Comun = (() => {
       if (a === "portada") (marco || window).location.href = "index.html";
       if (a === "mapa") location.href = "mapa.html?desde=" + encodeURIComponent(archivo);
       if (a === "coleccion") location.href = "coleccion.html?desde=" + encodeURIComponent(archivo);
-      if (a === "codigo") {
-        const n = irACodigo(input.value);
-        if (n) location.href = n + ".html";
-        else { input.value = ""; input.placeholder = t("Código no válido"); tono(150, 0, .25, .12, "sine"); }
-      }
     }));
-    input.addEventListener("keydown", e => { if (e.key === "Enter") panel.querySelector('[data-a="codigo"]').click(); });
   }
 
   // Monta el número de nivel, el menú y la barra donde se escribe la palabra.
@@ -612,7 +600,7 @@ const Comun = (() => {
     let h = document.querySelector(".hoja-resp");
     if (h) { h.classList.add("abierta"); return; }
     document.body.insertAdjacentHTML("beforeend", `<div class="hoja-resp" role="dialog" aria-modal="true"><div class="hoja-int"><div class="hoja-zona"></div>
-      <div class="hoja-acc">${formato ? "" : '<button class="h-borrar">Borrar</button>'}<button class="h-cerrar">Cerrar</button></div></div></div>`);
+      <div class="hoja-acc">${formato ? '<button class="h-comprobar">Comprobar</button>' : '<button class="h-borrar">Borrar</button>'}<button class="h-cerrar">Cerrar</button></div></div></div>`);
     h = document.querySelector(".hoja-resp"); const zona = h.querySelector(".hoja-zona");
     h.addEventListener("pointerdown", e => e.stopPropagation());
     h.addEventListener("click", e => { if (e.target === h) h.classList.remove("abierta"); });
@@ -624,13 +612,21 @@ const Comun = (() => {
       zona.innerHTML = `<div class="candado">${[...formato].map(ch => ch === "#" ? '<div class="rueda"><button class="r-arr" aria-label="Subir">▲</button><span class="r-dig">0</span><button class="r-abj" aria-label="Bajar">▼</button></div>' : `<span class="r-sep">${ch}</span>`).join("")}</div>`;
       zona.querySelectorAll(".rueda").forEach(rd => {
         const st = { v: 0, el: rd.querySelector(".r-dig") }; ruedas.push(st);
-        const mover = d => { st.v = (st.v + d + 10) % 10; st.el.textContent = st.v; tono(1800, 0, .03, .05, "square"); vibrar(5); if (comprobar(ruedas.map(x => x.v).join(""))) acierto(); };
+        const mover = d => { st.v = (st.v + d + 10) % 10; st.el.textContent = st.v; tono(1800, 0, .03, .05, "square"); vibrar(5); };
         rd.querySelector(".r-arr").addEventListener("click", () => mover(1));
         rd.querySelector(".r-abj").addEventListener("click", () => mover(-1));
         let y0 = null;
         rd.addEventListener("pointerdown", e => { y0 = e.clientY; });
         rd.addEventListener("pointermove", e => { if (y0 == null) return; const d = e.clientY - y0; if (Math.abs(d) > 24) { mover(d < 0 ? 1 : -1); y0 = e.clientY; } });
         rd.addEventListener("pointerup", () => y0 = null);
+      });
+      // Comprobar al pulsar el botón; si no es correcto, indica si hay que subir o bajar
+      h.querySelector(".h-comprobar").addEventListener("click", () => {
+        const intento = ruedas.map(x => x.v).join("");
+        if (comprobar(intento)) { acierto(); return; }
+        const cand = zona.querySelector(".candado"); cand.classList.remove("mal"); void cand.offsetWidth; cand.classList.add("mal");
+        tono(160, 0, .25, .12, "sine"); vibrar([20, 40, 20]);
+        avisar(archivo === "cajafuerte" ? "No es la combinación" : (Number(intento) < Number(valor) ? "Más ↑" : "Menos ↓"));
       });
     } else {
       const letras = [...valor], esNum = /^[0-9]+$/.test(valor), abc = "ABCDEFGHIJLMNOPRSTUVZ";

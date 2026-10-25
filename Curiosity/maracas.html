@@ -42,8 +42,8 @@ function mismoRitmo(a, b) { if (a.length !== b.length) return false; const da = 
   let golpes = [], sensor = false, ultimo = 0, hecho = false, sonando = false, prev = null;
   function chas(cuando = 0) {
     const c = Comun.audio(); if (!c) return; const t = c.currentTime + cuando;
-    const b = c.createBuffer(1, c.sampleRate * .08, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
-    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); f.type = "highpass"; f.frequency.value = 3000; g.gain.value = .5;
+    const b = c.createBuffer(1, c.sampleRate * .14, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); f.type = "bandpass"; f.frequency.value = 4500; f.Q.value = .7; g.gain.value = 1.4;
     s.buffer = b; s.connect(f).connect(g).connect(c.destination); s.start(t);
   }
   document.getElementById("escuchar").addEventListener("click", () => {

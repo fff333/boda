@@ -153,6 +153,7 @@
   window.dormirAudio = () => { if (window.AUDIO && window.AUDIO.state === "running") window.AUDIO.suspend(); };
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") { window.cerrarMicro(); window.pararSensores(); window.dormirAudio(); }
+    else if (window.AUDIO && window.AUDIO.state === "suspended") window.AUDIO.resume();
   });
 
   // Copiar el título del nivel a la pestaña

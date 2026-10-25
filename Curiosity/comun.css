@@ -379,3 +379,5 @@ body.tema-papel .dia.finde { color: var(--oro); }
 .r-sep { font-size: 28px; font-family: "Courier New", monospace; font-style: normal; color: var(--tinta); }
 
 .numero .num-est { color: #A97A1C; margin-left: 4px; }
+
+.hoja-acc .h-comprobar { background: var(--verde); color: var(--papel2); border: none; }

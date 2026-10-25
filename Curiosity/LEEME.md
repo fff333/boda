@@ -13,7 +13,7 @@ GitHub Pages usa HTTPS, así que el micrófono, la cámara y los sensores funcio
 ## Cómo funciona
 
 - `index.html` es la portada: pide los permisos una sola vez y carga los retos dentro.
-- `comun.js` contiene el orden de los retos (`NIVELES`), sus códigos, las curiosidades (`CURIOSIDADES`) y las respuestas, guardadas como huella.
+- `comun.js` contiene el orden de los retos (`NIVELES`), las curiosidades (`CURIOSIDADES`) y las respuestas, guardadas como huella.
 - `plantillas.js` contiene los tipos de reto reutilizables: series, preguntas y varias respuestas.
 - `mapa.html` muestra el camino en cuatro tramos (fácil, intermedio, difícil y experto), con una estrella en los retos superados.
-- Desde el menú ☰ de cada reto se puede volver al anterior, ir a un reto por su código, abrir el mapa o rendirse y pasar al siguiente.
+- Desde el menú ☰ de cada reto se puede volver al anterior, abrir el mapa o rendirse y pasar al siguiente.
