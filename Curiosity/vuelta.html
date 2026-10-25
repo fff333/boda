@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Una vuelta</title>
@@ -15,17 +15,17 @@
   .conejo-c { position: absolute; left: 50%; top: 58%; width: min(36vw, 160px); transform: translate(-50%, -50%); transition: transform .35s cubic-bezier(.3,1.6,.6,1); }
   .conejo-c svg { width: 100%; display: block; }
   .marcas { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 100px); display: flex; justify-content: center; gap: 10px; }
-  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(242,233,201,.2); }
-  .marcas span.on { background: #F2E9C9; }
+  .marcas span { width: 16px; height: 16px; border-radius: 50%; background: rgba(243,235,221,.2); }
+  .marcas span.on { background: #F3EBDD; }
 
-  .barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(242,233,201,.15); }
-  .barra-q span { display: block; height: 100%; width: 0; background: #F2E9C9; border-radius: 3px; }
+  .barra-q { position: absolute; left: 20%; right: 20%; bottom: calc(env(safe-area-inset-bottom) + 100px); height: 5px; border-radius: 3px; background: rgba(243,235,221,.15); }
+  .barra-q span { display: block; height: 100%; width: 0; background: #F3EBDD; border-radius: 3px; }
 
 </style>
 </head>
 <body>
 
-<main class="escena entrada"><div class="conejo-c" id="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#E9A6B8" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#E9A6B8" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#0B1020"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#E9A6B8"/></svg></div><div class="barra-q"><span id="barra"></span></div></main>
+<main class="escena entrada"><div class="conejo-c" id="conejo"><svg viewBox="0 0 120 130"><ellipse cx="48" cy="28" rx="9" ry="28" fill="#FBFAF4" transform="rotate(-12 48 28)"/><ellipse cx="48" cy="30" rx="4" ry="20" fill="#D9A441" transform="rotate(-12 48 30)"/><ellipse cx="70" cy="26" rx="9" ry="28" fill="#FBFAF4" transform="rotate(10 70 26)"/><ellipse cx="70" cy="28" rx="4" ry="20" fill="#D9A441" transform="rotate(10 70 28)"/><ellipse cx="62" cy="100" rx="38" ry="28" fill="#FBFAF4"/><circle cx="98" cy="100" r="9" fill="#FBFAF4"/><circle cx="56" cy="66" r="24" fill="#FBFAF4"/><circle cx="47" cy="63" r="3.4" fill="#16292B"/><ellipse cx="36" cy="72" rx="3" ry="2.2" fill="#D9A441"/></svg></div><div class="barra-q"><span id="barra"></span></div></main>
 <p class="pista">Algo se ha perdido a tu alrededor</p>
 <p class="subpista" id="sub"></p>
 

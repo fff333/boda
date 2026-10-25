@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Colores</title>
 <style>
   .palabra { position: absolute; left: 0; right: 0; top: 34%; text-align: center; font-size: clamp(44px, 14vw, 76px); font-style: normal; font-weight: bold; font-family: Georgia, serif; letter-spacing: .05em; }
   .colores { position: absolute; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 110px); transform: translateX(-50%); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(84vw, 360px); }
-  .colores button { font: inherit; font-size: 18px; color: #F2E9C9; background: rgba(242,233,201,.07); border: 1px solid rgba(242,233,201,.3); border-radius: 16px; padding: 14px; cursor: pointer; }
+  .colores button { font: inherit; font-size: 18px; color: #F3EBDD; background: rgba(243,235,221,.07); border: 1px solid rgba(243,235,221,.3); border-radius: 16px; padding: 14px; cursor: pointer; }
   .marcador { position: absolute; left: 0; right: 0; top: 56%; text-align: center; font-size: 18px; opacity: .8; }
 </style>
 </head>
-<body>
+<body class="tema-papel">
 
 <main class="escena entrada">
   <div class="palabra" id="palabra"></div>
@@ -32,7 +32,7 @@
 
   Comun.pistas(["No leas la palabra: fíjate solo en su color.", "Tu cerebro lee sin querer. Ve un poco más despacio.", "Si fallas, el contador vuelve a cero. Diez aciertos seguidos."]);
   Comun.nivel("", null);
-  const C = [["ROJO", "#E53935"], ["AZUL", "#1E88E5"], ["VERDE", "#43A047"], ["AMARILLO", "#FDD835"]];
+  const C = [["ROJO", "#E53935"], ["AZUL", "#1E88E5"], ["VERDE", "#43A047"], ["AMARILLO", "#D4A017"]];
   const pal = document.getElementById("palabra"), marc = document.getElementById("marcador"), cont = document.getElementById("colores");
   let tinta = 0, racha = 0, hecho = false;
   function nueva() { const p = Math.floor(Math.random() * 4); do { tinta = Math.floor(Math.random() * 4); } while (tinta === p); pal.textContent = C[p][0]; pal.style.color = C[tinta][1]; }

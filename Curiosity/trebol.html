@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Suerte</title>
+<style>
+  .prado { background: #1F3A24; }
+  .trebol { position: absolute; width: 13vw; max-width: 60px; transform: translate(-50%, -50%) rotate(var(--r)); border: none; background: none; cursor: pointer; padding: 0; }
+  .trebol svg { width: 100%; display: block; }
+  .trebol.no svg { animation: no .35s; }
+  @keyframes no { 30% { transform: rotate(-12deg); } 60% { transform: rotate(10deg); } }
+  .trebol.si svg { animation: si .8s ease forwards; }
+  @keyframes si { to { transform: scale(2.2); filter: drop-shadow(0 0 12px #C8F7A0); } }
+</style>
+</head>
+<body>
+<main class="escena prado entrada" id="prado"></main>
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+  Comun.pistas(["Mira bien entre todos los tréboles.", "Casi todos tienen tres hojas.", "Busca el único trébol de cuatro hojas y tócalo."]);
+  Comun.nivel("XXIX", null);
+  const prado = document.getElementById("prado");
+  const hoja = (a, c) => `<ellipse cx="50" cy="30" rx="15" ry="20" fill="${c}" transform="rotate(${a} 50 50)"/>`;
+  const dibujo = n => `<svg viewBox="0 0 100 100"><path d="M50 50 Q54 75 48 98" stroke="#2E6B30" stroke-width="4" fill="none"/>` +
+    Array.from({ length: n }, (_, i) => hoja(i * 360 / n + (n === 3 ? 0 : 45), "#43A047")).join("") + `<circle cx="50" cy="50" r="5" fill="#2E7D32"/></svg>`;
+  const COLS = 5, FILAS = 8, especial = Math.floor(Math.random() * COLS * FILAS);
+  let hecho = false;
+  for (let i = 0; i < COLS * FILAS; i++) {
+    const x = (i % COLS + .5) / COLS * 100 + (Math.random() - .5) * 8;
+    const y = 18 + (Math.floor(i / COLS) + .5) / FILAS * 70 + (Math.random() - .5) * 4;
+    const b = document.createElement("button");
+    b.className = "trebol"; b.style.left = x + "%"; b.style.top = y + "%";
+    b.style.setProperty("--r", Math.floor(Math.random() * 360) + "deg");
+    b.setAttribute("aria-label", "Trébol");
+    b.innerHTML = dibujo(i === especial ? 4 : 3);
+    b.addEventListener("click", () => {
+      if (hecho) return;
+      if (i === especial) {
+        hecho = true; b.classList.add("si");
+        [659.25, 783.99, 987.77, 1318.5].forEach((f, k) => Comun.tono(f, k * .1, .6, .12, "sine")); Comun.vibrar(40);
+        setTimeout(() => Comun.superado("escondite.html", "XXIX"), 1500);
+      } else { b.classList.remove("no"); void b.offsetWidth; b.classList.add("no"); Comun.tono(200, 0, .1, .08, "sine"); }
+    });
+    prado.appendChild(b);
+  }
+</script>
+</body>
+</html>

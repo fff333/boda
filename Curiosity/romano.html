@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Hora romana</title>
+<style>
+  canvas.lienzo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+
+  .reloj-r { position: absolute; left: 50%; top: 56%; width: min(78vw, 340px); transform: translate(-50%, -50%); touch-action: none; }
+  .reloj-r svg { width: 100%; display: block; }
+  .objetivo-r { position: absolute; left: 0; right: 0; top: 22%; text-align: center; font-size: 34px; letter-spacing: .1em; font-style: normal; font-family: Georgia, serif; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" style="background:radial-gradient(ellipse at 50% 30%, #5A3D28, #1A140C 80%)">
+  <div class="objetivo-r">IX : XLV</div>
+  <div class="reloj-r" id="reloj"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="#F7F0DC" stroke="#C9A86A" stroke-width="6"/><g id="num"></g>
+    <line id="hora" x1="100" y1="100" x2="100" y2="52" stroke="#3E2A1A" stroke-width="6" stroke-linecap="round"/>
+    <line id="minuto" x1="100" y1="100" x2="100" y2="26" stroke="#8E2433" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="100" r="5" fill="#3E2A1A"/></svg></div>
+</main>
+<p class="pista">Pon el reloj a esta hora</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script>
+
+  Comun.pistas(["Las horas están escritas como las escribían los romanos.", "I = 1, V = 5, X = 10, L = 50. Si una letra pequeña va delante de una grande, se resta: IX = 9, XL = 40.", "IX : XLV son las 9:45. Arrastra la aguja larga."]);
+  Comun.nivel("", null);
+  const R = ["XII", "I", "II", "III", "IIII", "V", "VI", "VII", "VIII", "IX", "X", "XI"], g = document.getElementById("num");
+  R.forEach((n, i) => { const a = i * 30 * Math.PI / 180; g.insertAdjacentHTML("beforeend", `<text x="${100 + Math.sin(a) * 74}" y="${100 - Math.cos(a) * 74 + 5}" text-anchor="middle" font-family="Georgia" font-size="13" fill="#3E2A1A">${n}</text>`); });
+  const reloj = document.getElementById("reloj"), hora = document.getElementById("hora"), minuto = document.getElementById("minuto");
+  let t = 3 * 60 + 10, prev = null, hecho = false;
+  function pintar() { minuto.setAttribute("transform", `rotate(${(t % 60) * 6} 100 100)`); hora.setAttribute("transform", `rotate(${t / 2} 100 100)`); }
+  pintar();
+  const ang = e => { const r = reloj.getBoundingClientRect(); return (Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI + 450) % 360; };
+  reloj.addEventListener("pointerdown", e => { prev = ang(e); reloj.setPointerCapture(e.pointerId); });
+  reloj.addEventListener("pointermove", e => { if (prev == null || hecho) return; const a = ang(e); let d = a - prev; if (d > 180) d -= 360; if (d < -180) d += 360; prev = a; t = ((t + d / 6) % 720 + 720) % 720; pintar(); });
+  reloj.addEventListener("pointerup", () => { prev = null; const obj = 9 * 60 + 45, e = Math.min(Math.abs(t - obj), 720 - Math.abs(t - obj));
+    if (e <= 3) { hecho = true; Comun.tono(523.25,0,.8,.12,"sine");Comun.tono(659.25,.12,.8,.12,"sine");Comun.tono(783.99,.24,1,.12,"sine");Comun.vibrar([30,50,30]); setTimeout(() => Comun.superado("laberinto.html"), 1500); } else if (e <= 20) Comun.avisar("¡Casi! Afina un poco más"); });
+
+</script>
+</body>
+</html>

@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Sube el sonido</title>
 <style>
   .altavoz { position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%); width: 120px; height: 120px; border-radius: 50%;
-    border: 1px solid rgba(242,233,201,.35); background: rgba(242,233,201,.06); cursor: pointer; display: grid; place-items: center; color: var(--crema); }
+    border: 1px solid rgba(243,235,221,.35); background: rgba(243,235,221,.06); cursor: pointer; display: grid; place-items: center; color: var(--crema); }
   .altavoz svg { width: 56px; }
-  .altavoz.sonando { box-shadow: 0 0 40px rgba(242,233,201,.35); }
+  .altavoz.sonando { box-shadow: 0 0 40px rgba(243,235,221,.35); }
   .morse { position: absolute; left: 0; right: 0; top: 62%; display: flex; justify-content: center; gap: 22px; opacity: 0; transition: opacity 1s; font-style: normal; }
   .morse.visible { opacity: 1; }
   .grupo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
   .simbolos { font-family: "Courier New", monospace; font-weight: bold; font-size: 34px; letter-spacing: 2px; line-height: 1; transition: color .1s; }
-  .grupo.activo .simbolos { color: #E9A6B8; }
+  .grupo.activo .simbolos { color: #D9A441; }
   .letra { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 28px; opacity: 0; transition: opacity 1s; }
   .con-letras .letra { opacity: 1; }
   .titulo { position: absolute; left: 0; right: 0; top: 18%; text-align: center; font-size: clamp(34px, 10vw, 54px); }

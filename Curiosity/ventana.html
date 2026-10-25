@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>Ventana al cielo</title>
@@ -13,7 +13,7 @@
   .noche { background: radial-gradient(ellipse at 50% 35%, #16213F 0%, #070B18 80%); }
   canvas.cielo { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
 
-  .mira { position: absolute; left: 50%; top: 50%; width: 36vmin; height: 36vmin; transform: translate(-50%, -50%); border: 2px dashed rgba(242,233,201,.35); border-radius: 50%; pointer-events: none; }
+  .mira { position: absolute; left: 50%; top: 50%; width: 36vmin; height: 36vmin; transform: translate(-50%, -50%); border: 2px dashed rgba(243,235,221,.35); border-radius: 50%; pointer-events: none; }
 
 </style>
 </head>
@@ -69,7 +69,7 @@
     alt0 += (alturaVista - alt0) * .15;
     const pantalla = ([alt, az]) => [W / 2 + envolver(az - az0) * Math.cos(alt * Math.PI / 180) * k, H / 2 - (alt - alt0) * k];
     ctx.clearRect(0, 0, W, H);
-    debiles.forEach(p => { if (p[0] < 0) return; const [x, y] = pantalla(p); if (x < -10 || x > W + 10 || y < -10 || y > H + 10) return; ctx.fillStyle = "rgba(242,233,201,.45)"; ctx.beginPath(); ctx.arc(x, y, .9, 0, 7); ctx.fill(); });
+    debiles.forEach(p => { if (p[0] < 0) return; const [x, y] = pantalla(p); if (x < -10 || x > W + 10 || y < -10 || y > H + 10) return; ctx.fillStyle = "rgba(243,235,221,.45)"; ctx.beginPath(); ctx.arc(x, y, .9, 0, 7); ctx.fill(); });
     const pos = {};
     for (const n in posiciones) { if (posiciones[n][0] < -2) continue; pos[n] = pantalla(posiciones[n]); }
     if (hecho) Cielo.dibujarLineas(ctx, pos, Cielo.C[objetivo].lineas, "rgba(233,166,184,1)", 2);
@@ -77,7 +77,7 @@
     // horizonte y puntos cardinales
     const yH = H / 2 + alt0 * k;
     if (yH < H) { ctx.fillStyle = "#0E1A12"; ctx.fillRect(0, yH, W, H - yH); }
-    ctx.fillStyle = "rgba(242,233,201,.7)"; ctx.font = "italic 18px Georgia"; ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(243,235,221,.7)"; ctx.font = "italic 18px Georgia"; ctx.textAlign = "center";
     [["N", 0], ["E", 90], ["S", 180], ["O", 270]].forEach(([l, a]) => { const x = W / 2 + envolver(a - az0) * k; if (x > -20 && x < W + 20) ctx.fillText(l, x, yH - 8); });
     ctx.textAlign = "start";
     // dónde está la constelación

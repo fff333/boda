@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0B1020">
+<meta name="theme-color" content="#16292B">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comun.css">
 <title>La Polar</title>
@@ -42,7 +42,7 @@
   colocar(); addEventListener("resize", colocar);
   (function pintar() {
     ctx.clearRect(0, 0, W, H); Cielo.fondo(ctx, W, H, 260, 21);
-    Cielo.dibujarLineas(ctx, pos, Cielo.C.osamayor.lineas, "rgba(242,233,201,.3)", 1.2);
+    Cielo.dibujarLineas(ctx, pos, Cielo.C.osamayor.lineas, "rgba(243,235,221,.3)", 1.2);
     if (guia || hecho) {
       const [ax, ay] = pos.merak, [bx, by] = pos.dubhe, f = hecho ? 5.2 : 1.6;
       ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(233,166,184,.8)"; ctx.lineWidth = 1.5;

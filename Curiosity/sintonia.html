@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16292B">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<title>Sintonía</title>
+<style>
+
+  .aparato { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(88vw, 400px); background: #5A3D28; border-radius: 22px; padding: 22px; box-shadow: inset 0 0 0 4px #3E2A1A; }
+  .pantalla { background: #F7F0DC; border-radius: 10px; height: 70px; position: relative; overflow: hidden; touch-action: none; cursor: ew-resize; }
+  .escala { position: absolute; top: 0; bottom: 0; left: 0; width: 600%; background: repeating-linear-gradient(90deg, #5A3A1E 0 1px, transparent 1px 10px); opacity: .5; }
+  .aguja { position: absolute; left: 50%; top: 4px; bottom: 4px; width: 3px; background: #E53935; }
+  .mhz { color: #F3EBDD; text-align: center; font-size: 30px; margin-top: 14px; font-style: normal; font-family: "Courier New", monospace; }
+  .nota-musical { text-align: center; font-size: 30px; height: 36px; opacity: 0; transition: opacity .5s; color: #FFE082; }
+  .sintonizado .nota-musical { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<main class="escena entrada" id="escena">
+  <div class="aparato">
+    <div class="nota-musical">♪ ♫ ♪</div>
+    <div class="pantalla" id="pantalla"><div class="escala" id="escala"></div><div class="aguja"></div></div>
+    <div class="mhz" id="mhz">90.0 MHz</div>
+  </div>
+</main>
+<p class="pista">Una emisora toca a un genio</p>
+<p class="subpista">Desliza el dial</p>
+
+<script src="idiomas.js"></script>
+<script src="comun.js"></script>
+<script src="motor.js"></script>
+<script>
+
+  Comun.pistas(["Desliza el dial con el dedo hasta que deje de sonar el ruido.", "La emisora está por encima de 100.", "Suena la «Pequeña serenata nocturna». ¿Quién la compuso?"]);
+  Comun.nivel("", { pequenaserenatanocturna: "¿Quién la compuso?", serenata: "¿Quién la compuso?", beethoven: "Ese ya salió", bach: "Frío, frío" });
+  const OBJ = 101.3;
+  let f = 90, ruido = null, gRuido = null, prev = null, ultimaMelodia = 0;
+  const pantalla = document.getElementById("pantalla"), escala = document.getElementById("escala"), mhz = document.getElementById("mhz"), escena = document.getElementById("escena");
+  function pintar() { mhz.textContent = f.toFixed(1) + " MHz"; escala.style.transform = `translateX(${-(f - 87.5) * 20}px)`; }
+  pintar();
+  pantalla.addEventListener("pointerdown", e => { prev = e.clientX; pantalla.setPointerCapture(e.pointerId); });
+  pantalla.addEventListener("pointermove", e => { if (prev == null) return; f = Math.max(87.5, Math.min(108, f - (e.clientX - prev) * .05)); prev = e.clientX; pintar(); });
+  pantalla.addEventListener("pointerup", () => prev = null);
+  Comun.inicio("Una radio antigua", "Encenderla", async () => {
+    const c = Comun.audio(); if (!c) return;
+    const buf = c.createBuffer(1, c.sampleRate * 2, c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    ruido = c.createBufferSource(); ruido.buffer = buf; ruido.loop = true;
+    gRuido = c.createGain(); gRuido.gain.value = .12; ruido.connect(gRuido).connect(c.destination); ruido.start();
+    (function bucle() {
+      const dist = Math.abs(f - OBJ);
+      gRuido.gain.setTargetAtTime(Math.min(.12, dist * .05), c.currentTime, .05);
+      const ok = dist < .25; escena.classList.toggle("sintonizado", ok);
+      if (ok && performance.now() - ultimaMelodia > 4200) {
+        ultimaMelodia = performance.now();
+        Motor.melodia([{ n: 67, d: 1 }, { n: null, d: .5 }, { n: 62, d: .5 }, { n: 67, d: 1 }, { n: null, d: .5 }, { n: 62, d: .5 }, { n: 67, d: .5 }, { n: 62, d: .5 }, { n: 67, d: .5 }, { n: 71, d: .5 }, { n: 74, d: 2 }], { pulso: .32 });
+      }
+      requestAnimationFrame(bucle);
+    })();
+  });
+
+</script>
+</body>
+</html>
