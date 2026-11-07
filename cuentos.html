@@ -299,7 +299,7 @@ function render(){
   const v = stories.filter(s => !k || norm(s.title+' '+s.code).includes(k));
   $('#count').textContent = `${v.length} cuentos`;
   $('#empty').hidden = v.length>0;
-  $('#grid').innerHTML = v.map(s => `<button class="card${cur===s?' on':''}${cur===s&&audio.paused?' paused':''}" data-c="${s.code}">
+  $('#grid').innerHTML = v.map(s => `<button class="card${cur===s?' on':''}${cur===s&&audio.paused?' paused':''}" data-c="${esc(s.dir)}">
     <div class="cv">${cover(s)}<span class="code">${s.code}</span><span class="eq"><b></b><b></b><b></b></span></div>
     <div class="cb"><h3 class="ct">${esc(s.title)}</h3><div class="cm">${s.files.length} ${s.files.length===1?'pista':'pistas'}${s.total>s.files.length?` de ${s.total}`:''}</div></div></button>`).join('');
 }
@@ -389,7 +389,7 @@ async function download(s, i, btn){
 }
 
 /* ---------- events ---------- */
-$('#grid').onclick = e => { const c = e.target.closest('.card'); if (c) show(stories.find(s=>s.code===c.dataset.c)); };
+$('#grid').onclick = e => { const c = e.target.closest('.card'); if (c) show(stories.find(s=>s.dir===c.dataset.c)); };
 $('#list').onclick = e => {
   const d = e.target.closest('.dl'); if (d) { download(open, +d.dataset.d, d); return; }
   const r = e.target.closest('.rp'); if (r) play(open, +r.dataset.i);
