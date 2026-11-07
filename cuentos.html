@@ -235,7 +235,7 @@ async function gapi(params){
 async function listAll(q, fields){
   const out = []; let pageToken = null;
   do {
-    const j = await gapi({q, fields:`nextPageToken,files(${fields})`, pageSize:1000, pageToken, supportsAllDrives:true, includeItemsFromAllDrives:true});
+    const j = await gapi({q, fields:`nextPageToken,files(${fields})`, pageSize:1000, pageToken});
     out.push(...(j.files||[])); pageToken = j.nextPageToken;
   } while (pageToken);
   return out;
@@ -259,12 +259,16 @@ async function loadDrive(){
   const folders = await findStoryFolders(FOLDER_ID, 0);
   if (!folders.length) throw new Error('No encuentro carpetas Kxxxx en la carpeta de Drive.');
   const byFolder = new Map(folders.map(f => [f.id, []]));
-  for (let i = 0; i < folders.length; i += 25) {
-    const part = folders.slice(i, i+25);
-    const q = `(${part.map(f=>`'${f.id}' in parents`).join(' or ')}) and mimeType!='${FOLDER}' and trashed=false`;
-    for (const f of await listAll(q, 'id,name,size,parents'))
-      if (/\.(mki|mp3)$/i.test(f.name)) for (const p of f.parents||[]) if (byFolder.has(p)) byFolder.get(p).push(f);
+  // Con clave de API, Drive solo permite listar una carpeta por consulta: se piden de 6 en 6.
+  let next = 0;
+  async function worker(){
+    while (next < folders.length) {
+      const fd = folders[next++];
+      const fl = await listAll(`'${fd.id}' in parents and mimeType!='${FOLDER}' and trashed=false`, 'id,name,size');
+      byFolder.set(fd.id, fl.filter(f => /\.(mki|mp3)$/i.test(f.name)));
+    }
   }
+  await Promise.all(Array.from({length:6}, worker));
   const skey = s => s.replace(/^[^\p{L}\p{N}]+/u,'');
   stories = folders.map(fd => {
     const p = parseFolder(fd.name);
