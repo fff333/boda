@@ -85,6 +85,7 @@ main{max-width:1300px;margin:0 auto;padding:20px}
 .x svg{width:20px;height:20px}
 .sbody{overflow:auto;padding:16px 20px 24px;flex:1}
 .playall{width:100%;border:0;border-radius:999px;background:var(--coral);color:#fff;font-weight:800;font-size:17px;padding:14px;display:flex;gap:8px;align-items:center;justify-content:center;box-shadow:0 4px 0 var(--coral-d);margin-bottom:16px}
+.playall:disabled{opacity:.5;cursor:default}
 .playall:active{transform:translateY(2px);box-shadow:0 2px 0 var(--coral-d)}
 .playall svg{width:20px;height:20px}
 .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
@@ -254,32 +255,54 @@ function parseFolder(name){
   if (!m) return {code:name, title:'', total:0};
   return {code:m[1].toUpperCase(), title:(m[2]||m[5]||'').trim(), total: m[4]?+m[4]:0};
 }
+function makeStory(fd, raw){
+  const p = parseFolder(fd.name);
+  const st = {id: fd.id, dir: fd.name, code: p.code, title: p.title || p.code, known: !!p.title, total: p.total, raw: null, files: [], loaded: false};
+  if (raw) setFiles(st, raw);
+  return st;
+}
+function setFiles(st, raw){
+  st.raw = raw; st.loaded = true;
+  const chosen = new Map();   // one file per chapter, prefer .mp3
+  for (const f of raw) { const n = +((f.name.match(/(\d+)/)||[0,0])[1]); const prev = chosen.get(n);
+    if (!prev || (/\.mki$/i.test(prev.name) && /\.mp3$/i.test(f.name))) chosen.set(n, f); }
+  st.files = [...chosen.entries()].sort((a,b)=>a[0]-b[0]).map(([n,f]) => ({id:f.id, name:f.name, size:+f.size||0, n, mki:/\.mki$/i.test(f.name)}));
+}
+const sortStories = () => stories.sort((a,b)=>(a.known===b.known?0:a.known?-1:1) || skey(a.title).localeCompare(skey(b.title),'es',{sensitivity:'base'}));
+async function fetchFiles(st){
+  const fl = await listAll(`'${st.id}' in parents and mimeType!='${FOLDER}' and trashed=false`, 'id,name,size');
+  return fl.filter(f => /\.(mki|mp3)$/i.test(f.name)).map(f => ({id:f.id, name:f.name, size:f.size}));
+}
+const pending = new Map();   // story id -> promise
+function loadStory(st){
+  if (!pending.has(st.id)) pending.set(st.id, fetchFiles(st).then(raw => { setFiles(st, raw); updateCard(st); if (open === st) show(st); })
+    .finally(() => pending.delete(st.id)));
+  return pending.get(st.id);
+}
+const CACHE_KEY = 'fabateca-cache-v1';
+function saveCache(){
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({folder: FOLDER_ID, items: stories.filter(s=>s.loaded).map(s => ({fd:{id:s.id, name:s.dir}, files:s.raw}))})); } catch(e) {}
+}
 async function loadDrive(){
   if (!API_KEY || API_KEY.startsWith('__')) throw new Error('Falta la clave de API en el archivo (API_KEY).');
+  // 1) lo guardado de la ultima visita se muestra al instante
+  try { const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (c && c.folder === FOLDER_ID && c.items && c.items.length) { stories = c.items.map(it => makeStory(it.fd, it.files)); sortStories(); render(); }
+  } catch(e) {}
+  // 2) lista de carpetas actual (1 consulta): se pinta ya
   const folders = await findStoryFolders(FOLDER_ID, 0);
   if (!folders.length) throw new Error('No encuentro carpetas Kxxxx en la carpeta de Drive.');
-  const byFolder = new Map(folders.map(f => [f.id, []]));
-  // Con clave de API, Drive solo permite listar una carpeta por consulta: se piden de 6 en 6.
-  let next = 0;
-  async function worker(){
-    while (next < folders.length) {
-      const fd = folders[next++];
-      const fl = await listAll(`'${fd.id}' in parents and mimeType!='${FOLDER}' and trashed=false`, 'id,name,size');
-      byFolder.set(fd.id, fl.filter(f => /\.(mki|mp3)$/i.test(f.name)));
-    }
-  }
-  await Promise.all(Array.from({length:6}, worker));
-  const skey = s => s.replace(/^[^\p{L}\p{N}]+/u,'');
-  stories = folders.map(fd => {
-    const p = parseFolder(fd.name);
-    const all = byFolder.get(fd.id);
-    const chosen = new Map();   // one file per chapter, prefer .mp3
-    for (const f of all) { const n = +((f.name.match(/(\d+)/)||[0,0])[1]); const prev = chosen.get(n);
-      if (!prev || (/\.mki$/i.test(prev.name) && /\.mp3$/i.test(f.name))) chosen.set(n, f); }
-    const files = [...chosen.entries()].sort((a,b)=>a[0]-b[0]).map(([n,f]) => ({id:f.id, name:f.name, size:+f.size||0, n, mki:/\.mki$/i.test(f.name)}));
-    return {dir: fd.name, code: p.code, title: p.title || p.code, known: !!p.title, files, total: p.total};
-  }).filter(s => s.files.length)
-    .sort((a,b)=>(a.known===b.known?0:a.known?-1:1) || skey(a.title).localeCompare(skey(b.title),'es',{sensitivity:'base'}));
+  const old = new Map(stories.map(s => [s.id, s]));
+  stories = folders.map(fd => { const o = old.get(fd.id); return makeStory(fd, o ? o.raw : null); });
+  sortStories(); render();
+  if (open) { const o = stories.find(s => s.id === open.id); if (o) show(o); }
+  if (cur) { const o = stories.find(s => s.id === cur.id); if (o && o.files.length === cur.files.length) cur = o; }
+  // 3) capitulos de cada carpeta, en segundo plano (10 a la vez)
+  const queue = stories.filter(s => !s.loaded).concat(stories.filter(s => s.loaded));
+  let n = 0;
+  async function worker(){ while (n < queue.length) { const st = queue[n++]; try { await loadStory(st); } catch(e) { console.warn(st.dir, e); } } }
+  await Promise.all(Array.from({length:10}, worker));
+  saveCache(); render();
 }
 let tt; const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); };
 
@@ -296,22 +319,38 @@ let q = '', cur = null, ci = -1, open = null, curUrl = null;
 const audio = $('#audio');
 function render(){
   const k = norm(q).trim();
-  const v = stories.filter(s => !k || norm(s.title+' '+s.code).includes(k));
+  const v = stories.filter(s => (!s.loaded || s.files.length) && (!k || norm(s.title+' '+s.code).includes(k)));
   $('#count').textContent = `${v.length} cuentos`;
   $('#empty').hidden = v.length>0;
-  $('#grid').innerHTML = v.map(s => `<button class="card${cur===s?' on':''}${cur===s&&audio.paused?' paused':''}" data-c="${esc(s.dir)}">
+  $('#grid').innerHTML = v.map(s => `<button class="card${cur&&cur.id===s.id?' on':''}${cur&&cur.id===s.id&&audio.paused?' paused':''}" data-c="${esc(s.dir)}">
     <div class="cv">${cover(s)}<span class="code">${s.code}</span><span class="eq"><b></b><b></b><b></b></span></div>
-    <div class="cb"><h3 class="ct">${esc(s.title)}</h3><div class="cm">${s.files.length} ${s.files.length===1?'pista':'pistas'}${s.total>s.files.length?` de ${s.total}`:''}</div></div></button>`).join('');
+    <div class="cb"><h3 class="ct">${esc(s.title)}</h3><div class="cm">${meta(s)}</div></div></button>`).join('');
+}
+
+const meta = s => !s.loaded ? 'Cargando…' : `${s.files.length} ${s.files.length===1?'pista':'pistas'}${s.total>s.files.length?` de ${s.total}`:''}`;
+function updateCard(s){
+  const c = document.querySelector(`.card[data-c="${CSS.escape(s.dir)}"]`);
+  if (!c) return;
+  if (s.loaded && !s.files.length) { c.remove(); return; }
+  c.querySelector('.cm').textContent = meta(s);
+}
+function markCards(){
+  document.querySelectorAll('.card').forEach(c => { const on = !!cur && c.dataset.c === cur.dir;
+    c.classList.toggle('on', on); c.classList.toggle('paused', on && audio.paused); });
 }
 
 /* ---------- sheet ---------- */
 function show(s){
   open = s;
   const size = s.files.reduce((a,f)=>a+f.size,0);
-  $('#sh').innerHTML = `<div class="cv">${cover(s)}</div><div><h2>${esc(s.title)}</h2><p>${s.code} · ${s.files.length} ${s.files.length===1?'pista':'pistas'} · ${mb(size)}</p></div>
+  $('#sh').innerHTML = `<div class="cv">${cover(s)}</div><div><h2>${esc(s.title)}</h2><p>${s.code}${s.loaded?` · ${s.files.length} ${s.files.length===1?'pista':'pistas'} · ${mb(size)}`:''}</p></div>
     <button class="x" id="x" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`;
   $('#x').onclick = hide;
   $('#playAll span').textContent = cur===s ? (audio.paused?'Seguir escuchando':'Sonando…') : 'Escuchar';
+  $('#playAll').disabled = !s.loaded;
+  if (!s.loaded) { $('#list').innerHTML = '<li class="empty" style="padding:30px 0"><div class="spin"></div>Cargando capítulos…</li>';
+    $('#sheet').classList.add('on'); $('#scrim').classList.add('on'); $('#sheet').setAttribute('aria-hidden','false');
+    loadStory(s).catch(() => toast('No se han podido cargar los capítulos')); return; }
   $('#list').innerHTML = s.files.map((f,i)=>`<li class="row${cur===s&&ci===i?' on':''}">
     <button class="rp" data-i="${i}"><span class="num">${f.n||i+1}</span><span class="rn">Capítulo ${f.n||i+1}<small>${mb(f.size)}</small></span></button>
     <button class="dl" data-d="${i}" aria-label="Descargar capítulo ${f.n||i+1}" title="Descargar MP3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 20h14"/></svg></button></li>`).join('');
@@ -343,6 +382,7 @@ async function play(s, i){
     if (curUrl) URL.revokeObjectURL(curUrl);
     curUrl = URL.createObjectURL(blob); audio.src = curUrl;
     await audio.play();
+    prefetchNext();
   } catch(e) { if (my===token) toast('No se ha podido cargar este capítulo'); }
   finally { if (my===token) $('#pp').classList.remove('load'); }
   paint();
@@ -355,14 +395,30 @@ function paint(){
   $('#psub').textContent = `Capítulo ${cur.files[ci].n||ci+1} de ${cur.files.length}`;
   const p = audio.paused; $('#iPlay').style.display = p?'':'none'; $('#iPause').style.display = p?'none':'';
   $('#pp').setAttribute('aria-label', p?'Reproducir':'Pausar');
-  render(); if (open) show(open);
+  markCards(); if (open) show(open);
   if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({title:cur.title, artist:`Capítulo ${cur.files[ci].n||ci+1}`, album:'Fabateca',
     artwork: []});
 }
 const next = () => { if (cur && ci < cur.files.length-1) play(cur, ci+1); };
 const prev = () => { if (!cur) return; if (audio.currentTime>4 || ci===0) audio.currentTime=0; else play(cur, ci-1); };
 audio.onplay = audio.onpause = paint;
-audio.onended = () => { if (cur && ci < cur.files.length-1) next(); else paint(); };
+// Paso automatico al siguiente capitulo: el siguiente se descarga mientras suena el actual,
+// asi el cambio es inmediato (tambien con la pantalla del movil bloqueada).
+function prefetchNext(){
+  if (!cur || ci >= cur.files.length-1) return;
+  const s = cur, f = cur.files[ci+1];
+  getMp3(s, f).catch(() => {});
+}
+audio.onended = () => {
+  if (!cur || ci >= cur.files.length-1) { paint(); return; }
+  const f = cur.files[ci+1];
+  if (cache.has(f.id)) {
+    ++token; ci++;
+    if (curUrl) URL.revokeObjectURL(curUrl);
+    curUrl = URL.createObjectURL(cache.get(f.id)); audio.src = curUrl;
+    audio.play().catch(() => {}); paint(); prefetchNext();
+  } else next();
+};
 audio.onloadedmetadata = () => $('#td').textContent = fmt(audio.duration);
 let seeking = false;
 audio.ontimeupdate = () => { if (seeking) return; const p = audio.duration ? audio.currentTime/audio.duration : 0;
